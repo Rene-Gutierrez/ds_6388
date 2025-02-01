@@ -1,6 +1,6 @@
 ---
-title: "A Book"
-author: "Frida Gomam"
+title: "DS 6388"
+author: "Rene Gutierrez"
 site: bookdown::bookdown_site
 documentclass: book
 output:
