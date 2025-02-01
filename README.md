@@ -1,7 +1,10 @@
-This is a minimal bookdown example. Although you see a few files here, only `index.Rmd` is required. All other files are optional, but `bookdown-minimal.Rproj` can make it much easier to build the book.
+# DS 6388: Multivariate Statistical Methods for High-dimensional Data
 
-The key is the `site` setting in `index.Rmd`. If you want to build the book in RStudio, just click the `Build Book` button in the `Build` pane, otherwise call the function in R:
+This is the website for DS 6388. It contains relevant information for the course
+and lecture notes.
 
-```r
-bookdown::render_book('index.Rmd', 'all')
-```
+## Calendar
+
+### Importatnt Dates
+
+* February 10: Linear Algebra Extra Credit Test

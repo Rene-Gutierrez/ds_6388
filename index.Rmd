@@ -1,5 +1,5 @@
 ---
-title: "DS 6388"
+title: "DS 6388 Spring 2025"
 author: "Rene Gutierrez"
 site: bookdown::bookdown_site
 documentclass: book
@@ -8,10 +8,13 @@ output:
   #bookdown::pdf_book: default
 ---
 
-# Hello World
+# DS 6388: Multivariate Statistical Methods for High-dimensional Data
 
-Hi.
+This is the website for DS 6388. It contains relevant information for the course
+and lecture notes.
 
-Bye.
+## Calendar
 
-<!-- If you need PDF output, uncomment bookdown::pdf_book above in YAML. You will need a LaTeX installation, e.g., https://yihui.name/tinytex/ -->
+### Importatnt Dates
+
+* February 10: Linear Algebra Extra Credit Test
