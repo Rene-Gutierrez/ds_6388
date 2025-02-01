@@ -23,7 +23,7 @@ and lecture notes.
 
 ### Class Schedule
 
-Class 1: Introduction to Multivariate High-Dimensional Methods
-Class 2: HD Linear Regression: Machine Learning
-Class 3: HD Linear Regression: Bayesian Methods
-Class 4: Computational Implementation
+* Class 1: Introduction to Multivariate High-Dimensional Methods
+* Class 2: HD Linear Regression: Machine Learning
+* Class 3: HD Linear Regression: Bayesian Methods
+* Class 4: Computational Implementation of HD Linear Regression
