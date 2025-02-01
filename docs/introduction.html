@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DS 6388 Spring 2025</title>
-  <meta name="description" content="DS 6388 Spring 2025" />
+  <title>3 Introduction | DS 6388 Spring 2025</title>
+  <meta name="description" content="3 Introduction | DS 6388 Spring 2025" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="DS 6388 Spring 2025" />
+  <meta property="og:title" content="3 Introduction | DS 6388 Spring 2025" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="DS 6388 Spring 2025" />
+  <meta name="twitter:title" content="3 Introduction | DS 6388 Spring 2025" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="prerequisites.html"/>
 
-<link rel="next" href="prerequisites.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -141,39 +141,41 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">DS 6388 Spring 2025</h1>
-<p class="author"><em>Rene Gutierrez</em></p>
-</div>
-<div id="ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> DS 6388: Multivariate Statistical Methods for High-dimensional Data<a href="index.html#ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is the website for DS 6388. It contains relevant information for the course
-and lecture notes.</p>
-<div id="calendar" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Calendar<a href="index.html#calendar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="importatnt-dates" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Importatnt Dates<a href="index.html#importatnt-dates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="introduction" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">3</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>High-dimensional multivariate statistics deals with the analysis of data where both the number of variables (<span class="math inline">\(p\)</span>) and the number of observations (<span class="math inline">\(n\)</span>) can be large, and often, <span class="math inline">\(p\)</span> is comparable to or even greater than <span class="math inline">\(n\)</span>, making tradintional methods unavailable or computationally impractical. This setting arises naturally in modern applications like genomics, finance, and machine learning, where data sets contain hundreds or thousands of variables.</p>
+<div id="key-challenges" class="section level3 hasAnchor" number="3.0.1">
+<h3><span class="header-section-number">3.0.1</span> Key Challenges<a href="introduction.html#key-challenges" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>February 10: Linear Algebra Extra Credit Test</li>
+<li><strong>Curse of Dimensionality</strong>: As <span class="math inline">\(p\)</span> grows, classical statistical methods (e.g., ordinary least squares, classical covariance estimation) break down, become unstable or are computationally expensive.<br />
+</li>
+<li><strong>Multicollinearity</strong>: High correlation between variables can lead to singular or nearly singular covariance matrices. As the number of variables increases this scenario becomes more likely, if <span class="math inline">\(p \gg n\)</span> this have to be the case necessarily.</li>
+<li><strong>Overfitting</strong>: When <span class="math inline">\(p \gg n\)</span>, models tend to fit noise rather than signal.</li>
 </ul>
 </div>
-<div id="class-schedule" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Class Schedule<a href="index.html#class-schedule" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="core-concepts" class="section level3 hasAnchor" number="3.0.2">
+<h3><span class="header-section-number">3.0.2</span> Core Concepts<a href="introduction.html#core-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><strong>Regularized Estimation</strong>: Methods like ridge regression, LASSO, and graphical models introduce constraints to stabilize estimation.<br />
+</li>
+<li><strong>Dimensionality Reduction</strong>: Techniques like Principal Component Analysis (PCA) and Factor Analysis help summarize information in fewer dimensions.<br />
+</li>
+<li><strong>High-Dimensional Covariance and Precision Matrices</strong>: Classical estimators (e.g., sample covariance) fail when <span class="math inline">\(p &gt; n\)</span>, requiring alternatives like shrinkage estimators or sparsity inducing approaches.<br />
+</li>
+<li><strong>Multiple Testing and False Discovery Rate (FDR)</strong>: In high-dimensional settings, multiple hypothesis tests lead to inflated error rates, necessitating corrections like the Benjamini-Hochberg procedure.</li>
+</ol>
+</div>
+<div id="applications-4" class="section level3 hasAnchor" number="3.0.3">
+<h3><span class="header-section-number">3.0.3</span> Applications<a href="introduction.html#applications-4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>Class 1: Introduction to Multivariate High-Dimensional Methods</li>
-<li>Class 2: HD Linear Regression: Machine Learning</li>
-<li>Class 3: HD Linear Regression: Bayesian Methods</li>
-<li>Class 4: Computational Implementation of HD Linear Regression</li>
+<li><strong>Genomics</strong>: Identifying genes associated with diseases from thousands of genetic markers.<br />
+</li>
+<li><strong>Finance</strong>: Portfolio optimization where the number of assets is large relative to available data.<br />
+</li>
+<li><strong>Machine Learning</strong>: Feature selection and model regularization in predictive modeling.</li>
 </ul>
+<p>High-dimensional statistics continues to evolve, with ongoing research in areas like robust estimation, Bayesian methods, and deep learning applications. As more computational power and data becomes availale, methods that were considered High-Dimensional can be approached with traditional methods.</p>
 
-<!-- Bold Letters -->
-<!-- Regular Greeks -->
-<!-- Variant Greeks -->
-<!-- Calligraphic Letters -->
-<!-- Double Letters -->
-<!-- Tilde Letters -->
-<!-- Bold Numbers -->
-</div>
 </div>
 </div>
             </section>
@@ -181,8 +183,8 @@ and lecture notes.</p>
           </div>
         </div>
       </div>
+<a href="prerequisites.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="prerequisites.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

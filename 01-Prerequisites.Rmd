@@ -1,3 +1,4 @@
+<!-- Bold Letters -->
 \newcommand{\ba}{ {\boldsymbol a} }
 \newcommand{\bA}{ {\boldsymbol A} }
 \newcommand{\bb}{ {\boldsymbol b} }
@@ -50,7 +51,7 @@
 \newcommand{\bY}{ {\boldsymbol Y} }
 \newcommand{\bz}{ {\boldsymbol z} }
 \newcommand{\bZ}{ {\boldsymbol Z} }
-% Regular Greeks
+<!-- Regular Greeks -->
 \newcommand{\bga} { {\boldsymbol \alpha} }
 \newcommand{\bgb} { {\boldsymbol \beta} }
 \newcommand{\bgg} { {\boldsymbol \gamma} }
@@ -85,14 +86,14 @@
 \newcommand{\bgPs}{ {\boldsymbol \Psi} }
 \newcommand{\bgo} { {\boldsymbol \omega} }
 \newcommand{\bgO} { {\boldsymbol \Omega} }
-% Variant Greeks
+<!-- Variant Greeks -->
 \newcommand{\bgve} { {\boldsymbol \varepsilon} }
 \newcommand{\bgvth}{ {\boldsymbol \vartheta} }
 \newcommand{\bgvp} { {\boldsymbol \varpi} }
 \newcommand{\bgvr} { {\boldsymbol \varrho} }
 \newcommand{\bgvs} { {\boldsymbol \varsigma} }
 \newcommand{\bgvph}{ {\boldsymbol \varphi} }
-%%% Calligraphic Letters %%%
+<!-- Calligraphic Letters -->
 \newcommand{\cA}{ {\mathcal{A}} }
 \newcommand{\cB}{ {\mathcal{B}} }
 \newcommand{\cC}{ {\mathcal{C}} }
@@ -118,7 +119,7 @@
 \newcommand{\cX}{ {\mathcal{X}} }
 \newcommand{\cY}{ {\mathcal{Y}} }
 \newcommand{\cZ}{ {\mathcal{Z}} }
-%%% Double Letters %%%
+<!-- Double Letters -->
 \newcommand{\dA}{ {\mathbb{A}} }
 \newcommand{\dB}{ {\mathbb{B}} }
 \newcommand{\dC}{ {\mathbb{C}} }
@@ -144,7 +145,7 @@
 \newcommand{\dX}{ {\mathbb{X}} }
 \newcommand{\dY}{ {\mathbb{Y}} }
 \newcommand{\dZ}{ {\mathbb{Z}} }
-%%% Tilde Letters %%%
+<!-- Tilde Letters -->
 \newcommand{\ta}{ {\tilde{a}} }
 \newcommand{\tA}{ {\tilde{A}} }
 \newcommand{\tb}{ {\tilde{b}} }
@@ -193,7 +194,7 @@
 \newcommand{\tY}{ {\tilde{Y}} }
 \newcommand{\tz}{ {\tilde{z}} }
 \newcommand{\tZ}{ {\tilde{Z}} }
-%%% Bold Numbers %%%
+<!-- Bold Numbers -->
 \newcommand{\bzero}{ {\boldsymbol 0} }
 \newcommand{\bones}{ {\boldsymbol 1} }
 \newcommand{\hy}{\hat{y}}

@@ -1,0 +1,21 @@
+# Introduction
+
+High-dimensional multivariate statistics deals with the analysis of data where both the number of variables (\( p \)) and the number of observations (\( n \)) can be large, and often, \( p \) is comparable to or even greater than \( n \), making tradintional methods unavailable or computationally impractical. This setting arises naturally in modern applications like genomics, finance, and machine learning, where data sets contain hundreds or thousands of variables.
+
+### Key Challenges  
+- **Curse of Dimensionality**: As \( p \) grows, classical statistical methods (e.g., ordinary least squares, classical covariance estimation) break down, become unstable or are computationally expensive.  
+- **Multicollinearity**: High correlation between variables can lead to singular or nearly singular covariance matrices. As the number of variables increases this scenario becomes more likely, if $p \gg n$ this have to be the case necessarily. 
+- **Overfitting**: When \( p \gg n \), models tend to fit noise rather than signal.  
+
+### Core Concepts  
+1. **Regularized Estimation**: Methods like ridge regression, LASSO, and graphical models introduce constraints to stabilize estimation.  
+2. **Dimensionality Reduction**: Techniques like Principal Component Analysis (PCA) and Factor Analysis help summarize information in fewer dimensions.  
+3. **High-Dimensional Covariance and Precision Matrices**: Classical estimators (e.g., sample covariance) fail when \( p > n \), requiring alternatives like shrinkage estimators or sparsity inducing approaches.  
+4. **Multiple Testing and False Discovery Rate (FDR)**: In high-dimensional settings, multiple hypothesis tests lead to inflated error rates, necessitating corrections like the Benjamini-Hochberg procedure.  
+
+### Applications  
+- **Genomics**: Identifying genes associated with diseases from thousands of genetic markers.  
+- **Finance**: Portfolio optimization where the number of assets is large relative to available data.  
+- **Machine Learning**: Feature selection and model regularization in predictive modeling.  
+
+High-dimensional statistics continues to evolve, with ongoing research in areas like robust estimation, Bayesian methods, and deep learning applications. As more computational power and data becomes availale, methods that were considered High-Dimensional can be approached with traditional methods.
