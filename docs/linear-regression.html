@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Linear Regression | DS 6388 Spring 2025</title>
+  <meta name="description" content="4 Linear Regression | DS 6388 Spring 2025" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Linear Regression | DS 6388 Spring 2025" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Linear Regression | DS 6388 Spring 2025" />
+  
+  
+  
+
+<meta name="author" content="Rene Gutierrez" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> DS 6388: Multivariate Statistical Methods for High-dimensional Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#calendar"><i class="fa fa-check"></i><b>1.1</b> Calendar</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#importatnt-dates"><i class="fa fa-check"></i><b>1.1.1</b> Importatnt Dates</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#class-schedule"><i class="fa fa-check"></i><b>1.1.2</b> Class Schedule</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.1</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="prerequisites.html"><a href="prerequisites.html#linear-independence"><i class="fa fa-check"></i><b>2.1.1</b> Linear Independence</a></li>
+<li class="chapter" data-level="2.1.2" data-path="prerequisites.html"><a href="prerequisites.html#column-space-of-a-matrix"><i class="fa fa-check"></i><b>2.1.2</b> Column Space of a Matrix</a></li>
+<li class="chapter" data-level="2.1.3" data-path="prerequisites.html"><a href="prerequisites.html#rank-of-a-matrix"><i class="fa fa-check"></i><b>2.1.3</b> Rank of a Matrix</a></li>
+<li class="chapter" data-level="2.1.4" data-path="prerequisites.html"><a href="prerequisites.html#full-rank-matrix"><i class="fa fa-check"></i><b>2.1.4</b> Full Rank Matrix</a></li>
+<li class="chapter" data-level="2.1.5" data-path="prerequisites.html"><a href="prerequisites.html#inverse-matrix"><i class="fa fa-check"></i><b>2.1.5</b> Inverse Matrix</a></li>
+<li class="chapter" data-level="2.1.6" data-path="prerequisites.html"><a href="prerequisites.html#positive-definite-matrix"><i class="fa fa-check"></i><b>2.1.6</b> Positive Definite Matrix</a></li>
+<li class="chapter" data-level="2.1.7" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.1.7</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="2.1.8" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.1.8</b> Eigendecomposition</a></li>
+<li class="chapter" data-level="2.1.9" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.1.9</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.1.10" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.1.10</b> Determinant of a Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.2</b> Calculus</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#gradient"><i class="fa fa-check"></i><b>2.2.1</b> Gradient</a></li>
+<li class="chapter" data-level="2.2.2" data-path="prerequisites.html"><a href="prerequisites.html#hessian-matrix"><i class="fa fa-check"></i><b>2.2.2</b> Hessian Matrix</a></li>
+<li class="chapter" data-level="2.2.3" data-path="prerequisites.html"><a href="prerequisites.html#applications-1"><i class="fa fa-check"></i><b>2.2.3</b> Applications:</a></li>
+<li class="chapter" data-level="2.2.4" data-path="prerequisites.html"><a href="prerequisites.html#matrix-calculus"><i class="fa fa-check"></i><b>2.2.4</b> Matrix Calculus</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="prerequisites.html"><a href="prerequisites.html#expected-value"><i class="fa fa-check"></i><b>2.3.1</b> Expected Value</a></li>
+<li class="chapter" data-level="2.3.2" data-path="prerequisites.html"><a href="prerequisites.html#variance"><i class="fa fa-check"></i><b>2.3.2</b> Variance</a></li>
+<li class="chapter" data-level="2.3.3" data-path="prerequisites.html"><a href="prerequisites.html#cross-covariance-matrix"><i class="fa fa-check"></i><b>2.3.3</b> Cross-Covariance Matrix</a></li>
+<li class="chapter" data-level="2.3.4" data-path="prerequisites.html"><a href="prerequisites.html#multivariate-normal-distribution"><i class="fa fa-check"></i><b>2.3.4</b> Multivariate Normal Distribution</a></li>
+<li class="chapter" data-level="2.3.5" data-path="prerequisites.html"><a href="prerequisites.html#chi2-distribution"><i class="fa fa-check"></i><b>2.3.5</b> <span class="math inline">\(\chi^2\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.3.6" data-path="prerequisites.html"><a href="prerequisites.html#t-distribution"><i class="fa fa-check"></i><b>2.3.6</b> <span class="math inline">\(t\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.3.7" data-path="prerequisites.html"><a href="prerequisites.html#f-distribution"><i class="fa fa-check"></i><b>2.3.7</b> <span class="math inline">\(F\)</span> Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.4.1</b> Bias of an Estimator</a></li>
+<li class="chapter" data-level="2.4.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.4.2</b> Unbiased Estimator</a></li>
+<li class="chapter" data-level="2.4.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.4.3</b> Mean Square Error of an Estimator</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#key-challenges"><i class="fa fa-check"></i><b>3.1</b> Key Challenges</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction.html"><a href="introduction.html#core-concepts"><i class="fa fa-check"></i><b>3.2</b> Core Concepts</a></li>
+<li class="chapter" data-level="3.3" data-path="introduction.html"><a href="introduction.html#applications-4"><i class="fa fa-check"></i><b>3.3</b> Applications</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>4</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="linear-regression.html"><a href="linear-regression.html#machine-learning"><i class="fa fa-check"></i><b>4.1</b> Machine Learning</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="linear-regression.html"><a href="linear-regression.html#ordinary-least-squares"><i class="fa fa-check"></i><b>4.1.1</b> Ordinary Least Squares</a></li>
+<li class="chapter" data-level="4.1.2" data-path="linear-regression.html"><a href="linear-regression.html#ridge-regression"><i class="fa fa-check"></i><b>4.1.2</b> Ridge Regression</a></li>
+<li class="chapter" data-level="4.1.3" data-path="linear-regression.html"><a href="linear-regression.html#lasso-regression"><i class="fa fa-check"></i><b>4.1.3</b> Lasso Regression</a></li>
+<li class="chapter" data-level="4.1.4" data-path="linear-regression.html"><a href="linear-regression.html#elastic-net"><i class="fa fa-check"></i><b>4.1.4</b> Elastic Net</a></li>
+<li class="chapter" data-level="4.1.5" data-path="linear-regression.html"><a href="linear-regression.html#elastic-net-as-a-mixed-penalty"><i class="fa fa-check"></i><b>4.1.5</b> <strong>Elastic Net as a Mixed Penalty</strong></a></li>
+<li class="chapter" data-level="4.1.6" data-path="linear-regression.html"><a href="linear-regression.html#other-options-of-regularization"><i class="fa fa-check"></i><b>4.1.6</b> Other Options of Regularization</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DS 6388 Spring 2025</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="linear-regression" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> Linear Regression<a href="linear-regression.html#linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="machine-learning" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Machine Learning<a href="linear-regression.html#machine-learning" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this section, we will not make any probability assumption, and we will treat
+the problem only as an optimization problem.</p>
+<hr />
+<div id="ordinary-least-squares" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Ordinary Least Squares<a href="linear-regression.html#ordinary-least-squares" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="model-specification" class="section level4 hasAnchor" number="4.1.1.1">
+<h4><span class="header-section-number">4.1.1.1</span> Model Specification<a href="linear-regression.html#model-specification" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(y_i \in \mathbb{R}\)</span> be the response variable and <span class="math inline">\(x_i \in \mathbb{R}^p\)</span> be the vector of predictors for observation <span class="math inline">\(i\)</span>, where <span class="math inline">\(i = 1, \dots, n\)</span>. The multiple linear regression model is given by:</p>
+<p><span class="math display">\[
+{\boldsymbol y} =  {\boldsymbol X}  {\boldsymbol \beta} +  {\boldsymbol e}
+\]</span></p>
+<p>where:<br />
+- <span class="math inline">\( {\boldsymbol y} \in \mathbb{R}^{n}\)</span> is the <strong>response vector</strong> (each entry corresponds to an observation),<br />
+- <span class="math inline">\( {\boldsymbol X} \in \mathbb{R}^{n \times p}\)</span> is the <strong>design matrix</strong> (including predictors, typically with an intercept column of ones),<br />
+- <span class="math inline">\( {\boldsymbol \beta} \in \mathbb{R}^{p}\)</span> is the <strong>coefficient vector</strong> to be estimated,<br />
+- <span class="math inline">\( {\boldsymbol e} \in \mathbb{R}^{n}\)</span> is the <strong>error vector</strong>.</p>
+<hr />
+</div>
+<div id="minimization-problem" class="section level4 hasAnchor" number="4.1.1.2">
+<h4><span class="header-section-number">4.1.1.2</span> Minimization Problem<a href="linear-regression.html#minimization-problem" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The objective is to minimize the sum of squared errors (SSE):</p>
+<p><span class="math display">\[
+\min_{ {\boldsymbol \beta} } \mathcal{L}( {\boldsymbol \beta} ) = \min_{ {\boldsymbol \beta} } \|  {\boldsymbol y} -  {\boldsymbol X}  {\boldsymbol \beta} \|_2^2.
+\]</span></p>
+<p>Expanding the loss function:</p>
+<p><span class="math display">\[
+\mathcal{L}( {\boldsymbol \beta} ) = ( {\boldsymbol y} -  {\boldsymbol X}  {\boldsymbol \beta} )&#39; ( {\boldsymbol y} -  {\boldsymbol X}  {\boldsymbol \beta} ).
+\]</span></p>
+<hr />
+</div>
+<div id="solution" class="section level4 hasAnchor" number="4.1.1.3">
+<h4><span class="header-section-number">4.1.1.3</span> Solution<a href="linear-regression.html#solution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>To minimize <span class="math inline">\(\mathcal{L}(\beta)\)</span>, we take the derivative with respect to <span class="math inline">\(\beta\)</span>:</p>
+<p><span class="math display">\[
+\frac{\partial \mathcal{L}( {\boldsymbol \beta} )}{\partial  {\boldsymbol \beta} } = -2  {\boldsymbol X} &#39; ( {\boldsymbol y} -  {\boldsymbol X}  {\boldsymbol \beta} ).
+\]</span></p>
+<p>Setting this to zero, we obtain the <strong>normal equation</strong>:</p>
+<p><span class="math display">\[
+{\boldsymbol X} &#39;  {\boldsymbol X}  {\boldsymbol \beta} =  {\boldsymbol X} &#39;  {\boldsymbol y} .
+\]</span></p>
+<p>If <span class="math inline">\( {\boldsymbol X} &#39;  {\boldsymbol X} \)</span> is invertible (i.e., <span class="math inline">\( {\boldsymbol X} \)</span> has full column rank), we solve for <span class="math inline">\( {\boldsymbol \beta} \)</span>:</p>
+<p><span class="math display">\[
+{\boldsymbol \beta} = ( {\boldsymbol X} &#39;  {\boldsymbol X} )^{-1}  {\boldsymbol X} &#39;  {\boldsymbol y} .
+\]</span></p>
+<p>To check that this is a minimizer, we compute the Hessian of <span class="math inline">\(\mathcal{L}( {\boldsymbol \beta} )\)</span>:</p>
+<p><span class="math display">\[
+H = \frac{\partial^2 \mathcal{L}( {\boldsymbol \beta} )}{\partial  {\boldsymbol \beta} \partial  {\boldsymbol \beta} &#39;} = 2  {\boldsymbol X} &#39;  {\boldsymbol X} .
+\]</span></p>
+<p>Since <span class="math inline">\( {\boldsymbol X} &#39;  {\boldsymbol X} \)</span> is positive semidefinite and positive definite if <span class="math inline">\( {\boldsymbol X} \)</span> has full column rank, the function <span class="math inline">\(\mathcal{L}( {\boldsymbol \beta} )\)</span> is convex. Hence, the critical point <span class="math inline">\( {\boldsymbol \beta} = ( {\boldsymbol X} &#39;  {\boldsymbol X} )^{-1}  {\boldsymbol X} &#39;  {\boldsymbol y} \)</span> is the unique global minimum.</p>
+<p>The OLS solution is often denoted as:</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}_{\text{OLS}} = (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{X}&#39;\mathbf{y}.
+\]</span></p>
+<p>Notice that we noted that <span class="math inline">\( {\boldsymbol X} \)</span> is full column rank, when this condition is not
+met (or is close to not be met), other approaches are necessary.</p>
+<hr />
+</div>
+</div>
+<div id="ridge-regression" class="section level3 hasAnchor" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Ridge Regression<a href="linear-regression.html#ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="introduction-1" class="section level4 hasAnchor" number="4.1.2.1">
+<h4><span class="header-section-number">4.1.2.1</span> Introduction<a href="linear-regression.html#introduction-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When the design matrix <span class="math inline">\(\mathbf{X}\)</span> is not full rank, the matrix <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is singular (i.e., not invertible), making it impossible to compute the least squares solution</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}_{\text{OLS}} = (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{X}&#39;\mathbf{y}.
+\]</span></p>
+<p>This issue arises when there are <strong>more predictors than observations</strong> (<span class="math inline">\(p &gt; n\)</span>) or when there is <strong>multicollinearity</strong> among the predictors.</p>
+<p>To address this, <strong>Ridge Regression</strong> introduces a small positive <strong>penalty term</strong> that <strong>regularizes</strong> the matrix <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>, making it invertible. This method is also known as <strong>Tikhonov regularization</strong> or <strong><span class="math inline">\(L_2\)</span> regularization</strong>.</p>
+<p>When <span class="math inline">\(p &gt; n\)</span> then we can approximate <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> with <span class="math inline">\(\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I}\)</span>, where <span class="math inline">\(\lambda &gt; 0\)</span> can be as small as necessary. This approximation is helpful since <span class="math inline">\(\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I}\)</span> is always non-singular.</p>
+<hr />
+</div>
+<div id="non-singularity-of-the-approximation" class="section level4 hasAnchor" number="4.1.2.2">
+<h4><span class="header-section-number">4.1.2.2</span> Non-singularity of the Approximation<a href="linear-regression.html#non-singularity-of-the-approximation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{X}\)</span> be an <span class="math inline">\(n \times p\)</span> matrix. Its SVD decomposition is</p>
+<p><span class="math display">\[
+\mathbf{X} = \mathbf{U} \mathbf{D} \mathbf{V}&#39;
+\]</span></p>
+<p>where:<br />
+- <span class="math inline">\(\mathbf{U} \in \mathbb{R}^{n \times n}\)</span> is an <strong>orthonormal matrix</strong> (<span class="math inline">\(\mathbf{U}&#39; \mathbf{U} = \mathbf{I}_n\)</span>),<br />
+- <span class="math inline">\(\mathbf{V} \in \mathbb{R}^{p \times p}\)</span> is an <strong>orthonormal matrix</strong> (<span class="math inline">\(\mathbf{V}&#39; \mathbf{V} = \mathbf{I}_p\)</span>),<br />
+- <span class="math inline">\(\mathbf{D} \in \mathbb{R}^{n \times p}\)</span> is a <strong>diagonal matrix</strong> with singular values <span class="math inline">\(d_1, d_2, \dots, d_n \geq 0\)</span> along the diagonal.</p>
+<p>Since <span class="math inline">\(p &gt; n\)</span>, the number of singular values is at most <span class="math inline">\(n\)</span>, meaning that <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> has at most <strong>rank <span class="math inline">\(n\)</span></strong> and is <strong>not invertible</strong> when <span class="math inline">\(p &gt; n\)</span>.</p>
+<p>Using the SVD of <span class="math inline">\(\mathbf{X}\)</span>, we can express</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} = (\mathbf{U} \mathbf{D} \mathbf{V}&#39;)&#39; (\mathbf{U} \mathbf{D} \mathbf{V}&#39;)
+= \mathbf{V} \mathbf{D}&#39; \mathbf{U}&#39; \mathbf{U} \mathbf{D} \mathbf{V}&#39;
+= \mathbf{V} (\mathbf{D}&#39; \mathbf{D}) \mathbf{V}&#39;.
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{U}\)</span> is an <span class="math inline">\(n \times n\)</span> orthogonal matrix, <span class="math inline">\(\mathbf{D}&#39; \mathbf{D}\)</span> is a <span class="math inline">\(p \times p\)</span> diagonal matrix:</p>
+<p><span class="math display">\[
+\mathbf{D}&#39; \mathbf{D} =
+\begin{bmatrix}
+d_1^2 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; d_2^2 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \dots &amp; d_n^2 &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+\end{bmatrix}.
+\]</span></p>
+<ul>
+<li>The first <span class="math inline">\(n\)</span> diagonal entries are <span class="math inline">\(d_i^2\)</span>, corresponding to the squared singular values of <span class="math inline">\(\mathbf{X}\)</span>.<br />
+</li>
+<li>The remaining <span class="math inline">\(p - n\)</span> diagonal entries are <strong>zero</strong>, meaning <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> has <strong><span class="math inline">\(p - n\)</span> zero eigenvalues</strong> and is <strong>not full rank</strong>.</li>
+</ul>
+<p>Now, consider the modified matrix:</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I}.
+\]</span></p>
+<p>Using the SVD form of <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>, we have:</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} = \mathbf{V} (\mathbf{D}&#39; \mathbf{D}) \mathbf{V}&#39; + \lambda \mathbf{I}.
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{I} = \mathbf{V} \mathbf{I} \mathbf{V}&#39;\)</span>, we rewrite this as:</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} = \mathbf{V} (\mathbf{D}&#39; \mathbf{D} + \lambda \mathbf{I}) \mathbf{V}&#39;.
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{D}&#39; \mathbf{D}\)</span> is diagonal, adding <span class="math inline">\(\lambda \mathbf{I}\)</span> results in:</p>
+<p><span class="math display">\[
+\mathbf{D}&#39; \mathbf{D} + \lambda \mathbf{I} =
+\begin{bmatrix}
+d_1^2 + \lambda &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; d_2^2 + \lambda &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \dots &amp; d_n^2 + \lambda &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; 0 &amp; \dots &amp; 0 &amp; \lambda &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; \lambda \\
+\end{bmatrix}.
+\]</span></p>
+<ul>
+<li>The first <span class="math inline">\(n\)</span> diagonal entries are <span class="math inline">\(d_i^2 + \lambda\)</span>, all <strong>strictly positive</strong> because <span class="math inline">\(d_i^2 \geq 0\)</span> and <span class="math inline">\(\lambda &gt; 0\)</span>.<br />
+</li>
+<li>The last <span class="math inline">\(p - n\)</span> diagonal entries are <strong><span class="math inline">\(\lambda\)</span> (also strictly positive)</strong>.</li>
+</ul>
+<p>Thus, <strong>all eigenvalues of <span class="math inline">\(\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I}\)</span> are strictly positive</strong>, implying that it is <strong>full rank and invertible</strong>.</p>
+<p>Since <span class="math inline">\(\mathbf{V}\)</span> is an <strong>orthogonal matrix</strong>, the entire expression</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} = \mathbf{V} (\mathbf{D}&#39; \mathbf{D} + \lambda \mathbf{I}) \mathbf{V}&#39;
+\]</span></p>
+<p>is <strong>invertible</strong>, because an orthogonal matrix times an invertible diagonal matrix remains invertible.</p>
+<p>So, even when <span class="math inline">\(p &gt; n\)</span>, adding <span class="math inline">\(\lambda \mathbf{I}\)</span> <strong>shifts all eigenvalues away from zero</strong>, ensuring that</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I}
+\]</span></p>
+<p>is always invertible for <span class="math inline">\(\lambda &gt; 0\)</span>. This guarantees that Ridge Regression always has a unique solution:</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}_{\text{ridge}} = (\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<hr />
+</div>
+<div id="ridge-regression-as-a-minimization-problem" class="section level4 hasAnchor" number="4.1.2.3">
+<h4><span class="header-section-number">4.1.2.3</span> Ridge Regression as a Minimization Problem<a href="linear-regression.html#ridge-regression-as-a-minimization-problem" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Instead of minimizing the standard sum of squared errors, Ridge Regression solves the following regularized problem:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \mathcal{L}(\boldsymbol{\beta}) = \min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \|\boldsymbol{\beta}\|_2^2 \right\}.
+\]</span></p>
+<p>where <span class="math inline">\(\lambda &gt; 0\)</span> is a <strong>tuning parameter</strong> that controls the amount of regularization:<br />
+- <strong>When <span class="math inline">\(\lambda = 0\)</span></strong>: The problem reduces to ordinary least squares (OLS).<br />
+- <strong>When <span class="math inline">\(\lambda \to \infty\)</span></strong>: The penalty dominates, forcing <span class="math inline">\(\boldsymbol{\beta}\)</span> toward <strong>zero</strong>, shrinking coefficients.</p>
+<p>Expanding the loss function:</p>
+<p><span class="math display">\[
+\mathcal{L}(\boldsymbol{\beta}) = (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})&#39; (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + \lambda \boldsymbol{\beta}&#39; \boldsymbol{\beta}.
+\]</span></p>
+<p>Taking the derivative with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> and setting it to zero:</p>
+<p><span class="math display">\[
+-2 \mathbf{X}&#39; (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + 2 \lambda \boldsymbol{\beta} = 0.
+\]</span></p>
+<p>Rearranging:</p>
+<p><span class="math display">\[
+\mathbf{X}&#39; \mathbf{X} \boldsymbol{\beta} + \lambda \boldsymbol{\beta} = \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<p>Factoring out <span class="math inline">\(\boldsymbol{\beta}\)</span>:</p>
+<p><span class="math display">\[
+(\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I}) \boldsymbol{\beta} = \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> may be singular, adding <span class="math inline">\(\lambda \mathbf{I}\)</span> ensures that the matrix <span class="math inline">\((\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I})\)</span> is always invertible for any <span class="math inline">\(\lambda &gt; 0\)</span>.</p>
+<p>Thus, the Ridge Regression solution is</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}_{\text{ridge}} = (\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<hr />
+</div>
+<div id="conclusion" class="section level4 hasAnchor" number="4.1.2.4">
+<h4><span class="header-section-number">4.1.2.4</span> Conclusion<a href="linear-regression.html#conclusion" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><strong>Matrix Regularization</strong>: The term <span class="math inline">\(\lambda \mathbf{I}\)</span> ensures that <span class="math inline">\(\mathbf{X}&#39;\mathbf{X} + \lambda \mathbf{I}\)</span> is always invertible because it shifts the eigenvalues of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> away from zero.<br />
+</li>
+<li><strong>Bias-Variance Tradeoff</strong>: Ridge Regression <strong>reduces variance</strong> at the cost of introducing some <strong>bias</strong>, which can improve prediction accuracy when <span class="math inline">\(\mathbf{X}\)</span> is ill-conditioned or when <span class="math inline">\(p &gt; n\)</span>.<br />
+</li>
+<li><strong>Shrinkage Effect</strong>: Larger <span class="math inline">\(\lambda\)</span> values shrink the coefficients towards zero, preventing overfitting.<br />
+</li>
+<li>When <span class="math inline">\(\lambda = 0\)</span>: The problem reduces to ordinary least squares (OLS).<br />
+</li>
+<li>When <span class="math inline">\(\lambda \to \infty\)</span>: The penalty dominates, forcing <span class="math inline">\(\boldsymbol{\beta}\)</span> toward <strong>zero</strong>, shrinking coefficients.</li>
+</ol>
+<p>The only thing that is left is selecting the value of <span class="math inline">\(\lambda\)</span></p>
+<hr />
+</div>
+</div>
+<div id="lasso-regression" class="section level3 hasAnchor" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Lasso Regression<a href="linear-regression.html#lasso-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Lasso regression</strong> (Least Absolute Shrinkage and Selection Operator) is a variation of <strong>linear regression</strong> that adds a penalty (like Ridge Regression) to the loss function to promote <strong>sparsity</strong> in the coefficients, effectively setting some of them to zero (unulike Ridge Regression). This makes Lasso a useful technique for <strong>feature selection</strong>, especially when we have many predictors, some of which may be irrelevant or highly correlated.</p>
+<hr />
+<div id="lasso-regression-as-an-optimization-problem" class="section level4 hasAnchor" number="4.1.3.1">
+<h4><span class="header-section-number">4.1.3.1</span> Lasso Regression as an Optimization Problem<a href="linear-regression.html#lasso-regression-as-an-optimization-problem" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Lasso regression formulation is:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \mathcal{L}(\boldsymbol{\beta}) = \min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \|\boldsymbol{\beta}\|_1 \right\}.
+\]</span></p>
+<p>Where:
+- <span class="math inline">\(\|\boldsymbol{\beta}\|_1 = \sum_{i=1}^p |\beta_i|\)</span> is the <strong>L1 norm</strong> of the coefficients (sum of absolute values of the coefficients),
+- <span class="math inline">\(\lambda \geq 0\)</span> is the <strong>regularization parameter</strong> controlling the strength of the penalty.</p>
+<p>The loss function consists of:
+1. <strong>Residual Sum of Squares (RSS)</strong>: <span class="math inline">\(\| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2\)</span>, which measures the fit of the model (same as in ordinary least squares regression).
+2. <strong>L1 Penalty</strong>: <span class="math inline">\(\lambda \|\boldsymbol{\beta}\|_1\)</span>, which shrinks the coefficients towards zero and encourages sparsity (i.e., some coefficients are exactly zero).</p>
+<p>The <strong>objective</strong> is to minimize the <strong>sum of squared residuals</strong> along with a penalty term:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \sum_{i=1}^p |\beta_i| \right\}.
+\]</span></p>
+<p>The key feature of Lasso is that the <strong>L1 penalty</strong> promotes <strong>sparsity</strong> by shrinking some coefficients exactly to zero, which results in a simpler, more interpretable model. The parameter <span class="math inline">\(\lambda\)</span> controls the trade-off between <strong>fit</strong> and <strong>sparsity</strong>:
+- <strong>When <span class="math inline">\(\lambda = 0\)</span></strong>: Lasso reduces to ordinary least squares regression (OLS), where no penalty is applied.
+- <strong>When <span class="math inline">\(\lambda\)</span> is large</strong>: The penalty dominates, and more coefficients are shrunk to zero.</p>
+<p>Unfortunately, unlike Ridge Regression, Lasso has no closed form solution and it is necessary to find the solution numerically.</p>
+<hr />
+</div>
+</div>
+<div id="elastic-net" class="section level3 hasAnchor" number="4.1.4">
+<h3><span class="header-section-number">4.1.4</span> Elastic Net<a href="linear-regression.html#elastic-net" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Elastic Net is a regularization technique that combines the strengths of <strong>Lasso</strong> and <strong>Ridge</strong> regression. While Lasso uses an L1 penalty and Ridge uses an L2 penalty, Elastic Net applies a <strong>mix</strong> of both penalties, giving a balance between sparsity and regularization strength. Elastic Net is particularly useful when there are <strong>highly correlated features</strong> or when the number of features is larger than the number of observations (<span class="math inline">\(p &gt; n\)</span>).</p>
+<hr />
+</div>
+<div id="elastic-net-as-a-mixed-penalty" class="section level3 hasAnchor" number="4.1.5">
+<h3><span class="header-section-number">4.1.5</span> <strong>Elastic Net as a Mixed Penalty</strong><a href="linear-regression.html#elastic-net-as-a-mixed-penalty" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The Elastic Net loss function is defined as:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda_1 \|\boldsymbol{\beta}\|_1 + \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2 \right\}.
+\]</span></p>
+<p>Where:
+- <span class="math inline">\(\mathbf{y}\)</span> is the <span class="math inline">\(n \times 1\)</span> vector of observed responses,
+- <span class="math inline">\(\mathbf{X}\)</span> is the <span class="math inline">\(n \times p\)</span> matrix of predictor variables,
+- <span class="math inline">\(\boldsymbol{\beta}\)</span> is the <span class="math inline">\(p \times 1\)</span> vector of regression coefficients,
+- <span class="math inline">\(\|\boldsymbol{\beta}\|_1 = \sum_{i=1}^p |\beta_i|\)</span> is the L1 norm (Lasso penalty),
+- <span class="math inline">\(\|\boldsymbol{\beta}\|_2^2 = \sum_{i=1}^p \beta_i^2\)</span> is the L2 norm (Ridge penalty),
+- <span class="math inline">\(\lambda_1 \geq 0\)</span> is the L1 regularization parameter (controlling the Lasso penalty),
+- <span class="math inline">\(\lambda_2 \geq 0\)</span> is the L2 regularization parameter (controlling the Ridge penalty).</p>
+<ul>
+<li><p><strong>L1 Penalty (Lasso term)</strong>: <span class="math inline">\(\lambda_1 \|\boldsymbol{\beta}\|_1\)</span> encourages sparsity, meaning that it drives some coefficients to exactly zero. This is helpful for feature selection and reduces the complexity of the model.</p></li>
+<li><p><strong>L2 Penalty (Ridge term)</strong>: <span class="math inline">\(\frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2\)</span> shrinks the coefficients toward zero without setting them exactly to zero. This helps with multicollinearity, preventing large fluctuations in the estimated coefficients when predictors are highly correlated.</p></li>
+</ul>
+<hr />
+<div id="why-use-elastic-net" class="section level4 hasAnchor" number="4.1.5.1">
+<h4><span class="header-section-number">4.1.5.1</span> Why Use Elastic Net?<a href="linear-regression.html#why-use-elastic-net" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p><strong>Correlation between predictors</strong>: When predictors are highly correlated, Lasso tends to select one variable and ignore the others. Elastic Net, by mixing L1 and L2 penalties, can help by including correlated variables in the model but still controlling their coefficients through the L2 penalty.</p></li>
+<li><p><strong>Feature selection with many predictors</strong>: In cases where the number of features <span class="math inline">\(p\)</span> is much greater than the number of observations <span class="math inline">\(n\)</span>, Lasso can become unstable. Elastic Net helps stabilize the model by adding a Ridge component, which shrinks the coefficients of less important features without forcing them to zero.</p></li>
+</ul>
+<p>The Elastic Net can be seen as a <strong>weighted sum</strong> of the Lasso and Ridge penalties, where:</p>
+<p><span class="math display">\[
+\text{Elastic Net Loss} = \lambda_1 \|\boldsymbol{\beta}\|_1 + \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2.
+\]</span></p>
+<p>You can think of <strong><span class="math inline">\(\lambda_1\)</span></strong> as controlling the strength of the <strong>Lasso</strong> penalty (feature selection), and <strong><span class="math inline">\(\lambda_2\)</span></strong> as controlling the strength of the <strong>Ridge</strong> penalty (shrinkage). The Elastic Net is useful when you need both <strong>sparsity</strong> (for feature selection) and <strong>regularization</strong> (to prevent overfitting).</p>
+<hr />
+</div>
+<div id="optimization-problem" class="section level4 hasAnchor" number="4.1.5.2">
+<h4><span class="header-section-number">4.1.5.2</span> Optimization Problem<a href="linear-regression.html#optimization-problem" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Elastic Net optimization problem is:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda_1 \|\boldsymbol{\beta}\|_1 + \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2 \right\}.
+\]</span></p>
+<ul>
+<li><p><strong>Objective function</strong>: The goal is to minimize the <strong>sum of squared residuals</strong> (RSS) plus the combined <strong>penalty terms</strong>.</p></li>
+<li><p>The optimal values of <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are typically chosen via <strong>cross-validation</strong>.</p></li>
+</ul>
+<hr />
+</div>
+<div id="connections-to-lasso-and-ridge-regression" class="section level4 hasAnchor" number="4.1.5.3">
+<h4><span class="header-section-number">4.1.5.3</span> Connections to Lasso and Ridge Regression<a href="linear-regression.html#connections-to-lasso-and-ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p><strong>When <span class="math inline">\(\lambda_2 = 0\)</span></strong>: Elastic Net becomes Lasso regression, as the Ridge term disappears and only the L1 penalty is applied.</p></li>
+<li><p><strong>When <span class="math inline">\(\lambda_1 = 0\)</span></strong>: Elastic Net becomes Ridge regression, as the L1 penalty is removed and only the L2 penalty is applied.</p></li>
+<li><p><strong>When both <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are non-zero</strong>: Elastic Net is a combination of both regularization methods, providing a balanced approach.</p></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="other-options-of-regularization" class="section level3 hasAnchor" number="4.1.6">
+<h3><span class="header-section-number">4.1.6</span> Other Options of Regularization<a href="linear-regression.html#other-options-of-regularization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In addition to Elastic Net, Ridge, and Lasso, there are other regularization methods used in machine learning and statistical modeling:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Group Lasso</strong>:
+<ul>
+<li><strong>Formula</strong>:<br />
+<span class="math display">\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \sum_{g} \|\boldsymbol{\beta}_g\|_2 \right\}.
+\]</span></li>
+<li><strong>Penalty</strong>: Group Lasso is used when variables are grouped, and the penalty is applied at the group level. It forces entire groups of variables to be either included or excluded from the model.</li>
+</ul></li>
+<li><strong>Fused Lasso</strong>:
+<ul>
+<li><strong>Formula</strong>:<br />
+<span class="math display">\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda_1 \|\boldsymbol{\beta}\|_1 + \lambda_2 \sum_{i} |\beta_i - \beta_{i-1}| \right\}.
+\]</span></li>
+<li><strong>Penalty</strong>: Fused Lasso adds a penalty to the differences between adjacent coefficients, encouraging <strong>smoothness</strong> in the solution. This is useful in time series or spatial data where adjacent coefficients are expected to be similar.</li>
+</ul></li>
+<li><strong>Bayesian Regularization</strong>:
+<ul>
+<li><strong>Formula</strong>: Bayesian regularization methods, like <strong>Bayesian Ridge Regression</strong>, assume a probabilistic model for the coefficients and add a prior distribution (often Gaussian) to the coefficients. The regularization comes from the prior’s influence on the model.</li>
+<li><strong>Penalty</strong>: The prior serves as a regularizer, encouraging smaller coefficients with the Gaussian prior.</li>
+</ul></li>
+</ol>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

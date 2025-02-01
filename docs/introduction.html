@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="prerequisites.html"/>
-
+<link rel="next" href="linear-regression.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -120,9 +120,21 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="3.0.1" data-path="introduction.html"><a href="introduction.html#key-challenges"><i class="fa fa-check"></i><b>3.0.1</b> Key Challenges</a></li>
-<li class="chapter" data-level="3.0.2" data-path="introduction.html"><a href="introduction.html#core-concepts"><i class="fa fa-check"></i><b>3.0.2</b> Core Concepts</a></li>
-<li class="chapter" data-level="3.0.3" data-path="introduction.html"><a href="introduction.html#applications-4"><i class="fa fa-check"></i><b>3.0.3</b> Applications</a></li>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#key-challenges"><i class="fa fa-check"></i><b>3.1</b> Key Challenges</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction.html"><a href="introduction.html#core-concepts"><i class="fa fa-check"></i><b>3.2</b> Core Concepts</a></li>
+<li class="chapter" data-level="3.3" data-path="introduction.html"><a href="introduction.html#applications-4"><i class="fa fa-check"></i><b>3.3</b> Applications</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>4</b> Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="linear-regression.html"><a href="linear-regression.html#machine-learning"><i class="fa fa-check"></i><b>4.1</b> Machine Learning</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="linear-regression.html"><a href="linear-regression.html#ordinary-least-squares"><i class="fa fa-check"></i><b>4.1.1</b> Ordinary Least Squares</a></li>
+<li class="chapter" data-level="4.1.2" data-path="linear-regression.html"><a href="linear-regression.html#ridge-regression"><i class="fa fa-check"></i><b>4.1.2</b> Ridge Regression</a></li>
+<li class="chapter" data-level="4.1.3" data-path="linear-regression.html"><a href="linear-regression.html#lasso-regression"><i class="fa fa-check"></i><b>4.1.3</b> Lasso Regression</a></li>
+<li class="chapter" data-level="4.1.4" data-path="linear-regression.html"><a href="linear-regression.html#elastic-net"><i class="fa fa-check"></i><b>4.1.4</b> Elastic Net</a></li>
+<li class="chapter" data-level="4.1.5" data-path="linear-regression.html"><a href="linear-regression.html#elastic-net-as-a-mixed-penalty"><i class="fa fa-check"></i><b>4.1.5</b> <strong>Elastic Net as a Mixed Penalty</strong></a></li>
+<li class="chapter" data-level="4.1.6" data-path="linear-regression.html"><a href="linear-regression.html#other-options-of-regularization"><i class="fa fa-check"></i><b>4.1.6</b> Other Options of Regularization</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -143,9 +155,9 @@
             <section class="normal" id="section-">
 <div id="introduction" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>High-dimensional multivariate statistics deals with the analysis of data where both the number of variables (<span class="math inline">\(p\)</span>) and the number of observations (<span class="math inline">\(n\)</span>) can be large, and often, <span class="math inline">\(p\)</span> is comparable to or even greater than <span class="math inline">\(n\)</span>, making tradintional methods unavailable or computationally impractical. This setting arises naturally in modern applications like genomics, finance, and machine learning, where data sets contain hundreds or thousands of variables.</p>
-<div id="key-challenges" class="section level3 hasAnchor" number="3.0.1">
-<h3><span class="header-section-number">3.0.1</span> Key Challenges<a href="introduction.html#key-challenges" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>High-dimensional multivariate statistics deals with the analysis of data where both the number of variables (<span class="math inline">\(p\)</span>) and the number of observations (<span class="math inline">\(n\)</span>) can be large, and often, <span class="math inline">\(p\)</span> is comparable to or even greater than <span class="math inline">\(n\)</span>, making traditional methods unavailable or computationally impractical. This setting arises naturally in modern applications like genomics, finance, and machine learning, where data sets contain hundreds or thousands of variables.</p>
+<div id="key-challenges" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Key Challenges<a href="introduction.html#key-challenges" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li><strong>Curse of Dimensionality</strong>: As <span class="math inline">\(p\)</span> grows, classical statistical methods (e.g., ordinary least squares, classical covariance estimation) break down, become unstable or are computationally expensive.<br />
 </li>
@@ -153,8 +165,8 @@
 <li><strong>Overfitting</strong>: When <span class="math inline">\(p \gg n\)</span>, models tend to fit noise rather than signal.</li>
 </ul>
 </div>
-<div id="core-concepts" class="section level3 hasAnchor" number="3.0.2">
-<h3><span class="header-section-number">3.0.2</span> Core Concepts<a href="introduction.html#core-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="core-concepts" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Core Concepts<a href="introduction.html#core-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
 <li><strong>Regularized Estimation</strong>: Methods like ridge regression, LASSO, and graphical models introduce constraints to stabilize estimation.<br />
 </li>
@@ -165,8 +177,8 @@
 <li><strong>Multiple Testing and False Discovery Rate (FDR)</strong>: In high-dimensional settings, multiple hypothesis tests lead to inflated error rates, necessitating corrections like the Benjamini-Hochberg procedure.</li>
 </ol>
 </div>
-<div id="applications-4" class="section level3 hasAnchor" number="3.0.3">
-<h3><span class="header-section-number">3.0.3</span> Applications<a href="introduction.html#applications-4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="applications-4" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Applications<a href="introduction.html#applications-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li><strong>Genomics</strong>: Identifying genes associated with diseases from thousands of genetic markers.<br />
 </li>
@@ -183,8 +195,8 @@
           </div>
         </div>
       </div>
-<a href="prerequisites.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="prerequisites.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

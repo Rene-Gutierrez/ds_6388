@@ -1,0 +1,385 @@
+# Linear Regression
+
+## Machine Learning
+
+In this section, we will not make any probability assumption, and we will treat 
+the problem only as an optimization problem.
+
+---
+
+### Ordinary Least Squares
+
+#### Model Specification  
+
+Let \( y_i \in \mathbb{R} \) be the response variable and \( x_i \in \mathbb{R}^p \) be the vector of predictors for observation \( i \), where \( i = 1, \dots, n \). The multiple linear regression model is given by:  
+
+\[
+\by = \bX \bgb + \be
+\]
+
+where:  
+- \( \by  \in \mathbb{R}^{n} \) is the **response vector** (each entry corresponds to an observation),  
+- \( \bX  \in \mathbb{R}^{n \times p} \) is the **design matrix** (including predictors, typically with an intercept column of ones),  
+- \( \bgb \in \mathbb{R}^{p} \) is the **coefficient vector** to be estimated,  
+- \( \be  \in \mathbb{R}^{n} \) is the **error vector**.  
+
+---
+
+#### Minimization Problem  
+
+The objective is to minimize the sum of squared errors (SSE):  
+
+\[
+\min_{\bgb} \mathcal{L}(\bgb) = \min_{\bgb} \| \by - \bX \bgb \|_2^2.
+\]
+
+Expanding the loss function:  
+
+\[
+\mathcal{L}(\bgb) = (\by - \bX\bgb)' (\by - \bX \bgb).
+\]  
+
+---
+
+#### Solution  
+
+To minimize \( \mathcal{L}(\beta) \), we take the derivative with respect to \( \beta \):  
+
+\[
+\frac{\partial \mathcal{L}(\bgb)}{\partial \bgb} = -2 \bX' (\by - \bX \bgb).
+\]
+
+Setting this to zero, we obtain the **normal equation**:  
+
+\[
+\bX' \bX \bgb = \bX' \by.
+\]
+
+If \( \bX' \bX \) is invertible (i.e., \( \bX \) has full column rank), we solve for \( \bgb \):  
+
+\[
+\bgb = (\bX' \bX)^{-1} \bX' \by.
+\]
+
+To check that this is a minimizer, we compute the Hessian of \( \mathcal{L}(\bgb) \):  
+
+\[
+H = \frac{\partial^2 \mathcal{L}(\bgb)}{\partial \bgb \partial \bgb'} = 2 \bX' \bX.
+\]
+
+Since \( \bX' \bX \) is positive semidefinite and positive definite if \( \bX \) has full column rank, the function \( \mathcal{L}(\bgb) \) is convex. Hence, the critical point \( \bgb = (\bX' \bX)^{-1} \bX' \by \) is the unique global minimum.  
+
+The OLS solution is often denoted as:
+
+\[
+\boldsymbol{\beta}_{\text{OLS}} = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\mathbf{y}.
+\] 
+
+Notice that we noted that $\bX$ is full column rank, when this condition is not
+met (or is close to not be met), other approaches are necessary.
+
+---
+
+### Ridge Regression
+
+#### Introduction  
+
+When the design matrix \( \mathbf{X} \) is not full rank, the matrix \( \mathbf{X}'\mathbf{X} \) is singular (i.e., not invertible), making it impossible to compute the least squares solution  
+
+\[
+\boldsymbol{\beta}_{\text{OLS}} = (\mathbf{X}'\mathbf{X})^{-1} \mathbf{X}'\mathbf{y}.
+\]  
+
+This issue arises when there are **more predictors than observations** (\( p > n \)) or when there is **multicollinearity** among the predictors.  
+
+To address this, **Ridge Regression** introduces a small positive **penalty term** that **regularizes** the matrix \( \mathbf{X}'\mathbf{X} \), making it invertible. This method is also known as **Tikhonov regularization** or **\( L_2 \) regularization**.
+
+When \( p > n \) then we can approximate \( \mathbf{X}'\mathbf{X} \) with \( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \), where \( \lambda > 0 \) can be as small as necessary. This approximation is helpful since \( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \) is always non-singular.
+
+---
+
+#### Non-singularity of the Approximation
+
+Let \( \mathbf{X} \) be an \( n \times p \) matrix. Its SVD decomposition is  
+
+\[
+\mathbf{X} = \mathbf{U} \mathbf{D} \mathbf{V}'
+\]
+
+where:  
+- \( \mathbf{U} \in \mathbb{R}^{n \times n} \) is an **orthonormal matrix** (\( \mathbf{U}' \mathbf{U} = \mathbf{I}_n \)),  
+- \( \mathbf{V} \in \mathbb{R}^{p \times p} \) is an **orthonormal matrix** (\( \mathbf{V}' \mathbf{V} = \mathbf{I}_p \)),  
+- \( \mathbf{D} \in \mathbb{R}^{n \times p} \) is a **diagonal matrix** with singular values \( d_1, d_2, \dots, d_n \geq 0 \) along the diagonal.  
+
+Since \( p > n \), the number of singular values is at most \( n \), meaning that \( \mathbf{X}' \mathbf{X} \) has at most **rank \( n \)** and is **not invertible** when \( p > n \).
+
+Using the SVD of \( \mathbf{X} \), we can express  
+
+\[
+\mathbf{X}' \mathbf{X} = (\mathbf{U} \mathbf{D} \mathbf{V}')' (\mathbf{U} \mathbf{D} \mathbf{V}')
+= \mathbf{V} \mathbf{D}' \mathbf{U}' \mathbf{U} \mathbf{D} \mathbf{V}'
+= \mathbf{V} (\mathbf{D}' \mathbf{D}) \mathbf{V}'.
+\]
+
+Since \( \mathbf{U} \) is an \( n \times n \) orthogonal matrix, \( \mathbf{D}' \mathbf{D} \) is a \( p \times p \) diagonal matrix:
+
+\[
+\mathbf{D}' \mathbf{D} =
+\begin{bmatrix}
+d_1^2 & 0 & \dots & 0 & 0 & \dots & 0 \\
+0 & d_2^2 & \dots & 0 & 0 & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & d_n^2 & 0 & \dots & 0 \\
+0 & 0 & \dots & 0 & 0 & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & 0 & 0 & \dots & 0 \\
+\end{bmatrix}.
+\]
+
+- The first \( n \) diagonal entries are \( d_i^2 \), corresponding to the squared singular values of \( \mathbf{X} \).  
+- The remaining \( p - n \) diagonal entries are **zero**, meaning \( \mathbf{X}' \mathbf{X} \) has **\( p - n \) zero eigenvalues** and is **not full rank**.  
+
+Now, consider the modified matrix:  
+
+\[
+\mathbf{X}' \mathbf{X} + \lambda \mathbf{I}.
+\]
+
+Using the SVD form of \( \mathbf{X}' \mathbf{X} \), we have:  
+
+\[
+\mathbf{X}' \mathbf{X} + \lambda \mathbf{I} = \mathbf{V} (\mathbf{D}' \mathbf{D}) \mathbf{V}' + \lambda \mathbf{I}.
+\]
+
+Since \( \mathbf{I} = \mathbf{V} \mathbf{I} \mathbf{V}' \), we rewrite this as:
+
+\[
+\mathbf{X}' \mathbf{X} + \lambda \mathbf{I} = \mathbf{V} (\mathbf{D}' \mathbf{D} + \lambda \mathbf{I}) \mathbf{V}'.
+\]
+
+Since \( \mathbf{D}' \mathbf{D} \) is diagonal, adding \( \lambda \mathbf{I} \) results in:
+
+\[
+\mathbf{D}' \mathbf{D} + \lambda \mathbf{I} =
+\begin{bmatrix}
+d_1^2 + \lambda & 0 & \dots & 0 & 0 & \dots & 0 \\
+0 & d_2^2 + \lambda & \dots & 0 & 0 & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & d_n^2 + \lambda & 0 & \dots & 0 \\
+0 & 0 & \dots & 0 & \lambda & \dots & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \dots & 0 & 0 & \dots & \lambda \\
+\end{bmatrix}.
+\]
+
+- The first \( n \) diagonal entries are \( d_i^2 + \lambda \), all **strictly positive** because \( d_i^2 \geq 0 \) and \( \lambda > 0 \).  
+- The last \( p - n \) diagonal entries are **\( \lambda \) (also strictly positive)**.  
+
+Thus, **all eigenvalues of \( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \) are strictly positive**, implying that it is **full rank and invertible**.  
+
+Since \( \mathbf{V} \) is an **orthogonal matrix**, the entire expression  
+
+\[
+\mathbf{X}' \mathbf{X} + \lambda \mathbf{I} = \mathbf{V} (\mathbf{D}' \mathbf{D} + \lambda \mathbf{I}) \mathbf{V}'
+\]
+
+is **invertible**, because an orthogonal matrix times an invertible diagonal matrix remains invertible.
+
+So, even when \( p > n \), adding \( \lambda \mathbf{I} \) **shifts all eigenvalues away from zero**, ensuring that  
+
+\[
+\mathbf{X}' \mathbf{X} + \lambda \mathbf{I}
+\]
+
+is always invertible for \( \lambda > 0 \). This guarantees that Ridge Regression always has a unique solution:
+
+\[
+\boldsymbol{\beta}_{\text{ridge}} = (\mathbf{X}' \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}' \mathbf{y}.
+\]
+
+---
+
+#### Ridge Regression as a Minimization Problem  
+
+Instead of minimizing the standard sum of squared errors, Ridge Regression solves the following regularized problem:  
+
+\[
+\min_{\boldsymbol{\beta}} \mathcal{L}(\boldsymbol{\beta}) = \min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \|\boldsymbol{\beta}\|_2^2 \right\}.
+\]
+
+where \( \lambda > 0 \) is a **tuning parameter** that controls the amount of regularization:  
+- **When \( \lambda = 0 \)**: The problem reduces to ordinary least squares (OLS).  
+- **When \( \lambda \to \infty \)**: The penalty dominates, forcing \( \boldsymbol{\beta} \) toward **zero**, shrinking coefficients.  
+
+Expanding the loss function:  
+
+\[
+\mathcal{L}(\boldsymbol{\beta}) = (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})' (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + \lambda \boldsymbol{\beta}' \boldsymbol{\beta}.
+\]
+
+Taking the derivative with respect to \( \boldsymbol{\beta} \) and setting it to zero:  
+
+\[
+-2 \mathbf{X}' (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + 2 \lambda \boldsymbol{\beta} = 0.
+\]
+
+Rearranging:  
+
+\[
+\mathbf{X}' \mathbf{X} \boldsymbol{\beta} + \lambda \boldsymbol{\beta} = \mathbf{X}' \mathbf{y}.
+\]
+
+Factoring out \( \boldsymbol{\beta} \):  
+
+\[
+(\mathbf{X}' \mathbf{X} + \lambda \mathbf{I}) \boldsymbol{\beta} = \mathbf{X}' \mathbf{y}.
+\]
+
+Since \( \mathbf{X}'\mathbf{X} \) may be singular, adding \( \lambda \mathbf{I} \) ensures that the matrix \( (\mathbf{X}' \mathbf{X} + \lambda \mathbf{I}) \) is always invertible for any \( \lambda > 0 \).  
+
+Thus, the Ridge Regression solution is  
+
+\[
+\boldsymbol{\beta}_{\text{ridge}} = (\mathbf{X}' \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}' \mathbf{y}.
+\]
+
+---
+
+#### Conclusion 
+
+1. **Matrix Regularization**: The term \( \lambda \mathbf{I} \) ensures that \( \mathbf{X}'\mathbf{X} + \lambda \mathbf{I} \) is always invertible because it shifts the eigenvalues of \( \mathbf{X}'\mathbf{X} \) away from zero.  
+2. **Bias-Variance Tradeoff**: Ridge Regression **reduces variance** at the cost of introducing some **bias**, which can improve prediction accuracy when \( \mathbf{X} \) is ill-conditioned or when \( p > n \).  
+3. **Shrinkage Effect**: Larger \( \lambda \) values shrink the coefficients towards zero, preventing overfitting.  
+4. When \( \lambda = 0 \): The problem reduces to ordinary least squares (OLS).  
+5. When \( \lambda \to \infty \): The penalty dominates, forcing \( \boldsymbol{\beta} \) toward **zero**, shrinking coefficients.
+
+The only thing that is left is selecting the value of \( \lambda \)
+
+---
+
+### Lasso Regression
+
+**Lasso regression** (Least Absolute Shrinkage and Selection Operator) is a variation of **linear regression** that adds a penalty (like Ridge Regression) to the loss function to promote **sparsity** in the coefficients, effectively setting some of them to zero (unulike Ridge Regression). This makes Lasso a useful technique for **feature selection**, especially when we have many predictors, some of which may be irrelevant or highly correlated.
+
+---
+
+#### Lasso Regression as an Optimization Problem
+
+The Lasso regression formulation is:
+
+\[
+\min_{\boldsymbol{\beta}} \mathcal{L}(\boldsymbol{\beta}) = \min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \|\boldsymbol{\beta}\|_1 \right\}.
+\]
+
+Where:
+- \( \|\boldsymbol{\beta}\|_1 = \sum_{i=1}^p |\beta_i| \) is the **L1 norm** of the coefficients (sum of absolute values of the coefficients),
+- \( \lambda \geq 0 \) is the **regularization parameter** controlling the strength of the penalty.
+
+The loss function consists of:
+1. **Residual Sum of Squares (RSS)**: \( \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 \), which measures the fit of the model (same as in ordinary least squares regression).
+2. **L1 Penalty**: \( \lambda \|\boldsymbol{\beta}\|_1 \), which shrinks the coefficients towards zero and encourages sparsity (i.e., some coefficients are exactly zero).
+
+The **objective** is to minimize the **sum of squared residuals** along with a penalty term:
+
+\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \sum_{i=1}^p |\beta_i| \right\}.
+\]
+
+The key feature of Lasso is that the **L1 penalty** promotes **sparsity** by shrinking some coefficients exactly to zero, which results in a simpler, more interpretable model. The parameter \( \lambda \) controls the trade-off between **fit** and **sparsity**:
+- **When \( \lambda = 0 \)**: Lasso reduces to ordinary least squares regression (OLS), where no penalty is applied.
+- **When \( \lambda \) is large**: The penalty dominates, and more coefficients are shrunk to zero.
+
+Unfortunately, unlike Ridge Regression, Lasso has no closed form solution and it is necessary to find the solution numerically.
+
+---
+
+### Elastic Net
+
+Elastic Net is a regularization technique that combines the strengths of **Lasso** and **Ridge** regression. While Lasso uses an L1 penalty and Ridge uses an L2 penalty, Elastic Net applies a **mix** of both penalties, giving a balance between sparsity and regularization strength. Elastic Net is particularly useful when there are **highly correlated features** or when the number of features is larger than the number of observations (\( p > n \)).
+
+---
+
+### **Elastic Net as a Mixed Penalty**
+
+The Elastic Net loss function is defined as:
+
+\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda_1 \|\boldsymbol{\beta}\|_1 + \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2 \right\}.
+\]
+
+Where:
+- \( \mathbf{y} \) is the \( n \times 1 \) vector of observed responses,
+- \( \mathbf{X} \) is the \( n \times p \) matrix of predictor variables,
+- \( \boldsymbol{\beta} \) is the \( p \times 1 \) vector of regression coefficients,
+- \( \|\boldsymbol{\beta}\|_1 = \sum_{i=1}^p |\beta_i| \) is the L1 norm (Lasso penalty),
+- \( \|\boldsymbol{\beta}\|_2^2 = \sum_{i=1}^p \beta_i^2 \) is the L2 norm (Ridge penalty),
+- \( \lambda_1 \geq 0 \) is the L1 regularization parameter (controlling the Lasso penalty),
+- \( \lambda_2 \geq 0 \) is the L2 regularization parameter (controlling the Ridge penalty).
+
+- **L1 Penalty (Lasso term)**: \( \lambda_1 \|\boldsymbol{\beta}\|_1 \) encourages sparsity, meaning that it drives some coefficients to exactly zero. This is helpful for feature selection and reduces the complexity of the model.
+  
+- **L2 Penalty (Ridge term)**: \( \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2 \) shrinks the coefficients toward zero without setting them exactly to zero. This helps with multicollinearity, preventing large fluctuations in the estimated coefficients when predictors are highly correlated.
+
+---
+
+#### Why Use Elastic Net?
+
+- **Correlation between predictors**: When predictors are highly correlated, Lasso tends to select one variable and ignore the others. Elastic Net, by mixing L1 and L2 penalties, can help by including correlated variables in the model but still controlling their coefficients through the L2 penalty.
+  
+- **Feature selection with many predictors**: In cases where the number of features \( p \) is much greater than the number of observations \( n \), Lasso can become unstable. Elastic Net helps stabilize the model by adding a Ridge component, which shrinks the coefficients of less important features without forcing them to zero.
+
+The Elastic Net can be seen as a **weighted sum** of the Lasso and Ridge penalties, where:
+
+\[
+\text{Elastic Net Loss} = \lambda_1 \|\boldsymbol{\beta}\|_1 + \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2.
+\]
+
+You can think of **\( \lambda_1 \)** as controlling the strength of the **Lasso** penalty (feature selection), and **\( \lambda_2 \)** as controlling the strength of the **Ridge** penalty (shrinkage). The Elastic Net is useful when you need both **sparsity** (for feature selection) and **regularization** (to prevent overfitting).
+
+---
+
+#### Optimization Problem
+
+The Elastic Net optimization problem is:
+
+\[
+\min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda_1 \|\boldsymbol{\beta}\|_1 + \frac{\lambda_2}{2} \|\boldsymbol{\beta}\|_2^2 \right\}.
+\]
+
+- **Objective function**: The goal is to minimize the **sum of squared residuals** (RSS) plus the combined **penalty terms**.
+  
+- The optimal values of \( \lambda_1 \) and \( \lambda_2 \) are typically chosen via **cross-validation**.
+
+---
+
+#### Connections to Lasso and Ridge Regression
+
+- **When \( \lambda_2 = 0 \)**: Elastic Net becomes Lasso regression, as the Ridge term disappears and only the L1 penalty is applied.
+  
+- **When \( \lambda_1 = 0 \)**: Elastic Net becomes Ridge regression, as the L1 penalty is removed and only the L2 penalty is applied.
+
+- **When both \( \lambda_1 \) and \( \lambda_2 \) are non-zero**: Elastic Net is a combination of both regularization methods, providing a balanced approach.
+
+---
+
+### Other Options of Regularization
+
+In addition to Elastic Net, Ridge, and Lasso, there are other regularization methods used in machine learning and statistical modeling:
+
+1. **Group Lasso**:
+   - **Formula**:  
+     \[
+     \min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda \sum_{g} \|\boldsymbol{\beta}_g\|_2 \right\}.
+     \]
+   - **Penalty**: Group Lasso is used when variables are grouped, and the penalty is applied at the group level. It forces entire groups of variables to be either included or excluded from the model.
+
+2. **Fused Lasso**:
+   - **Formula**:  
+     \[
+     \min_{\boldsymbol{\beta}} \left\{ \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \lambda_1 \|\boldsymbol{\beta}\|_1 + \lambda_2 \sum_{i} |\beta_i - \beta_{i-1}| \right\}.
+     \]
+   - **Penalty**: Fused Lasso adds a penalty to the differences between adjacent coefficients, encouraging **smoothness** in the solution. This is useful in time series or spatial data where adjacent coefficients are expected to be similar.
+
+3. **Bayesian Regularization**:
+   - **Formula**: Bayesian regularization methods, like **Bayesian Ridge Regression**, assume a probabilistic model for the coefficients and add a prior distribution (often Gaussian) to the coefficients. The regularization comes from the prior's influence on the model.
+   - **Penalty**: The prior serves as a regularizer, encouraging smaller coefficients with the Gaussian prior.
