@@ -1,3 +1,4 @@
 ds-6388-multivariate-statistical-methods-for-high-dimensional-data
 calendar
 importatnt-dates
+class-schedule

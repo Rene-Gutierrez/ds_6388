@@ -18,3 +18,9 @@ and lecture notes.
 ### Importatnt Dates
 
 * February 10: Linear Algebra Extra Credit Test
+
+### Class Schedule
+
+Class 1: Introduction to Multivariate High-Dimensional Methods
+Class 2: HD Linear Regression: Machine Learning
+Class 3: HD Linear Regression: Bayesian Methods
