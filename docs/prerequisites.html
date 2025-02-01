@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Prerequisites | DS 6388 Spring 2025</title>
+  <meta name="description" content="2 Prerequisites | DS 6388 Spring 2025" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Prerequisites | DS 6388 Spring 2025" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Prerequisites | DS 6388 Spring 2025" />
+  
+  
+  
+
+<meta name="author" content="Rene Gutierrez" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> DS 6388: Multivariate Statistical Methods for High-dimensional Data</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#calendar"><i class="fa fa-check"></i><b>1.1</b> Calendar</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#importatnt-dates"><i class="fa fa-check"></i><b>1.1.1</b> Importatnt Dates</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#class-schedule"><i class="fa fa-check"></i><b>1.1.2</b> Class Schedule</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.1</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="prerequisites.html"><a href="prerequisites.html#linear-independence"><i class="fa fa-check"></i><b>2.1.1</b> Linear Independence</a></li>
+<li class="chapter" data-level="2.1.2" data-path="prerequisites.html"><a href="prerequisites.html#column-space-of-a-matrix"><i class="fa fa-check"></i><b>2.1.2</b> Column Space of a Matrix</a></li>
+<li class="chapter" data-level="2.1.3" data-path="prerequisites.html"><a href="prerequisites.html#rank-of-a-matrix"><i class="fa fa-check"></i><b>2.1.3</b> Rank of a Matrix</a></li>
+<li class="chapter" data-level="2.1.4" data-path="prerequisites.html"><a href="prerequisites.html#full-rank-matrix"><i class="fa fa-check"></i><b>2.1.4</b> Full Rank Matrix</a></li>
+<li class="chapter" data-level="2.1.5" data-path="prerequisites.html"><a href="prerequisites.html#inverse-matrix"><i class="fa fa-check"></i><b>2.1.5</b> Inverse Matrix</a></li>
+<li class="chapter" data-level="2.1.6" data-path="prerequisites.html"><a href="prerequisites.html#positive-definite-matrix"><i class="fa fa-check"></i><b>2.1.6</b> Positive Definite Matrix</a></li>
+<li class="chapter" data-level="2.1.7" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.1.7</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="2.1.8" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.1.8</b> Eigendecomposition</a></li>
+<li class="chapter" data-level="2.1.9" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.1.9</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.1.10" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.1.10</b> Determinant of a Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.2</b> Calculus</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#gradient"><i class="fa fa-check"></i><b>2.2.1</b> Gradient</a></li>
+<li class="chapter" data-level="2.2.2" data-path="prerequisites.html"><a href="prerequisites.html#hessian-matrix"><i class="fa fa-check"></i><b>2.2.2</b> Hessian Matrix</a></li>
+<li class="chapter" data-level="2.2.3" data-path="prerequisites.html"><a href="prerequisites.html#applications-1"><i class="fa fa-check"></i><b>2.2.3</b> Applications:</a></li>
+<li class="chapter" data-level="2.2.4" data-path="prerequisites.html"><a href="prerequisites.html#matrix-calculus"><i class="fa fa-check"></i><b>2.2.4</b> Matrix Calculus</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="prerequisites.html"><a href="prerequisites.html#expected-value"><i class="fa fa-check"></i><b>2.3.1</b> Expected Value</a></li>
+<li class="chapter" data-level="2.3.2" data-path="prerequisites.html"><a href="prerequisites.html#variance"><i class="fa fa-check"></i><b>2.3.2</b> Variance</a></li>
+<li class="chapter" data-level="2.3.3" data-path="prerequisites.html"><a href="prerequisites.html#cross-covariance-matrix"><i class="fa fa-check"></i><b>2.3.3</b> Cross-Covariance Matrix</a></li>
+<li class="chapter" data-level="2.3.4" data-path="prerequisites.html"><a href="prerequisites.html#multivariate-normal-distribution"><i class="fa fa-check"></i><b>2.3.4</b> Multivariate Normal Distribution</a></li>
+<li class="chapter" data-level="2.3.5" data-path="prerequisites.html"><a href="prerequisites.html#chi2-distribution"><i class="fa fa-check"></i><b>2.3.5</b> <span class="math inline">\(\chi^2\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.3.6" data-path="prerequisites.html"><a href="prerequisites.html#t-distribution"><i class="fa fa-check"></i><b>2.3.6</b> <span class="math inline">\(t\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.3.7" data-path="prerequisites.html"><a href="prerequisites.html#f-distribution"><i class="fa fa-check"></i><b>2.3.7</b> <span class="math inline">\(F\)</span> Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.4.1</b> Bias of an Estimator</a></li>
+<li class="chapter" data-level="2.4.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.4.2</b> Unbiased Estimator</a></li>
+<li class="chapter" data-level="2.4.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.4.3</b> Mean Square Error of an Estimator</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DS 6388 Spring 2025</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="prerequisites" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">2</span> Prerequisites<a href="prerequisites.html#prerequisites" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Before diving into the course, it’s important to have a solid understanding of the following foundational concepts. These are categorized into four key topics:</p>
+<ul>
+<li><a href="prerequisites.html#linear-algebra">Linear Algebra</a></li>
+<li><a href="prerequisites.html#probability">Probability</a></li>
+<li><a href="prerequisites.html#statistics">Statistics</a></li>
+<li><a href="prerequisites.html#calculus">Calculus</a></li>
+</ul>
+<div id="linear-algebra" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Linear Algebra<a href="prerequisites.html#linear-algebra" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You should be familiar with the following linear algebra concepts:</p>
+<ul>
+<li><a href="prerequisites.html#linear-independence">Linear Independence</a></li>
+<li><a href="prerequisites.html#column-space-of-a-matrix">Column Space of a Matrix</a></li>
+<li><a href="prerequisites.html#rank-of-a-matrix">Rank of a Matrix</a></li>
+<li><a href="prerequisites.html#full-rank-matrix">Full Rank Matrix</a></li>
+<li><a href="prerequisites.html#inverse-matrix">Inverse Matrix</a></li>
+<li><a href="prerequisites.html#positive-definite-matrix">Positive Definite Matrix</a></li>
+<li><a href="prerequisites.html#singular-value-decomposition">Singular Value Decomposition</a></li>
+<li><a href="prerequisites.html#eigendecomposition">Eigendecomposition</a></li>
+<li><a href="prerequisites.html#idempotent-matrix">Idempotent Matrix</a></li>
+<li><a href="prerequisites.html#determinant-of-a-matrix">Determinant of a Matrix</a></li>
+</ul>
+<div id="linear-independence" class="section level3 hasAnchor" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Linear Independence<a href="prerequisites.html#linear-independence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Linear independence</strong> is a fundamental concept in linear algebra that describes a set of vectors where no vector can be written as a linear combination of the others. In other words, the vectors are not “redundant,” meaning none of the vectors depends on any other in the set.</p>
+<div id="definition" class="section level4 hasAnchor" number="2.1.1.1">
+<h4><span class="header-section-number">2.1.1.1</span> Definition:<a href="prerequisites.html#definition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A set of vectors <span class="math inline">\(\{ \mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_n \}\)</span> in a vector space is <strong>linearly independent</strong> if the only solution to the equation:</p>
+<p><span class="math display">\[
+c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \cdots + c_n \mathbf{v}_n = \mathbf{0}
+\]</span></p>
+<p>is when all the scalar coefficients <span class="math inline">\(c_1, c_2, \ldots, c_n\)</span> are zero, i.e., <span class="math inline">\(c_1 = c_2 = \cdots = c_n = 0\)</span>.</p>
+<p>If any of the coefficients can be non-zero while still satisfying this equation, then the vectors are <strong>linearly dependent</strong>.</p>
+</div>
+<div id="example" class="section level4 hasAnchor" number="2.1.1.2">
+<h4><span class="header-section-number">2.1.1.2</span> Example:<a href="prerequisites.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider two vectors in <span class="math inline">\(\mathbb{R}^2\)</span>:</p>
+<p><span class="math display">\[
+\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+\]</span></p>
+<p>These vectors are <strong>linearly independent</strong> because there is no way to express one as a multiple of the other. The only solution to:</p>
+<p><span class="math display">\[
+c_1 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + c_2 \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}
+\]</span></p>
+<p>is <span class="math inline">\(c_1 = 0\)</span> and <span class="math inline">\(c_2 = 0\)</span>.</p>
+<p>In contrast, if:</p>
+<p><span class="math display">\[
+\mathbf{v}_1 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} 2 \\ 4 \end{bmatrix}
+\]</span></p>
+<p>These vectors are <strong>linearly dependent</strong>, because <span class="math inline">\(\mathbf{v}_2 = 2 \mathbf{v}_1\)</span>. Therefore, you can express <span class="math inline">\(mathbf{v}_2\)</span> as a linear combination of <span class="math inline">\(\mathbf{v}_1\)</span>.</p>
+</div>
+<div id="key-points" class="section level4 hasAnchor" number="2.1.1.3">
+<h4><span class="header-section-number">2.1.1.3</span> Key Points:<a href="prerequisites.html#key-points" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Linearly independent</strong> vectors carry distinct information and cannot be derived from each other.</li>
+<li><strong>Linearly dependent</strong> vectors are redundant because one or more can be expressed as a combination of others.</li>
+<li>In a set of linearly independent vectors, removing any vector would reduce the span of the vector space they cover.</li>
+</ul>
+</div>
+<div id="importance" class="section level4 hasAnchor" number="2.1.1.4">
+<h4><span class="header-section-number">2.1.1.4</span> Importance:<a href="prerequisites.html#importance" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>Linear independence is crucial in determining the <strong>rank</strong> of a matrix.</li>
+<li>In systems of equations, linear independence of the rows or columns determines if the system has a unique solution.</li>
+<li>In vector spaces, the <strong>dimension</strong> of the space is the maximum number of linearly independent vectors.</li>
+</ul>
+</div>
+</div>
+<div id="column-space-of-a-matrix" class="section level3 hasAnchor" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Column Space of a Matrix<a href="prerequisites.html#column-space-of-a-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>column space</strong> of a matrix is the set of all possible linear combinations of its columns. If you have a matrix <span class="math inline">\(\mathbf{A}\)</span> with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> columns, the column space of <span class="math inline">\(\mathbf{A}\)</span>, denoted as <strong>Col(<span class="math inline">\(\mathbf{A}\)</span>)</strong>, consists of all vectors in <span class="math inline">\(\mathbb{R}^n\)</span> that can be expressed as a linear combination of the columns of <span class="math inline">\(\mathbf{A}\)</span>.</p>
+<div id="definition-1" class="section level4 hasAnchor" number="2.1.2.1">
+<h4><span class="header-section-number">2.1.2.1</span> Definition:<a href="prerequisites.html#definition-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Given a matrix <span class="math inline">\(\mathbf{A}\)</span> with columns <span class="math inline">\(\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_p\)</span>, the column space of <span class="math inline">\(\mathbf{A}\)</span> is defined as:</p>
+<p><span class="math display">\[
+\text{Col}(\mathbf{A}) = \left\{ \mathbf{y} \in \mathbb{R}^n \mid \mathbf{y} = \mathbf{A} \mathbf{c} \text{ for some } \mathbf{c} \in \mathbb{R}^p \right\}
+\]</span></p>
+<p>This means the column space is the span of the columns of <span class="math inline">\(\mathbf{A}\)</span>, or equivalently, all vectors that can be written as <span class="math inline">\(\mathbf{y} = c_1 \mathbf{a}_1 + c_2 \mathbf{a}_2 + \dots + c_p \mathbf{a}_p\)</span>, where <span class="math inline">\(c_1, c_2, \dots, c_p\)</span> are scalars.</p>
+</div>
+<div id="properties" class="section level4 hasAnchor" number="2.1.2.2">
+<h4><span class="header-section-number">2.1.2.2</span> Properties:<a href="prerequisites.html#properties" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The column space of <span class="math inline">\(\mathbf{A}\)</span> is a <strong>subspace</strong> of <span class="math inline">\(\mathbb{R}^n\)</span>.</li>
+<li>The <strong>dimension</strong> of the column space of <span class="math inline">\(\mathbf{A}\)</span> is called the <strong>rank</strong> of the matrix and corresponds to the number of linearly independent columns in <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li>The column space provides valuable information about the linear independence and span of the columns of a matrix.</li>
+</ul>
+</div>
+<div id="geometric-interpretation" class="section level4 hasAnchor" number="2.1.2.3">
+<h4><span class="header-section-number">2.1.2.3</span> Geometric Interpretation:<a href="prerequisites.html#geometric-interpretation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In geometric terms, the column space represents the set of all possible vectors that can be “reached” by linearly combining the columns of the matrix. For example:
+- For a matrix with 2 columns in <span class="math inline">\(\mathbb{R}^3\)</span>, the column space will be a plane in <span class="math inline">\(\mathbb{R}^3\)</span> if the columns are linearly independent.
+- For a matrix with 3 columns in <span class="math inline">\(\mathbb{R}^2\)</span>, the column space will span all of <span class="math inline">\(\mathbb{R}^2\)</span> (if the columns are linearly independent) or a line (if they are dependent).</p>
+</div>
+</div>
+<div id="rank-of-a-matrix" class="section level3 hasAnchor" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Rank of a Matrix<a href="prerequisites.html#rank-of-a-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>rank</strong> of a matrix is the dimension of its column space, which is the number of linearly independent columns in the matrix. Alternatively, it is also the dimension of the row space, which is the number of linearly independent rows.</p>
+<div id="definition-2" class="section level4 hasAnchor" number="2.1.3.1">
+<h4><span class="header-section-number">2.1.3.1</span> Definition:<a href="prerequisites.html#definition-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a matrix <span class="math inline">\(\mathbf{A}\)</span>, the rank is defined as:</p>
+<p><span class="math display">\[
+\text{rank}(\mathbf{A}) = \dim(\text{Col}(\mathbf{A})) = \dim(\text{Row}(\mathbf{A}))
+\]</span></p>
+<p>This is the maximum number of linearly independent rows or columns in the matrix. In other words, it tells you how many of the matrix’s columns (or rows) are not redundant and cannot be written as a linear combination of the others.</p>
+</div>
+<div id="key-points-1" class="section level4 hasAnchor" number="2.1.3.2">
+<h4><span class="header-section-number">2.1.3.2</span> Key Points:<a href="prerequisites.html#key-points-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The rank of a matrix <span class="math inline">\(\mathbf{A}\)</span> is denoted as <strong>rank(<span class="math inline">\(\mathbf{A}\)</span>)</strong>.</li>
+<li>It measures the number of independent directions in the column space or row space.</li>
+<li><strong>Full rank</strong>: A matrix is said to have full rank if its rank is equal to the smaller of the number of rows or columns. For an <span class="math inline">\(m \times n\)</span> matrix:
+<ul>
+<li>If <span class="math inline">\(\text{rank}(\mathbf{A}) = m\)</span> (number of rows), it has full row rank.</li>
+<li>If <span class="math inline">\(\text{rank}(\mathbf{A}) = n\)</span> (number of columns), it has full column rank.</li>
+</ul></li>
+<li><strong>Rank-deficient</strong>: If the rank of the matrix is less than the smaller of the number of rows or columns, the matrix is called rank-deficient, meaning that some of its rows or columns are linearly dependent.</li>
+<li><span class="math inline">\(\text{rank}( {\boldsymbol A} ) = \text{rank}( {\boldsymbol A} &#39;) = \text{rank}( {\boldsymbol A} &#39;  {\boldsymbol A} ) = \text{rank}( {\boldsymbol A}  {\boldsymbol A} &#39;)\)</span></li>
+</ul>
+</div>
+<div id="example-1" class="section level4 hasAnchor" number="2.1.3.3">
+<h4><span class="header-section-number">2.1.3.3</span> Example:<a href="prerequisites.html#example-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider the matrix:
+<span class="math display">\[
+\mathbf{A} = \begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \\ 7 &amp; 8 &amp; 9 \end{bmatrix}
+\]</span></p>
+<p>The rank of <span class="math inline">\(\mathbf{A}\)</span> is 2 because two of the rows (or columns) are linearly independent, but the third row (or column) is a linear combination of the others.</p>
+</div>
+<div id="properties-1" class="section level4 hasAnchor" number="2.1.3.4">
+<h4><span class="header-section-number">2.1.3.4</span> Properties:<a href="prerequisites.html#properties-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The rank of a matrix is always less than or equal to the minimum of the number of rows and columns:
+<span class="math display">\[ \text{rank}(\mathbf{A}) \leq \min(m, n) \]</span></li>
+<li>The rank of a matrix is equal to the number of non-zero singular values in its singular value decomposition (SVD).</li>
+<li>In square matrices, the rank gives insight into whether the matrix is <strong>invertible</strong>. A square matrix is invertible if and only if it has full rank.</li>
+</ul>
+</div>
+</div>
+<div id="full-rank-matrix" class="section level3 hasAnchor" number="2.1.4">
+<h3><span class="header-section-number">2.1.4</span> Full Rank Matrix<a href="prerequisites.html#full-rank-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A <strong>full rank matrix</strong> is a matrix in which the rank is equal to the largest possible value for that matrix, meaning:</p>
+<ul>
+<li>For an <span class="math inline">\(m \times n\)</span> matrix <span class="math inline">\(A\)</span>, the rank is the maximum number of linearly independent rows or columns.
+<ul>
+<li>If the rank is equal to <span class="math inline">\(m\)</span> (the number of rows), the matrix has <strong>full row rank</strong>.</li>
+<li>If the rank is equal to <span class="math inline">\(n\)</span> (the number of columns), the matrix has <strong>full column rank</strong>.</li>
+</ul></li>
+</ul>
+<div id="for-a-square-matrix-m-n" class="section level4 hasAnchor" number="2.1.4.1">
+<h4><span class="header-section-number">2.1.4.1</span> For a square matrix (<span class="math inline">\(m = n\)</span>):<a href="prerequisites.html#for-a-square-matrix-m-n" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>A square matrix is <strong>full rank</strong> if its rank is equal to its dimension, i.e., if the matrix is invertible.</li>
+<li>In this case, <span class="math inline">\(\text{rank}( {\boldsymbol A} ) = n\)</span>, meaning all rows and columns are linearly independent, and the matrix has an inverse.</li>
+</ul>
+</div>
+<div id="for-a-rectangular-matrix-m-neq-n" class="section level4 hasAnchor" number="2.1.4.2">
+<h4><span class="header-section-number">2.1.4.2</span> For a rectangular matrix (<span class="math inline">\(m \neq n\)</span>):<a href="prerequisites.html#for-a-rectangular-matrix-m-neq-n" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>A matrix is <strong>full rank</strong> if the rank equals the smaller of the number of rows or columns. For an <span class="math inline">\(m \times n\)</span> matrix, the rank is at most <span class="math inline">\(\min(m, n)\)</span>.
+<ul>
+<li>If the matrix has full row rank, all rows are linearly independent.</li>
+<li>If the matrix has full column rank, all columns are linearly independent.</li>
+</ul></li>
+</ul>
+</div>
+<div id="example-2" class="section level4 hasAnchor" number="2.1.4.3">
+<h4><span class="header-section-number">2.1.4.3</span> Example:<a href="prerequisites.html#example-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Consider the matrix:</p>
+<p><span class="math display">\[
+{\boldsymbol A} = \begin{bmatrix} 1 &amp; 2 &amp; 3 \\ 4 &amp; 5 &amp; 6 \end{bmatrix}
+\]</span></p>
+<p>This is a <span class="math inline">\(2 \times 3\)</span> matrix. Since its two rows are linearly independent, it has <strong>full row rank</strong>, with rank = 2 (the number of rows). However, it does not have full column rank because it has only two independent rows for three columns.</p>
+</div>
+<div id="key-properties" class="section level4 hasAnchor" number="2.1.4.4">
+<h4><span class="header-section-number">2.1.4.4</span> Key Properties:<a href="prerequisites.html#key-properties" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>A full rank matrix has <strong>no redundant rows or columns</strong> (no row or column can be written as a linear combination of others).</li>
+<li>A square matrix with full rank is <strong>invertible</strong> (non-singular).</li>
+<li>For a rectangular matrix, full rank implies the matrix has <strong>maximal independent information</strong> in terms of its rows or columns.</li>
+</ul>
+</div>
+<div id="importance-1" class="section level4 hasAnchor" number="2.1.4.5">
+<h4><span class="header-section-number">2.1.4.5</span> Importance:<a href="prerequisites.html#importance-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>Full rank matrices are crucial in solving systems of linear equations. A system <span class="math inline">\( {\boldsymbol A} \mathbf{x} = \mathbf{b}\)</span> has a unique solution if <span class="math inline">\( {\boldsymbol A} \)</span> is a square, full rank matrix.</li>
+<li>In linear algebra and machine learning, the rank provides insight into the dimensionality and the independence of the data or transformation matrix.</li>
+</ul>
+</div>
+</div>
+<div id="inverse-matrix" class="section level3 hasAnchor" number="2.1.5">
+<h3><span class="header-section-number">2.1.5</span> Inverse Matrix<a href="prerequisites.html#inverse-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An <strong>inverse matrix</strong> of a square matrix <span class="math inline">\( {\boldsymbol A} \)</span>, denoted as <span class="math inline">\( {\boldsymbol A} ^{-1}\)</span>, is a matrix that, when multiplied by <span class="math inline">\( {\boldsymbol A} \)</span>, results in the identity matrix <span class="math inline">\(I\)</span>. This relationship is expressed as:</p>
+<p><span class="math display">\[
+{\boldsymbol A}  {\boldsymbol A} ^{-1} =  {\boldsymbol A} ^{-1}  {\boldsymbol A} =  {\boldsymbol I}
+\]</span></p>
+<p>where <span class="math inline">\( {\boldsymbol I} \)</span> is the identity matrix, and its diagonal elements are 1, with all off-diagonal elements being 0.</p>
+<div id="conditions-for-a-matrix-to-have-an-inverse" class="section level4 hasAnchor" number="2.1.5.1">
+<h4><span class="header-section-number">2.1.5.1</span> Conditions for a Matrix to Have an Inverse:<a href="prerequisites.html#conditions-for-a-matrix-to-have-an-inverse" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The matrix <span class="math inline">\( {\boldsymbol A} \)</span> must be <strong>square</strong>, meaning it has the same number of rows and columns.</li>
+<li>The matrix <span class="math inline">\( {\boldsymbol A} \)</span> must be <strong>non-singular</strong>, meaning its <strong>determinant</strong> is non-zero (<span class="math inline">\(| {\boldsymbol A} | \neq 0\)</span>).</li>
+</ul>
+</div>
+<div id="properties-of-the-inverse-matrix" class="section level4 hasAnchor" number="2.1.5.2">
+<h4><span class="header-section-number">2.1.5.2</span> Properties of the Inverse Matrix:<a href="prerequisites.html#properties-of-the-inverse-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><strong>Uniqueness:</strong> If a matrix has an inverse, it is unique.</li>
+<li><strong>Inverse of a Product:</strong> The inverse of the product of two matrices <span class="math inline">\( {\boldsymbol A} \)</span> and <span class="math inline">\( {\boldsymbol B} \)</span> is given by <span class="math inline">\(( {\boldsymbol A}  {\boldsymbol B} )^{-1} =  {\boldsymbol B} ^{-1}  {\boldsymbol A} ^{-1}\)</span>.</li>
+<li><strong>Inverse of the Inverse:</strong> <span class="math inline">\(( {\boldsymbol A} ^{-1})^{-1} =  {\boldsymbol A} \)</span>.</li>
+<li><strong>Transpose of the Inverse:</strong> <span class="math inline">\(( {\boldsymbol A} ^{-1})&#39; = ( {\boldsymbol A} &#39;)^{-1}\)</span>.</li>
+</ol>
+</div>
+<div id="special-case-2-by-2-matrix" class="section level4 hasAnchor" number="2.1.5.3">
+<h4><span class="header-section-number">2.1.5.3</span> Special Case 2 by 2 Matrix<a href="prerequisites.html#special-case-2-by-2-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a <span class="math inline">\(2 \times 2\)</span> matrix:</p>
+<p><span class="math display">\[
+{\boldsymbol A} = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}
+\]</span></p>
+<p>The inverse of <span class="math inline">\( {\boldsymbol A} \)</span> (if <span class="math inline">\(| {\boldsymbol A} |=\det( {\boldsymbol A} ) \neq 0\)</span>) is:</p>
+<p><span class="math display">\[
+A^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}
+\]</span></p>
+<p>where <span class="math inline">\(ad - bc\)</span> is the <strong>determinant</strong> of the matrix <span class="math inline">\( {\boldsymbol A} \)</span>.</p>
+</div>
+<div id="special-case-2-by-2-block-matrix" class="section level4 hasAnchor" number="2.1.5.4">
+<h4><span class="header-section-number">2.1.5.4</span> Special Case 2 by 2 Block Matrix<a href="prerequisites.html#special-case-2-by-2-block-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The inverse of a <span class="math inline">\(2 \times 2\)</span> <strong>block matrix</strong> can be expressed under certain conditions. Let’s consider a block matrix <span class="math inline">\(\mathbf{M}\)</span> of the form:</p>
+<p><span class="math display">\[
+\mathbf{M} =
+\begin{bmatrix}
+\mathbf{A} &amp; \mathbf{B} \\
+\mathbf{C} &amp; \mathbf{D}
+\end{bmatrix}
+\]</span></p>
+<p>where:
+- <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{D}\)</span> are themselves square matrices, and <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{C}\)</span> are matrices (not necessarily square).</p>
+<p>Then the inverse of <span class="math inline">\(\mathbf{M}\)</span> is given by:</p>
+<p><span class="math display">\[
+\mathbf{M}^{-1} =
+\begin{bmatrix}
+\mathbf{A}^{-1} + \mathbf{A}^{-1} \mathbf{B} \mathbf{S}^{-1} \mathbf{C} \mathbf{A}^{-1} &amp; -\mathbf{A}^{-1} \mathbf{B} \mathbf{S}^{-1} \\
+-\mathbf{S}^{-1} \mathbf{C} \mathbf{A}^{-1} &amp; \mathbf{S}^{-1}
+\end{bmatrix}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{S}\)</span> is the <strong>Schur complement</strong> of <span class="math inline">\(\mathbf{A}\)</span> and is defined as:</p>
+<p><span class="math display">\[
+\mathbf{S} = \mathbf{D} - \mathbf{C} \mathbf{A}^{-1} \mathbf{B}
+\]</span></p>
+<div id="conditions-for-the-inverse-to-exist" class="section level5 hasAnchor" number="2.1.5.4.1">
+<h5><span class="header-section-number">2.1.5.4.1</span> Conditions for the Inverse to Exist:<a href="prerequisites.html#conditions-for-the-inverse-to-exist" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><span class="math inline">\(\mathbf{A}\)</span> must be invertible,</li>
+<li>The Schur complement <span class="math inline">\(\mathbf{S}\)</span> must also be invertible.</li>
+</ul>
+</div>
+<div id="explanation-of-the-terms" class="section level5 hasAnchor" number="2.1.5.4.2">
+<h5><span class="header-section-number">2.1.5.4.2</span> Explanation of the Terms:<a href="prerequisites.html#explanation-of-the-terms" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><span class="math inline">\(\mathbf{A}^{-1}\)</span>: The inverse of matrix <span class="math inline">\(\mathbf{A}\)</span>,</li>
+<li><span class="math inline">\(\mathbf{S}^{-1}\)</span>: The inverse of the Schur complement <span class="math inline">\(\mathbf{S}\)</span>, which can be interpreted as the “effective” part of matrix <span class="math inline">\(\mathbf{D}\)</span> once the contribution of <span class="math inline">\(\mathbf{A}\)</span> has been removed.</li>
+</ul>
+<p>This formula generalizes the concept of inverting a matrix when it’s partitioned into blocks.</p>
+</div>
+</div>
+<div id="sherman-morrison-formula" class="section level4 hasAnchor" number="2.1.5.5">
+<h4><span class="header-section-number">2.1.5.5</span> Sherman-Morrison Formula<a href="prerequisites.html#sherman-morrison-formula" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <strong>Sherman-Morrison formula</strong> provides a way to compute the inverse of a matrix after it has been updated by a rank-one modification. Specifically, it addresses the situation where a matrix <strong>A</strong> has been updated by the outer product of two vectors <strong>u</strong> and <strong>v</strong>. The formula is:</p>
+<p><span class="math display">\[
+(\mathbf{A} + \mathbf{u} \mathbf{v}^T)^{-1} = \mathbf{A}^{-1} - \frac{\mathbf{A}^{-1} \mathbf{u} \mathbf{v}^T \mathbf{A}^{-1}}{1 + \mathbf{v}^T \mathbf{A}^{-1} \mathbf{u}}
+\]</span></p>
+<div id="requirements" class="section level5 hasAnchor" number="2.1.5.5.1">
+<h5><span class="header-section-number">2.1.5.5.1</span> Requirements:<a href="prerequisites.html#requirements" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>A</strong> must be an invertible matrix.</li>
+<li>The scalar <span class="math inline">\(1 + \mathbf{v}^T \mathbf{A}^{-1} \mathbf{u}\)</span> must not be zero.</li>
+</ul>
+</div>
+<div id="explanation-of-the-terms-1" class="section level5 hasAnchor" number="2.1.5.5.2">
+<h5><span class="header-section-number">2.1.5.5.2</span> Explanation of the terms:<a href="prerequisites.html#explanation-of-the-terms-1" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>A</strong> is an invertible <span class="math inline">\(n \times n\)</span> matrix.</li>
+<li><strong>u</strong> and <strong>v</strong> are <span class="math inline">\(n \times 1\)</span> column vectors.</li>
+<li>The outer product <span class="math inline">\(\mathbf{u} \mathbf{v}^T\)</span> is an <span class="math inline">\(n \times n\)</span> rank-one matrix.</li>
+<li>The term <span class="math inline">\(1 + \mathbf{v}^T \mathbf{A}^{-1} \mathbf{u}\)</span> is a scalar.</li>
+</ul>
+<p>This formula is useful in situations where you need to efficiently update the inverse of a matrix after a low-rank modification, rather than recomputing the inverse from scratch.</p>
+</div>
+</div>
+</div>
+<div id="positive-definite-matrix" class="section level3 hasAnchor" number="2.1.6">
+<h3><span class="header-section-number">2.1.6</span> Positive Definite Matrix<a href="prerequisites.html#positive-definite-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A <strong>positive definite matrix</strong> is a symmetric matrix <span class="math inline">\( {\boldsymbol A} \)</span> where, for any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, the following condition holds:</p>
+<p><span class="math display">\[
+\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x} &gt; 0
+\]</span></p>
+<div id="key-properties-1" class="section level4 hasAnchor" number="2.1.6.1">
+<h4><span class="header-section-number">2.1.6.1</span> Key Properties:<a href="prerequisites.html#key-properties-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><strong>Symmetry:</strong> The matrix <span class="math inline">\( {\boldsymbol A} \)</span> must be symmetric, meaning <span class="math inline">\( {\boldsymbol A} =  {\boldsymbol A} &#39;\)</span>.</li>
+<li><strong>Positive quadratic form:</strong> For any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, the quadratic form <span class="math inline">\(\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x}\)</span> must yield a positive value.</li>
+</ol>
+</div>
+<div id="characteristics-of-a-positive-definite-matrix" class="section level4 hasAnchor" number="2.1.6.2">
+<h4><span class="header-section-number">2.1.6.2</span> Characteristics of a Positive Definite Matrix:<a href="prerequisites.html#characteristics-of-a-positive-definite-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>All the <strong>eigenvalues</strong> of a positive definite matrix are <strong>positive</strong>.</li>
+<li>The <strong>determinants</strong> of the leading principal minors (submatrices) of the matrix are positive.</li>
+<li>The <strong>diagonal elements</strong> of a positive definite matrix are positive.</li>
+<li><span class="math inline">\( {\boldsymbol A} \)</span> is invertible.</li>
+<li><span class="math inline">\( {\boldsymbol A} ^{-1}\)</span> is also <strong>positive definite matrix</strong>.</li>
+</ul>
+</div>
+<div id="example-3" class="section level4 hasAnchor" number="2.1.6.3">
+<h4><span class="header-section-number">2.1.6.3</span> Example:<a href="prerequisites.html#example-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The matrix:
+<span class="math display">\[
+{\boldsymbol A} = \begin{bmatrix} 2 &amp; 1 \\ 1 &amp; 2 \end{bmatrix}
+\]</span>
+is positive definite, because for any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\(\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x} &gt; 0\)</span>. For instance, if <span class="math inline">\(\mathbf{x} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\)</span>, then:</p>
+<p><span class="math display">\[
+\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x} = \begin{bmatrix} 1 &amp; 1 \end{bmatrix} \begin{bmatrix} 2 &amp; 1 \\ 1 &amp; 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 &gt; 0
+\]</span></p>
+</div>
+</div>
+<div id="singular-value-decomposition" class="section level3 hasAnchor" number="2.1.7">
+<h3><span class="header-section-number">2.1.7</span> Singular Value Decomposition<a href="prerequisites.html#singular-value-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Singular Value Decomposition (SVD)</strong> is a fundamental matrix factorization technique used in linear algebra to break down a matrix into three distinct components. It provides valuable insight into the structure of a matrix and is widely used in applications like data compression, signal processing, and dimensionality reduction.</p>
+<div id="definition-3" class="section level4 hasAnchor" number="2.1.7.1">
+<h4><span class="header-section-number">2.1.7.1</span> Definition:<a href="prerequisites.html#definition-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For any real (or complex) matrix <span class="math inline">\(\mathbf{A}\)</span> of size <span class="math inline">\(m \times n\)</span>, the Singular Value Decomposition is given by:</p>
+<p><span class="math display">\[
+\mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}&#39;
+\]</span></p>
+<p>where:
+- <span class="math inline">\(\mathbf{U}\)</span> is an <span class="math inline">\(m \times m\)</span> orthogonal matrix, whose columns are called the <strong>left singular vectors</strong>.
+- <span class="math inline">\(\mathbf{\Sigma}\)</span> is an <span class="math inline">\(m \times n\)</span> diagonal matrix, where the diagonal entries are the <strong>singular values</strong> of <span class="math inline">\(\mathbf{A}\)</span>. The singular values are always non-negative and arranged in decreasing order.
+- <span class="math inline">\(\mathbf{V}\)</span> is an <span class="math inline">\(n \times n\)</span> orthogonal matrix, whose columns are called the <strong>right singular vectors</strong>.</p>
+</div>
+<div id="interpretation-of-the-components" class="section level4 hasAnchor" number="2.1.7.2">
+<h4><span class="header-section-number">2.1.7.2</span> Interpretation of the Components:<a href="prerequisites.html#interpretation-of-the-components" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><span class="math inline">\(\mathbf{U}\)</span> represents the orthonormal basis for the <strong>column space</strong> of <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li><span class="math inline">\(\mathbf{V}\)</span> represents the orthonormal basis for the <strong>row space</strong> of <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li><span class="math inline">\(\mathbf{\Sigma}\)</span> contains the singular values, which provide information about the importance or magnitude of the corresponding singular vectors. Large singular values indicate directions with significant data spread, while small or zero singular values correspond to directions with little or no data variation.</li>
+</ul>
+</div>
+<div id="geometric-interpretation-1" class="section level4 hasAnchor" number="2.1.7.3">
+<h4><span class="header-section-number">2.1.7.3</span> Geometric Interpretation:<a href="prerequisites.html#geometric-interpretation-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>SVD can be viewed geometrically as a transformation where:
+1. <span class="math inline">\(\mathbf{V}\)</span> applies a rotation or reflection in the input space.
+2. <span class="math inline">\(\mathbf{\Sigma}\)</span> stretches or compresses the data along certain axes.
+3. <span class="math inline">\(\mathbf{U}\)</span> applies a final rotation or reflection in the output space.</p>
+</div>
+<div id="key-points-2" class="section level4 hasAnchor" number="2.1.7.4">
+<h4><span class="header-section-number">2.1.7.4</span> Key Points:<a href="prerequisites.html#key-points-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Rank</strong>: The number of non-zero singular values in <span class="math inline">\(\mathbf{\Sigma}\)</span> equals the rank of the matrix <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li><strong>Dimensionality Reduction</strong>: By truncating small singular values in <span class="math inline">\(\mathbf{\Sigma}\)</span>, we can approximate <span class="math inline">\(\mathbf{A}\)</span> with a lower-rank matrix, which is useful in compressing data while retaining most of its structure.</li>
+<li><strong>Condition Number</strong>: The ratio of the largest to the smallest non-zero singular value gives the condition number of the matrix, which indicates how sensitive a matrix is to numerical errors or perturbations.</li>
+</ul>
+</div>
+<div id="example-4" class="section level4 hasAnchor" number="2.1.7.5">
+<h4><span class="header-section-number">2.1.7.5</span> Example:<a href="prerequisites.html#example-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a matrix <span class="math inline">\(\mathbf{A}\)</span> of size <span class="math inline">\(3 \times 2\)</span>, the SVD would look like:</p>
+<p><span class="math display">\[
+\mathbf{A} = \mathbf{U}
+\begin{bmatrix}
+\sigma_1 &amp; 0 \\
+0 &amp; \sigma_2 \\
+0 &amp; 0
+\end{bmatrix}
+\mathbf{V}&#39;
+\]</span></p>
+<p>where <span class="math inline">\(\sigma_1\)</span> and <span class="math inline">\(\sigma_2\)</span> are the singular values, and <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are orthogonal matrices.</p>
+</div>
+<div id="applications-of-svd" class="section level4 hasAnchor" number="2.1.7.6">
+<h4><span class="header-section-number">2.1.7.6</span> Applications of SVD:<a href="prerequisites.html#applications-of-svd" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Dimensionality Reduction</strong>: SVD is widely used in Principal Component Analysis (PCA) for reducing the dimensionality of large datasets.</li>
+<li><strong>Low-Rank Approximations</strong>: In data compression, SVD helps to approximate matrices with fewer dimensions while maintaining the core structure.</li>
+<li><strong>Solving Linear Systems</strong>: In cases where a matrix is close to singular, SVD can be used to solve linear systems more stably.</li>
+<li><strong>Latent Semantic Analysis (LSA)</strong>: In natural language processing, SVD is used to reduce the dimensionality of word-document matrices to capture latent relationships between words and documents.</li>
+</ul>
+</div>
+</div>
+<div id="eigendecomposition" class="section level3 hasAnchor" number="2.1.8">
+<h3><span class="header-section-number">2.1.8</span> Eigendecomposition<a href="prerequisites.html#eigendecomposition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Eigendecomposition</strong> is a matrix factorization technique used in linear algebra, where a square matrix is decomposed into its eigenvalues and eigenvectors. It is applicable to square matrices and provides deep insight into the matrix’s structure, particularly in understanding transformations, systems of linear equations, and differential equations.</p>
+<div id="definition-4" class="section level4 hasAnchor" number="2.1.8.1">
+<h4><span class="header-section-number">2.1.8.1</span> Definition:<a href="prerequisites.html#definition-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Given a square matrix <span class="math inline">\(\mathbf{A}\)</span> of size <span class="math inline">\(n \times n\)</span>, eigendecomposition is a factorization of the matrix into the following form:</p>
+<p><span class="math display">\[
+\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{-1}
+\]</span></p>
+<p>where:
+- <span class="math inline">\(\mathbf{V}\)</span> is the matrix of <strong>eigenvectors</strong> of <span class="math inline">\(\mathbf{A}\)</span>, and each column of <span class="math inline">\(\mathbf{V}\)</span> is an eigenvector.
+- <span class="math inline">\(\mathbf{\Lambda}\)</span> is a diagonal matrix of <strong>eigenvalues</strong> of <span class="math inline">\(\mathbf{A}\)</span>, with each diagonal element corresponding to an eigenvalue of <span class="math inline">\(\mathbf{A}\)</span>.
+- <span class="math inline">\(\mathbf{V}^{-1}\)</span> is the inverse of the matrix of eigenvectors.</p>
+</div>
+<div id="eigenvalues-and-eigenvectors" class="section level4 hasAnchor" number="2.1.8.2">
+<h4><span class="header-section-number">2.1.8.2</span> Eigenvalues and Eigenvectors:<a href="prerequisites.html#eigenvalues-and-eigenvectors" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p><strong>Eigenvalue</strong> (<span class="math inline">\(\lambda\)</span>): A scalar <span class="math inline">\(\lambda\)</span> is an eigenvalue of <span class="math inline">\(\mathbf{A}\)</span> if there exists a non-zero vector <span class="math inline">\(\mathbf{v}\)</span> such that:</p>
+<p><span class="math display">\[
+\mathbf{A} \mathbf{v} = \lambda \mathbf{v}
+\]</span></p>
+<p>In this case, <span class="math inline">\(\mathbf{v}\)</span> is called the eigenvector corresponding to the eigenvalue <span class="math inline">\(\lambda\)</span>.</p></li>
+<li><p><strong>Eigenvector</strong>: A non-zero vector <span class="math inline">\(\mathbf{v}\)</span> that remains parallel to itself (i.e., only scaled) when multiplied by <span class="math inline">\(\mathbf{A}\)</span> is called an eigenvector.</p></li>
+</ul>
+</div>
+<div id="conditions-for-eigendecomposition" class="section level4 hasAnchor" number="2.1.8.3">
+<h4><span class="header-section-number">2.1.8.3</span> Conditions for Eigendecomposition:<a href="prerequisites.html#conditions-for-eigendecomposition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>A matrix <span class="math inline">\(\mathbf{A}\)</span> is <strong>diagonalizable</strong> (i.e., it can be factored into <span class="math inline">\(\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{-1}\)</span>) if and only if it has <span class="math inline">\(n\)</span> linearly independent eigenvectors.</li>
+<li>Not all matrices are diagonalizable. However, if <span class="math inline">\(\mathbf{A}\)</span> has <span class="math inline">\(n\)</span> distinct eigenvalues, then it is guaranteed to be diagonalizable.</li>
+<li>Symmetric matrices are always diagonalizable.</li>
+</ul>
+</div>
+<div id="geometric-interpretation-2" class="section level4 hasAnchor" number="2.1.8.4">
+<h4><span class="header-section-number">2.1.8.4</span> Geometric Interpretation:<a href="prerequisites.html#geometric-interpretation-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Eigendecomposition reveals the directions (eigenvectors) along which the matrix transformation <span class="math inline">\(\mathbf{A}\)</span> acts as a simple scaling by the eigenvalues. Geometrically:
+- Eigenvectors point in directions that remain invariant under the transformation by <span class="math inline">\(\mathbf{A}\)</span>.
+- The corresponding eigenvalues tell us how much the matrix stretches or compresses vectors in the direction of those eigenvectors.</p>
+</div>
+<div id="example-5" class="section level4 hasAnchor" number="2.1.8.5">
+<h4><span class="header-section-number">2.1.8.5</span> Example:<a href="prerequisites.html#example-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a matrix <span class="math inline">\(\mathbf{A}\)</span>:
+<span class="math display">\[
+\mathbf{A} = \begin{bmatrix} 4 &amp; 1 \\ 2 &amp; 3 \end{bmatrix}
+\]</span>
+The eigenvalues <span class="math inline">\(\lambda_1 = 5\)</span> and <span class="math inline">\(\lambda_2 = 2\)</span> can be found by solving the characteristic equation <span class="math inline">\(\det(\mathbf{A} - \lambda \mathbf{I}) = 0\)</span>. Corresponding eigenvectors can then be computed, allowing the matrix to be diagonalized as:</p>
+<p><span class="math display">\[
+\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{-1}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{\Lambda} = \text{diag}(5, 2)\)</span> and <span class="math inline">\(\mathbf{V}\)</span> is the matrix of eigenvectors.</p>
+</div>
+<div id="applications-of-eigendecomposition" class="section level4 hasAnchor" number="2.1.8.6">
+<h4><span class="header-section-number">2.1.8.6</span> Applications of Eigendecomposition:<a href="prerequisites.html#applications-of-eigendecomposition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Diagonalization</strong>: Eigendecomposition allows matrices to be diagonalized, simplifying many computations (such as raising matrices to powers).</li>
+<li><strong>Principal Component Analysis (PCA)</strong>: In data science, eigendecomposition is used in PCA to find directions of maximum variance in data.</li>
+<li><strong>Solving Differential Equations</strong>: Eigenvalues and eigenvectors are useful in solving systems of linear differential equations.</li>
+<li><strong>Quantum Mechanics</strong>: In physics, eigenvalues and eigenvectors describe the measurable properties (like energy levels) of systems.</li>
+</ul>
+<p>In summary, eigendecomposition is a powerful tool in linear algebra that provides insight into how a matrix transforms space, offering valuable properties through its eigenvalues and eigenvectors.</p>
+</div>
+</div>
+<div id="idempotent-matrix" class="section level3 hasAnchor" number="2.1.9">
+<h3><span class="header-section-number">2.1.9</span> Idempotent Matrix<a href="prerequisites.html#idempotent-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An <strong>idempotent matrix</strong> is a matrix that, when multiplied by itself, yields the same matrix. In other words, a matrix <span class="math inline">\(\mathbf{M}\)</span> is idempotent if it satisfies the condition:</p>
+<p><span class="math display">\[
+\mathbf{M}^2 = \mathbf{M}
+\]</span></p>
+<div id="key-properties-of-idempotent-matrices" class="section level4 hasAnchor" number="2.1.9.1">
+<h4><span class="header-section-number">2.1.9.1</span> Key Properties of Idempotent Matrices:<a href="prerequisites.html#key-properties-of-idempotent-matrices" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Eigenvalues</strong>: The eigenvalues of an idempotent matrix are either 0 or 1. This is because for an eigenvector <span class="math inline">\(\mathbf{v}\)</span> with eigenvalue <span class="math inline">\(\lambda\)</span>, the equation <span class="math inline">\(\mathbf{M}^2 \mathbf{v} = \mathbf{M} \mathbf{v}\)</span> simplifies to <span class="math inline">\(\lambda^2 \mathbf{v} = \lambda \mathbf{v}\)</span>, meaning <span class="math inline">\(\lambda(\lambda - 1) = 0\)</span>, so <span class="math inline">\(\lambda = 0\)</span> or <span class="math inline">\(\lambda = 1\)</span>.</p></li>
+<li><p><strong>Rank</strong>: The rank of an idempotent matrix <span class="math inline">\(\mathbf{M}\)</span> is equal to the trace of the matrix (the sum of the diagonal elements), which is also the number of eigenvalues equal to 1.</p></li>
+<li><p><strong>Projection Interpretation</strong>: Idempotent matrices often represent projection matrices in linear algebra. A projection matrix projects vectors onto a subspace, and applying the projection multiple times doesn’t change the result beyond the first application, which is why it satisfies <span class="math inline">\(\mathbf{M}^2 = \mathbf{M}\)</span>.</p></li>
+</ol>
+</div>
+<div id="examples" class="section level4 hasAnchor" number="2.1.9.2">
+<h4><span class="header-section-number">2.1.9.2</span> Examples:<a href="prerequisites.html#examples" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Identity Matrix</strong>: The identity matrix <span class="math inline">\(\mathbf{I}\)</span> is idempotent because:
+<span class="math display">\[
+\mathbf{I}^2 = \mathbf{I}
+\]</span></p></li>
+<li><p><strong>Zero Matrix</strong>: The zero matrix <span class="math inline">\(\mathbf{0}\)</span> is also idempotent because:
+<span class="math display">\[
+\mathbf{0}^2 = \mathbf{0}
+\]</span></p></li>
+<li><p><strong>Projection Matrix</strong>: Consider a projection matrix onto the x-axis in 2D:
+<span class="math display">\[
+\mathbf{P} = \begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 0 \end{bmatrix}
+\]</span>
+This matrix is idempotent since:
+<span class="math display">\[
+\mathbf{P}^2 = \mathbf{P}
+\]</span></p></li>
+</ol>
+</div>
+<div id="use-in-statistics" class="section level4 hasAnchor" number="2.1.9.3">
+<h4><span class="header-section-number">2.1.9.3</span> Use in Statistics:<a href="prerequisites.html#use-in-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Idempotent matrices are commonly used in statistics, particularly in the context of regression analysis. For example, the <strong>hat matrix</strong> <span class="math inline">\(\mathbf{H}\)</span> in linear regression, which transforms the observed values into the predicted values, is idempotent:</p>
+<p><span class="math display">\[
+\mathbf{H} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
+\]</span>
+where <span class="math inline">\(\mathbf{X}\)</span> is the design matrix.</p>
+<p>In summary, idempotent matrices have unique properties and are frequently encountered in linear algebra, projections, and statistical applications.</p>
+</div>
+</div>
+<div id="determinant-of-a-matrix" class="section level3 hasAnchor" number="2.1.10">
+<h3><span class="header-section-number">2.1.10</span> Determinant of a Matrix<a href="prerequisites.html#determinant-of-a-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>determinant</strong> of a matrix is a scalar value that provides important information about the properties of a square matrix. It is a fundamental concept in linear algebra, often used to determine whether a matrix is invertible, as well as to describe geometric transformations and volume scaling.</p>
+<div id="key-charachteristics-of-the-determinant" class="section level4 hasAnchor" number="2.1.10.1">
+<h4><span class="header-section-number">2.1.10.1</span> Key Charachteristics of the Determinant:<a href="prerequisites.html#key-charachteristics-of-the-determinant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Square Matrices Only</strong>: The determinant is only defined for square matrices (i.e., matrices with the same number of rows and columns).</p></li>
+<li><p><strong>Invertibility</strong>: A matrix is <strong>invertible</strong> (i.e., it has an inverse) if and only if its determinant is <strong>non-zero</strong>. If the determinant is <strong>zero</strong>, the matrix is <strong>singular</strong> and does not have an inverse.</p></li>
+<li><p><strong>Geometric Interpretation</strong>: The determinant represents the <strong>scaling factor</strong> of the linear transformation described by the matrix. For example, in two or three dimensions, the determinant tells you how much the matrix scales area or volume:</p>
+<ul>
+<li>A determinant of 1 means the matrix preserves the area (in 2D) or volume (in 3D).</li>
+<li>A determinant greater than 1 means the matrix scales the area or volume by that factor.</li>
+<li>A negative determinant indicates that the transformation also includes a <strong>reflection</strong>.</li>
+</ul></li>
+<li><p><strong>Significance of Zero Determinant</strong>: If the determinant is zero, it means that the matrix maps some vectors to a lower-dimensional space. For instance, in 2D, it might map points onto a line, collapsing the area to zero.</p></li>
+</ol>
+</div>
+<div id="definition-5" class="section level4 hasAnchor" number="2.1.10.2">
+<h4><span class="header-section-number">2.1.10.2</span> Definition:<a href="prerequisites.html#definition-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a <strong>2x2 matrix</strong>:
+<span class="math display">\[
+\mathbf{A} = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}
+\]</span>
+The determinant of <span class="math inline">\(\mathbf{A}\)</span> is:
+<span class="math display">\[
+\det(\mathbf{A}) = ad - bc
+\]</span>
+This formula gives the area scaling factor for the linear transformation represented by the matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+<p>For a <strong>3x3 matrix</strong>:
+<span class="math display">\[
+\mathbf{B} = \begin{bmatrix} a &amp; b &amp; c \\ d &amp; e &amp; f \\ g &amp; h &amp; i \end{bmatrix}
+\]</span>
+The determinant of <span class="math inline">\(\mathbf{B}\)</span> is:
+<span class="math display">\[
+\det(\mathbf{B}) = a(ei - fh) - b(di - fg) + c(dh - eg)
+\]</span>
+This formula can be extended to higher dimensions using recursive expansion (called cofactor expansion or Laplace expansion).</p>
+</div>
+<div id="applications-of-the-determinant" class="section level4 hasAnchor" number="2.1.10.3">
+<h4><span class="header-section-number">2.1.10.3</span> Applications of the Determinant:<a href="prerequisites.html#applications-of-the-determinant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Solving Linear Systems</strong>: The determinant is used in Cramer’s Rule, a method for solving systems of linear equations. If the determinant of the coefficient matrix is non-zero, the system has a unique solution.</p></li>
+<li><p><strong>Eigenvalues and Eigenvectors</strong>: The determinant plays a key role in computing the eigenvalues of a matrix. The determinant of a matrix <span class="math inline">\(\mathbf{A} - \lambda \mathbf{I}\)</span>, where <span class="math inline">\(\lambda\)</span> is a scalar and <span class="math inline">\(\mathbf{I}\)</span> is the identity matrix, gives the characteristic equation whose solutions are the eigenvalues.</p></li>
+<li><p><strong>Volume and Area Calculations</strong>: In geometry, the determinant helps calculate the area (in 2D) or volume (in 3D) of a region after applying a linear transformation.</p></li>
+<li><p><strong>Singular Value Decomposition (SVD)</strong> and <strong>Principal Component Analysis (PCA)</strong>: The determinant is important in these techniques for understanding data structures, transformations, and dimensionality reduction.</p></li>
+</ol>
+</div>
+<div id="properties-of-the-determinant" class="section level4 hasAnchor" number="2.1.10.4">
+<h4><span class="header-section-number">2.1.10.4</span> Properties of the Determinant<a href="prerequisites.html#properties-of-the-determinant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a general block matrix of the form:
+<span class="math display">\[
+\mathbf{M} = \begin{bmatrix} \mathbf{A} &amp; \mathbf{B} \\ \mathbf{C} &amp; \mathbf{D} \end{bmatrix}
+\]</span>
+where <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(\mathbf{C}\)</span>, and <span class="math inline">\(\mathbf{D}\)</span> are submatrices, the determinant formula is more complex. If <span class="math inline">\(\mathbf{D}\)</span> is invertible, we can use the <strong>Schur complement</strong> to compute the determinant:
+<span class="math display">\[
+\det(\mathbf{M}) = \det(\mathbf{D}) \det(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C})
+\]</span>
+Here, <span class="math inline">\(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C}\)</span> is called the <strong>Schur complement</strong> of <span class="math inline">\(\mathbf{D}\)</span> in <span class="math inline">\(\mathbf{M}\)</span>.</p>
+<p>For any invertible matrix <span class="math inline">\( {\boldsymbol X} \in  {\mathbb{R}} ^{p \times p}\)</span> and matrices <span class="math inline">\( {\boldsymbol A} \in {\mathbb{R}} ^{p\times q}\)</span> and <span class="math inline">\( {\boldsymbol B} \in {\mathbb{R}} ^{q\times p}\)</span> we have, that:</p>
+<p><span class="math display">\[\det( {\boldsymbol X} +  {\boldsymbol A}  {\boldsymbol B} ) = det( {\boldsymbol X} )\det( {\boldsymbol I} _q +  {\boldsymbol B}  {\boldsymbol X} ^{-1} {\boldsymbol A} ) \]</span></p>
+</div>
+</div>
+</div>
+<div id="calculus" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Calculus<a href="prerequisites.html#calculus" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Key calculus topics include:</p>
+<ul>
+<li><a href="prerequisites.html#gradient">Gradient</a></li>
+<li><a href="#hessian">Hessian</a></li>
+<li><a href="prerequisites.html#matrix-calculus">Matrix Calculus</a></li>
+<li>Optimization</li>
+</ul>
+<div id="gradient" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Gradient<a href="prerequisites.html#gradient" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>gradient</strong> of a function is a vector that contains the partial derivatives of the function with respect to each of its variables. It points in the direction of the steepest ascent of the function, and its magnitude indicates the rate of change in that direction.</p>
+<p>For a scalar function <span class="math inline">\(f(x_1, x_2, \ldots, x_n)\)</span>, where <span class="math inline">\(x_1, x_2, \ldots, x_n\)</span> are the variables, the gradient is defined as:</p>
+<p><span class="math display">\[
+\nabla f = \frac{d}{d \mathbf{x}} f(\mathbf{x}) = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix}
+\]</span></p>
+<div id="key-points-3" class="section level4 hasAnchor" number="2.2.1.1">
+<h4><span class="header-section-number">2.2.1.1</span> Key Points:<a href="prerequisites.html#key-points-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Direction:</strong> The gradient points in the direction of the greatest increase of the function.</li>
+<li><strong>Magnitude:</strong> The magnitude of the gradient represents how fast the function increases in that direction.</li>
+<li><strong>Zero Gradient:</strong> If <span class="math inline">\(\nabla f = 0\)</span>, it indicates that the function has a critical point, which could be a local minimum, maximum, or saddle point.</li>
+</ul>
+</div>
+<div id="example-6" class="section level4 hasAnchor" number="2.2.1.2">
+<h4><span class="header-section-number">2.2.1.2</span> Example:<a href="prerequisites.html#example-6" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a function <span class="math inline">\(f(x, y) = x^2 + y^2\)</span>, the gradient is:</p>
+<p><span class="math display">\[
+\nabla f = \begin{bmatrix} \frac{\partial}{\partial x} (x^2 + y^2) \\ \frac{\partial}{\partial y} (x^2 + y^2) \end{bmatrix} = \begin{bmatrix} 2x \\ 2y \end{bmatrix}
+\]</span></p>
+<p>This shows that the gradient points outward from the origin, and its magnitude increases as <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> increase.</p>
+</div>
+<div id="applications" class="section level4 hasAnchor" number="2.2.1.3">
+<h4><span class="header-section-number">2.2.1.3</span> Applications:<a href="prerequisites.html#applications" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>In <strong>optimization</strong>, the gradient is used to find the minimum or maximum of a function (e.g., in gradient descent, a common optimization algorithm).</li>
+<li>In <strong>vector calculus</strong>, the gradient is used to describe the slope or rate of change of scalar fields (such as temperature, pressure, or altitude in physical applications).</li>
+</ul>
+</div>
+</div>
+<div id="hessian-matrix" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Hessian Matrix<a href="prerequisites.html#hessian-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>Hessian matrix</strong> is a square matrix of second-order partial derivatives of a scalar-valued function. It describes the local curvature of a multivariable function and is used to assess the nature of critical points (i.e., whether they are minima, maxima, or saddle points).</p>
+<p>For a scalar function <span class="math inline">\(f(x_1, x_2, \ldots, x_n)\)</span>, the Hessian matrix <span class="math inline">\( {\boldsymbol H} \)</span> is defined as:</p>
+<p><span class="math display">\[
+{\boldsymbol H} (f) = \frac{d}{d \mathbf{x} d {\boldsymbol x} &#39;} f(\mathbf{x}) =\begin{bmatrix}
+\frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+\frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} &amp; \frac{\partial^2 f}{\partial x_n \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_n^2}
+\end{bmatrix}
+\]</span></p>
+<div id="key-properties-2" class="section level4 hasAnchor" number="2.2.2.1">
+<h4><span class="header-section-number">2.2.2.1</span> Key Properties:<a href="prerequisites.html#key-properties-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The Hessian is <strong>symmetric</strong> if the second-order partial derivatives are continuous (by Clairaut’s theorem, also called Schwarz’s theorem).</li>
+<li>It provides important information about the local behavior of the function, particularly around critical points where the gradient is zero.</li>
+<li><strong>Eigenvalues</strong> of the Hessian matrix determine the type of critical points:
+<ul>
+<li>If all eigenvalues are positive, the function has a <strong>local minimum</strong>.</li>
+<li>If all eigenvalues are negative, the function has a <strong>local maximum</strong>.</li>
+<li>If some eigenvalues are positive and others are negative, the function has a <strong>saddle point</strong>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="example-7" class="section level4 hasAnchor" number="2.2.2.2">
+<h4><span class="header-section-number">2.2.2.2</span> Example:<a href="prerequisites.html#example-7" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a function <span class="math inline">\(f(x, y) = x^2 + xy + y^2\)</span>, the Hessian matrix is:</p>
+<p><span class="math display">\[
+{\boldsymbol H} (f) = \begin{bmatrix}
+\frac{\partial^2 f}{\partial x^2} &amp; \frac{\partial^2 f}{\partial x \partial y} \\
+\frac{\partial^2 f}{\partial y \partial x} &amp; \frac{\partial^2 f}{\partial y^2}
+\end{bmatrix}
+= \begin{bmatrix}
+2 &amp; 1 \\
+1 &amp; 2
+\end{bmatrix}
+\]</span></p>
+</div>
+</div>
+<div id="applications-1" class="section level3 hasAnchor" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Applications:<a href="prerequisites.html#applications-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>In <strong>optimization</strong>, the Hessian is used to assess the convexity or concavity of a function, which helps in identifying the nature of critical points.</li>
+<li>In <strong>machine learning</strong>, it is used to optimize loss functions and can be part of second-order optimization methods like Newton’s method.</li>
+<li>In <strong>economics</strong> and <strong>engineering</strong>, the Hessian helps in analyzing systems involving multiple variables and understanding how they interact with each other.</li>
+</ul>
+</div>
+<div id="matrix-calculus" class="section level3 hasAnchor" number="2.2.4">
+<h3><span class="header-section-number">2.2.4</span> Matrix Calculus<a href="prerequisites.html#matrix-calculus" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>You need to know the following matrix calculus operations:</p>
+<p><span class="math display">\[
+\frac{d}{d \mathbf{x}} \left( {\boldsymbol c} &#39; {\boldsymbol x} \right)
+\]</span>
+<span class="math display">\[
+\frac{d}{d \mathbf{x}} \left( {\boldsymbol x} &#39; {\boldsymbol A}  {\boldsymbol x} \right)
+\]</span>
+<span class="math display">\[
+\frac{d}{d \mathbf{x} d {\boldsymbol x} &#39;} \left( {\boldsymbol x} &#39; {\boldsymbol A}  {\boldsymbol x} \right)
+\]</span></p>
+<p>Let <span class="math inline">\(\mathbf{c}\)</span> be a constant vector and <span class="math inline">\(\mathbf{x}\)</span> be a variable vector, both of size <span class="math inline">\(n \times 1\)</span>. We want to compute the derivative of the product:</p>
+<p><span class="math display">\[
+f(\mathbf{x}) = \mathbf{c}&#39; \mathbf{x}
+\]</span>
+Where:
+<span class="math display">\[
+\mathbf{c}&#39; \mathbf{x} = \sum_{i=1}^{n} c_i x_i
+\]</span></p>
+<p>To differentiate <span class="math inline">\(f(\mathbf{x}) = \mathbf{c}&#39; \mathbf{x}\)</span> with respect to the variable vector <span class="math inline">\(\mathbf{x}\)</span>, we take the derivative of each component separately:</p>
+<p><span class="math display">\[
+\nabla f = \frac{d}{d \mathbf{x}} f(\mathbf{x}) = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} (\mathbf{c}&#39; \mathbf{x})  \\ \frac{\partial }{\partial x_2} (\mathbf{c}&#39; \mathbf{x}) \\ \vdots \\ \frac{\partial }{\partial x_n} (\mathbf{c}&#39; \mathbf{x}) \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} \left(\sum_{i=1}^{n} c_i x_i\right)  \\ \frac{\partial }{\partial x_2} \left(\sum_{i=1}^{n} c_i x_i\right) \\ \vdots \\ \frac{\partial }{\partial x_n} \left(\sum_{i=1}^{n} c_i x_i\right) \end{bmatrix}
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{c}\)</span> is a constant vector, the derivative of each term <span class="math inline">\(c_i x_i\)</span> is simply <span class="math inline">\(c_i\)</span>, that is:</p>
+<p><span class="math display">\[
+\frac{d}{d x_j} \left(\sum_{i=1}^{n} c_i x_i\right) = c_j
+\]</span></p>
+<p>Thus, the derivative of the entire sum is the vector:</p>
+<p><span class="math display">\[
+\frac{d}{d \mathbf{x}} \left( \mathbf{c}&#39; \mathbf{x} \right) = \begin{bmatrix} c_1  \\ c_2 \\ \vdots \\ c_n \end{bmatrix} = \mathbf{c}
+\]</span></p>
+<p>Now, let’s go through the derivative of the quadratic form <span class="math inline">\(f(\mathbf{x}) = \mathbf{x}&#39;  {\boldsymbol A} \mathbf{x}\)</span>, where:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{x}\)</span> is a variable vector of size <span class="math inline">\(n \times 1\)</span>,</li>
+<li><span class="math inline">\( {\boldsymbol A} \)</span> is a constant, symmetric matrix of size <span class="math inline">\(n \times n\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+f(\mathbf{x}) = \mathbf{x}&#39;  {\boldsymbol A} \mathbf{x}
+\]</span>
+First, expand the quadratic form:</p>
+<p><span class="math display">\[
+f(\mathbf{x}) = \sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j
+\]</span>
+Then</p>
+<p><span class="math display">\[
+\nabla f = \frac{d}{d \mathbf{x}} f(\mathbf{x}) = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} (\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x})  \\ \frac{\partial }{\partial x_2} (\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x}) \\ \vdots \\ \frac{\partial }{\partial x_n} (\mathbf{x}&#39;  {\boldsymbol A} \mathbf{x}) \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right)  \\ \frac{\partial }{\partial x_2} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \\ \vdots \\ \frac{\partial }{\partial x_n} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \end{bmatrix}
+\]</span>
+For each component <span class="math inline">\(x_k\)</span> in the vector <span class="math inline">\(\mathbf{x}\)</span>, the derivative of <span class="math inline">\(f(\mathbf{x})\)</span> is:</p>
+<p><span class="math display">\[
+\frac{\partial}{\partial x_k} f(\mathbf{x}) = \frac{\partial}{\partial x_k} \left( \sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j \right) = \sum_{i=1}^{n} \sum_{j=1}^{n} \frac{\partial}{\partial x_k}  x_i a_{ij} x_j
+\]</span></p>
+<p>Each term <span class="math inline">\(x_i a_{ij} x_j\)</span> has two components that depend on <span class="math inline">\( {\boldsymbol x} \)</span>:</p>
+<ul>
+<li>If <span class="math inline">\(i = j = k\)</span>, the derivative with respect to <span class="math inline">\(x_k\)</span> is:</li>
+</ul>
+<p><span class="math display">\[
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = 2 a_{kk} x_k
+\]</span></p>
+<ul>
+<li>If <span class="math inline">\(i \neq j\)</span> and <span class="math inline">\(i = k\)</span>, the derivative with respect to <span class="math inline">\(x_k\)</span> is:</li>
+</ul>
+<p><span class="math display">\[
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = a_{kj} x_j
+\]</span>
+- Similarly, if <span class="math inline">\(i \neq j\)</span> and <span class="math inline">\(j = k\)</span>, the derivative with respect to <span class="math inline">\(x_k\)</span> is:</p>
+<p><span class="math display">\[
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = a_{ik} x_i
+\]</span>
+- Finally, if <span class="math inline">\(i \neq k\)</span> and <span class="math inline">\(j \neq k\)</span>, then:</p>
+<p><span class="math display">\[
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = 0
+\]</span>
+Then</p>
+<p><span class="math display">\[
+\frac{\partial}{\partial x_k} f(\mathbf{x}) = 2 a_{kk} x_k + \sum_{i \neq k} a_{ik} x_i + \sum_{j \neq k} a_{kj} x_j
+\]</span></p>
+<p>Now since <span class="math inline">\( {\boldsymbol A} \)</span> is symmetric (<span class="math inline">\(a_{ij} = a_{ji}\)</span>), then:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial}{\partial x_k} f(\mathbf{x})
+  &amp;= 2 a_{kk} x_k + \sum_{i \neq k} a_{ik} x_i + \sum_{i \neq k} a_{ik} x_i \\
+  &amp;= 2 a_{kk} x_k + 2\sum_{i \neq k} a_{ik} x_i \\
+  &amp;= 2 \left(\sum_{i \neq k} a_{ik} x_i + a_{kk}x_k \right) \\
+  &amp;= 2 \left(\sum_{i = 1}^n a_{ki} x_i\right)   
+\end{align*}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[
+\nabla f = \begin{bmatrix} \frac{\partial }{\partial x_1} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right)  \\ \frac{\partial }{\partial x_2} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \\ \vdots \\ \frac{\partial }{\partial x_n} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \end{bmatrix} = \begin{bmatrix} 2 \sum_{i = 1}^n a_{1i} x_i  \\ 2 \sum_{i = 1}^n a_{2i} x_i \\ \vdots \\ 2 \sum_{i = 1}^n a_{ni} x_i \end{bmatrix} = 2  {\boldsymbol A}  {\boldsymbol x}
+\]</span></p>
+<p>Finally for the second derivative we have that:</p>
+<p>In general, the Hessian matrix of a scalar function <span class="math inline">\(f(\mathbf{x})\)</span>, where <span class="math inline">\(\mathbf{x} \in \mathbb{R}^n\)</span> is a vector of variables, is a matrix that contains all the second-order partial derivatives of the function. It is defined as:</p>
+<p><span class="math display">\[
+{\boldsymbol H} (f) = \frac{d^2 f}{d {\boldsymbol x} d {\boldsymbol x} &#39;} =  \begin{bmatrix}
+\frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+\frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} &amp; \frac{\partial^2 f}{\partial x_n \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_n^2}
+\end{bmatrix}
+= \begin{bmatrix}
+\frac{\partial }{\partial x_1}\left(\frac{d f}{d {\boldsymbol x} }\right)&#39; \\
+\frac{\partial }{\partial x_2}\left(\frac{d f}{d {\boldsymbol x} }\right)&#39; \\
+\vdots  \\
+\frac{\partial }{\partial x_n}\left(\frac{d f}{d {\boldsymbol x} }\right)&#39;
+\end{bmatrix}
+= \begin{bmatrix}
+\frac{\partial }{\partial x_1}\left(2 {\boldsymbol A}  {\boldsymbol x} \right)&#39; \\
+\frac{\partial }{\partial x_2}\left(2 {\boldsymbol A}  {\boldsymbol x} \right)&#39; \\
+\vdots  \\
+\frac{\partial }{\partial x_n}\left(2 {\boldsymbol A}  {\boldsymbol x} \right)&#39;
+\end{bmatrix}
+\]</span></p>
+<p>Now</p>
+<p><span class="math display">\[
+\frac{\partial }{\partial x_k}\left(2 {\boldsymbol A}  {\boldsymbol x} \right)
+= 2\frac{\partial }{\partial x_k}\begin{bmatrix}
+\sum_{i = 1}^n a_{1i} x_i \\
+\sum_{i = 1}^n a_{2i} x_i \\
+\vdots  \\
+\sum_{i = 1}^n a_{ni} x_i
+\end{bmatrix}
+= 2 \begin{bmatrix}
+\frac{\partial }{\partial x_k} \left(\sum_{i = 1}^n a_{1i} x_i \right)\\
+\frac{\partial }{\partial x_k} \left(\sum_{i = 1}^n a_{2i} x_i \right)\\
+\vdots  \\
+\frac{\partial }{\partial x_k} \left(\sum_{i = 1}^n a_{ni} x_i \right)
+\end{bmatrix}
+= 2 \begin{bmatrix}
+a_{k1} \\
+a_{k2} \\
+\vdots \\
+a_{kn}
+\end{bmatrix}
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+{\boldsymbol H} (f) = \frac{d^2 f}{d {\boldsymbol x} d {\boldsymbol x} &#39;}
+= \begin{bmatrix}
+2\begin{bmatrix}
+a_{11} \\
+a_{12} \\
+\vdots \\
+a_{1n}
+\end{bmatrix}&#39; \\
+2\begin{bmatrix}
+a_{21} \\
+a_{22} \\
+\vdots \\
+a_{2n}
+\end{bmatrix}&#39; \\
+\vdots \\
+2\begin{bmatrix}
+a_{n1} \\
+a_{n2} \\
+\vdots \\
+a_{nn}
+\end{bmatrix}&#39;
+\end{bmatrix}
+=  2\begin{bmatrix}
+a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1n} \\
+a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+a_{n1} &amp; a_{n2} &amp; \cdots &amp; a_{nn}
+\end{bmatrix}
+= 2  {\boldsymbol A}
+\]</span></p>
+</div>
+</div>
+<div id="probability" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Probability<a href="prerequisites.html#probability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Key probability concepts to understand include:</p>
+<ul>
+<li><a href="prerequisites.html#expected-value">Expected Value</a></li>
+<li><a href="prerequisites.html#variance">Variance</a></li>
+<li><a href="prerequisites.html#cross-covariance-matrix">Cross-Covariance Matrix</a></li>
+<li><a href="prerequisites.html#multivariate-normal-distribution">Multivariate Normal Distribution</a></li>
+</ul>
+<div id="expected-value" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Expected Value<a href="prerequisites.html#expected-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>expected value</strong> (or <strong>mean</strong>) of a random vector is a fundamental concept in multivariate statistics. Just as the expected value of a random variable provides a measure of the “center” or “average” of the distribution, the expected value of a random vector captures the central location of a multidimensional distribution.</p>
+<div id="definition-6" class="section level4 hasAnchor" number="2.3.1.1">
+<h4><span class="header-section-number">2.3.1.1</span> Definition<a href="prerequisites.html#definition-6" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{X}\)</span> be a random vector in <span class="math inline">\(\mathbb{R}^n\)</span>, represented as:
+<span class="math display">\[
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+\]</span>
+where <span class="math inline">\(X_1, X_2, \dots, X_n\)</span> are its components. The <strong>expected value</strong> of <span class="math inline">\(\mathbf{X}\)</span>, denoted by <span class="math inline">\(\mathbb{E}[\mathbf{X}]\)</span>, is defined as the vector of the expected values of each component:
+<span class="math display">\[
+\mathbb{E}[\mathbf{X}] = \begin{bmatrix} \mathbb{E}[X_1] \\ \mathbb{E}[X_2] \\ \vdots \\ \mathbb{E}[X_n] \end{bmatrix}.
+\]</span></p>
+<p>This vector <span class="math inline">\(\mathbb{E}[\mathbf{X}]\)</span> is also called the <strong>mean vector</strong> of <span class="math inline">\(\mathbf{X}\)</span>.</p>
+</div>
+<div id="key-properties-of-the-expected-value-of-a-random-vector" class="section level4 hasAnchor" number="2.3.1.2">
+<h4><span class="header-section-number">2.3.1.2</span> Key Properties of the Expected Value of a Random Vector<a href="prerequisites.html#key-properties-of-the-expected-value-of-a-random-vector" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Linearity</strong>: For any scalar <span class="math inline">\(a\)</span> and random vectors <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span>,
+<span class="math display">\[
+\mathbb{E}[a\mathbf{X} + \mathbf{Y}] = a\mathbb{E}[\mathbf{X}] + \mathbb{E}[\mathbf{Y}].
+\]</span></p></li>
+<li><p><strong>Expectation of a Constant Vector</strong>: If <span class="math inline">\(\mathbf{c}\)</span> is a constant vector in <span class="math inline">\(\mathbb{R}^n\)</span>, then the expectation is simply the vector itself:
+<span class="math display">\[
+\mathbb{E}[\mathbf{c}] = \mathbf{c}.
+\]</span></p></li>
+<li><p><strong>Expectation of a Linear Transformation</strong>: If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(m \times n\)</span> constant matrix, then for a random vector <span class="math inline">\(\mathbf{X}\)</span> in <span class="math inline">\(\mathbb{R}^n\)</span>,
+<span class="math display">\[
+\mathbb{E}[\mathbf{A} \mathbf{X}] = \mathbf{A} \mathbb{E}[\mathbf{X}].
+\]</span></p></li>
+</ol>
+</div>
+</div>
+<div id="variance" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Variance<a href="prerequisites.html#variance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="definition-7" class="section level4 hasAnchor" number="2.3.2.1">
+<h4><span class="header-section-number">2.3.2.1</span> Definition<a href="prerequisites.html#definition-7" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{X}\)</span> be a random vector in <span class="math inline">\(\mathbb{R}^n\)</span>, represented as:
+<span class="math display">\[
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+\]</span>
+where each <span class="math inline">\(X_i\)</span> is a random variable. The <strong>variance-covariance matrix</strong> of <span class="math inline">\(\mathbf{X}\)</span>, denoted by <span class="math inline">\( {\mathbb{V}} (\mathbf{X})\)</span> or <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, is defined as:
+<span class="math display">\[
+{\mathbb{V}} (\mathbf{X}) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{X} - \mathbb{E}[\mathbf{X}])&#39;].
+\]</span>
+The <span class="math inline">\((i, j)\)</span> entry of <span class="math inline">\( {\mathbb{V}} (\mathbf{X})\)</span> is given by <span class="math inline">\( {\mathbb{C}} (X_i, X_j)\)</span>, representing the covariance between components <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>.</p>
+<p>If <span class="math inline">\(\mathbf{X}\)</span> has <span class="math inline">\(n\)</span> components, <span class="math inline">\( {\mathbb{V}} (\mathbf{X})\)</span> will be an <span class="math inline">\(n \times n\)</span> symmetric matrix where:
+- Diagonal entries represent the variances of each component, i.e., <span class="math inline">\( {\mathbb{V}} (X_i) =  {\mathbb{C}} (X_i, X_i)\)</span>.
+- Off-diagonal entries represent the covariances between different components, i.e., <span class="math inline">\( {\mathbb{C}} (X_i, X_j)\)</span> for <span class="math inline">\(i \neq j\)</span>.</p>
+</div>
+<div id="key-properties-of-the-variance-covariance-matrix" class="section level4 hasAnchor" number="2.3.2.2">
+<h4><span class="header-section-number">2.3.2.2</span> Key Properties of the Variance-Covariance Matrix<a href="prerequisites.html#key-properties-of-the-variance-covariance-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Symmetry</strong>: The variance-covariance matrix is symmetric, meaning:
+<span class="math display">\[
+{\mathbb{V}} (\mathbf{X}) =  {\mathbb{V}} (\mathbf{X})^T.
+\]</span></p></li>
+<li><p><strong>Non-negativity</strong>: The variance-covariance matrix is <strong>positive semi-definite</strong>, which implies:
+<span class="math display">\[
+\mathbf{z}^T  {\mathbb{V}} (\mathbf{X}) \mathbf{z} \geq 0 \quad \text{for any vector } \mathbf{z} \in \mathbb{R}^n.
+\]</span>
+This property indicates that variances (the diagonal entries) are always non-negative.</p></li>
+<li><p><strong>Variance of a Linear Transformation</strong>: If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(m \times n\)</span> matrix, then the variance of the transformed random vector <span class="math inline">\(\mathbf{A} \mathbf{X}\)</span> is given by:
+<span class="math display">\[
+{\mathbb{V}} (\mathbf{A} \mathbf{X}) = \mathbf{A} \,  {\mathbb{V}} (\mathbf{X}) \, \mathbf{A}^T.
+\]</span></p></li>
+<li><p><strong>Variance of Independent Random Variables</strong>: If the components of <span class="math inline">\(\mathbf{X}\)</span> are mutually independent, the off-diagonal entries of <span class="math inline">\( {\mathbb{V}} (\mathbf{X})\)</span> (the covariances) are zero, resulting in a diagonal covariance matrix.</p></li>
+<li><p><strong>Variance of the Sum of Two Arbitrary Random Vectors</strong>: If <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are two arbitrary random vectors in <span class="math inline">\(\mathbb{R}^n\)</span>, the variance of their sum is given by:
+<span class="math display">\[
+{\mathbb{V}} (\mathbf{X} + \mathbf{Y}) =  {\mathbb{V}} (\mathbf{X}) +  {\mathbb{V}} (\mathbf{Y}) + 2 \,  {\mathbb{C}} (\mathbf{X}, \mathbf{Y}),
+\]</span>
+where <span class="math inline">\( {\mathbb{C}} (\mathbf{X}, \mathbf{Y})\)</span> is the <strong>cross-covariance matrix</strong> between <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span>:
+<span class="math display">\[
+{\mathbb{C}} (\mathbf{X}, \mathbf{Y}) = \mathbb{E}\left[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{Y} - \mathbb{E}[\mathbf{Y}])&#39;\right].
+\]</span></p></li>
+<li><p><strong>Variance of the Sum of Two Independent Random Vectors</strong>: If <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are two independent random vectors in <span class="math inline">\(\mathbb{R}^n\)</span>, then the variance of their sum is given by the sum of their individual variances:
+<span class="math display">\[
+{\mathbb{V}} (\mathbf{X} + \mathbf{Y}) =  {\mathbb{V}} (\mathbf{X}) +  {\mathbb{V}} (\mathbf{Y}).
+\]</span>
+Since <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are independent, their covariance <span class="math inline">\( {\mathbb{C}} (\mathbf{X}, \mathbf{Y})\)</span> is zero, simplifying the variance of the sum.</p></li>
+<li><p><strong>Trace of the Variance</strong>: A related measure of the variance of a random vector <span class="math inline">\(\mathbf{X}\)</span>, is given by
+<span class="math display">\[
+\text{tr}( {\mathbb{V}} [\mathbf{X}]) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])&#39;(\mathbf{X} - \mathbb{E}[\mathbf{X}])]
+\]</span></p></li>
+</ol>
+</div>
+</div>
+<div id="cross-covariance-matrix" class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Cross-Covariance Matrix<a href="prerequisites.html#cross-covariance-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>cross-covariance matrix</strong> measures the covariance between two random vectors, providing insights into the linear relationships between different components of these vectors. Given two random vectors <span class="math inline">\(\mathbf{X} \in \mathbb{R}^n\)</span> and <span class="math inline">\(\mathbf{Y} \in \mathbb{R}^m\)</span>, the cross-covariance matrix between <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> captures how each component of <span class="math inline">\(\mathbf{X}\)</span> varies with each component of <span class="math inline">\(\mathbf{Y}\)</span>.</p>
+<div id="definition-8" class="section level4 hasAnchor" number="2.3.3.1">
+<h4><span class="header-section-number">2.3.3.1</span> Definition<a href="prerequisites.html#definition-8" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> be two random vectors with mean vectors <span class="math inline">\(\mathbb{E}[\mathbf{X}] = \boldsymbol{\mu}_{\mathbf{X}}\)</span> and <span class="math inline">\(\mathbb{E}[\mathbf{Y}] = \boldsymbol{\mu}_{\mathbf{Y}}\)</span>. The cross-covariance matrix of <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> is defined as:</p>
+<p><span class="math display">\[
+{\mathbb{C}} (\mathbf{X}, \mathbf{Y}) = \mathbb{E}[(\mathbf{X} - \boldsymbol{\mu}_{\mathbf{X}})(\mathbf{Y} - \boldsymbol{\mu}_{\mathbf{Y}})^T].
+\]</span></p>
+<p>This matrix is of dimension <span class="math inline">\(n \times m\)</span>, where each element <span class="math inline">\(( {\mathbb{C}} (\mathbf{X}, \mathbf{Y}))_{ij}\)</span> represents the covariance between the <span class="math inline">\(i\)</span>-th component of <span class="math inline">\(\mathbf{X}\)</span> and the <span class="math inline">\(j\)</span>-th component of <span class="math inline">\(\mathbf{Y}\)</span>:</p>
+<p><span class="math display">\[
+( {\mathbb{C}} (\mathbf{X}, \mathbf{Y}))_{ij} =  {\mathbb{C}} (X_i, Y_j) = \mathbb{E}[(X_i - \mu_{X_i})(Y_j - \mu_{Y_j})].
+\]</span></p>
+</div>
+<div id="key-properties-3" class="section level4 hasAnchor" number="2.3.3.2">
+<h4><span class="header-section-number">2.3.3.2</span> Key Properties<a href="prerequisites.html#key-properties-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><strong>Symmetry in Covariance</strong>:
+<ul>
+<li>If <span class="math inline">\(\mathbf{X} = \mathbf{Y}\)</span>, then <span class="math inline">\( {\mathbb{C}} (\mathbf{X}, \mathbf{Y})\)</span> reduces to the covariance matrix of <span class="math inline">\(\mathbf{X}\)</span>, which is symmetric. For distinct vectors <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span>, the cross-covariance matrix <span class="math inline">\( {\mathbb{C}} (\mathbf{X}, \mathbf{Y})\)</span> is generally not symmetric.</li>
+</ul></li>
+<li><strong>Relationship with Joint Covariance Matrix</strong>:
+<ul>
+<li>If <span class="math inline">\(\mathbf{Z} = \begin{bmatrix} \mathbf{X} \\ \mathbf{Y} \end{bmatrix}\)</span> is a combined random vector, then the covariance matrix of <span class="math inline">\(\mathbf{Z}\)</span> is:
+<span class="math display">\[
+{\mathbb{C}} (\mathbf{Z}) = \begin{bmatrix}  {\mathbb{C}} (\mathbf{X}) &amp;  {\mathbb{C}} (\mathbf{X}, \mathbf{Y}) \\  {\mathbb{C}} (\mathbf{Y}, \mathbf{X}) &amp;  {\mathbb{C}} (\mathbf{Y}) \end{bmatrix}.
+\]</span></li>
+</ul></li>
+<li><strong>Linearity</strong>:
+<ul>
+<li>If <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants and <span class="math inline">\(\mathbf{X}_1\)</span> and <span class="math inline">\(\mathbf{X}_2\)</span> are random vectors of the same dimension as <span class="math inline">\(\mathbf{X}\)</span>, then:
+<span class="math display">\[
+{\mathbb{C}} (a\mathbf{X}_1 + b\mathbf{X}_2, \mathbf{Y}) = a  {\mathbb{C}} (\mathbf{X}_1, \mathbf{Y}) + b  {\mathbb{C}} (\mathbf{X}_2, \mathbf{Y}).
+\]</span></li>
+</ul></li>
+</ol>
+<p>Furthermore, if <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span> are matrices of compatible dimensions, and <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are random vectors then the cross-covariance of <span class="math inline">\(\mathbf{A}\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{B}\mathbf{Y}\)</span> is given by:</p>
+<p><span class="math display">\[
+{\mathbb{C}} (\mathbf{A}\mathbf{X}, \mathbf{B}\mathbf{Y}) = \mathbf{A}  {\mathbb{C}} (\mathbf{X}, \mathbf{Y}) \mathbf{B}^T.
+\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Zero Cross-Covariance and Independence</strong>:
+<ul>
+<li>If <span class="math inline">\( {\mathbb{C}} (\mathbf{X}, \mathbf{Y}) = \mathbf{0}\)</span>, it implies that <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are uncorrelated, but it does not necessarily imply independence unless <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are jointly normally distributed.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="multivariate-normal-distribution" class="section level3 hasAnchor" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span> Multivariate Normal Distribution<a href="prerequisites.html#multivariate-normal-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>multivariate normal distribution</strong> generalizes the concept of the normal distribution to multiple dimensions, describing the behavior of random vectors whose elements are jointly normally distributed. It is widely used in statistics and machine learning due to its well-behaved properties and its applicability to modeling correlations between variables.</p>
+<div id="definition-9" class="section level4 hasAnchor" number="2.3.4.1">
+<h4><span class="header-section-number">2.3.4.1</span> Definition<a href="prerequisites.html#definition-9" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A random vector <span class="math inline">\(\mathbf{X} = (X_1, X_2, \dots, X_n)^T\)</span> is said to follow a multivariate normal distribution if it has a probability density function of the form:</p>
+<p><span class="math display">\[
+f(\mathbf{X}) = \frac{1}{(2\pi)^{n/2} |\boldsymbol{\Sigma}|^{1/2}} \exp\left( -\frac{1}{2} (\mathbf{X} - \boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{X} - \boldsymbol{\mu}) \right),
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{X} \in \mathbb{R}^n\)</span> is the random vector,</li>
+<li><span class="math inline">\(\boldsymbol{\mu} \in \mathbb{R}^n\)</span> is the mean vector,</li>
+<li><span class="math inline">\(\boldsymbol{\Sigma} \in \mathbb{R}^{n \times n}\)</span> is the covariance matrix, assumed to be symmetric and positive definite.</li>
+</ul>
+<p>This distribution is denoted as <span class="math inline">\(\mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span>.</p>
+</div>
+<div id="key-properties-4" class="section level4 hasAnchor" number="2.3.4.2">
+<h4><span class="header-section-number">2.3.4.2</span> Key Properties<a href="prerequisites.html#key-properties-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><strong>Marginal Distributions</strong>:
+<ul>
+<li>Any subset of the components of <span class="math inline">\(\mathbf{X}\)</span> is also normally distributed.</li>
+<li>If <span class="math inline">\(\mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span>, then any partition of <span class="math inline">\(\mathbf{X}\)</span> results in a marginal distribution that is also multivariate normal.</li>
+</ul></li>
+<li><strong>Affine Transformation</strong>:
+<ul>
+<li>For a matrix <span class="math inline">\(\mathbf{A}\)</span> and vector <span class="math inline">\(\mathbf{b}\)</span> of appropriate dimensions, the affine transformation <span class="math inline">\(\mathbf{Y} = \mathbf{A}\mathbf{X} + \mathbf{b}\)</span> also follows a multivariate normal distribution, <span class="math inline">\(\mathbf{Y} \sim \mathcal{N}(\mathbf{A} \boldsymbol{\mu} + \mathbf{b}, \mathbf{A} \boldsymbol{\Sigma} \mathbf{A}^T)\)</span>.</li>
+</ul></li>
+<li><strong>Conditional Distributions</strong>:
+<ul>
+<li>For a partitioned vector <span class="math inline">\(\mathbf{X} = (\mathbf{X}_1, \mathbf{X}_2)^T\)</span>, with corresponding partitions of the mean vector and covariance matrix:
+<span class="math display">\[
+\boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2 \end{pmatrix}, \quad
+\boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} &amp; \boldsymbol{\Sigma}_{12} \\ \boldsymbol{\Sigma}_{21} &amp; \boldsymbol{\Sigma}_{22} \end{pmatrix},
+\]</span></li>
+<li>the conditional distribution <span class="math inline">\(\mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2\)</span> is also multivariate normal:
+<span class="math display">\[
+\mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \sim \mathcal{N}(\boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} (\mathbf{x}_2 - \boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}).
+\]</span></li>
+</ul></li>
+<li><strong>Independence and Uncorrelatedness</strong>:
+<ul>
+<li>For a multivariate normal distribution, zero covariance implies independence. If two components <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span> (or two subvectors) have a covariance of zero, they are independent.</li>
+</ul></li>
+<li><strong>Moment Generating Function</strong>:
+<ul>
+<li>The moment generating function of <span class="math inline">\(\mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> is:
+<span class="math display">\[
+M_{\mathbf{X}}(\mathbf{t}) = \exp\left( \mathbf{t}^T \boldsymbol{\mu} + \frac{1}{2} \mathbf{t}^T \boldsymbol{\Sigma} \mathbf{t} \right).
+\]</span></li>
+</ul></li>
+<li><strong>Maximum Entropy</strong>:
+<ul>
+<li>Among all distributions with a given mean vector and covariance matrix, the multivariate normal distribution has the maximum entropy, making it the most “uninformative” or spread out.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="chi2-distribution" class="section level3 hasAnchor" number="2.3.5">
+<h3><span class="header-section-number">2.3.5</span> <span class="math inline">\(\chi^2\)</span> Distribution<a href="prerequisites.html#chi2-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The chi-squared distribution is a probability distribution that arises naturally in statistics, particularly in hypothesis testing and estimation problems. It is defined as the distribution of a sum of the squares of independent standard normal random variables.</p>
+<p>Formally, let <span class="math inline">\(Z_1, Z_2, \dots, Z_k\)</span> be <span class="math inline">\(k\)</span> independent random variables, each following a standard normal distribution (mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(1\)</span>). Then, the sum of their squares:</p>
+<p><span class="math display">\[
+Q = Z_1^2 + Z_2^2 + \cdots + Z_k^2
+\]</span></p>
+<p>follows a chi-squared distribution with <span class="math inline">\(k\)</span> degrees of freedom. We denote this as:</p>
+<p><span class="math display">\[
+Q \sim \chi^2_k
+\]</span></p>
+<div id="key-properties-of-the-chi-squared-distribution" class="section level4 hasAnchor" number="2.3.5.1">
+<h4><span class="header-section-number">2.3.5.1</span> Key Properties of the Chi-Squared Distribution<a href="prerequisites.html#key-properties-of-the-chi-squared-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Degrees of Freedom (<span class="math inline">\(k\)</span>):</strong> The parameter <span class="math inline">\(k\)</span> determines the shape of the distribution. Larger <span class="math inline">\(k\)</span> values result in a distribution that becomes more symmetric and approaches a normal distribution (as <span class="math inline">\(k \to \infty\)</span>).</p></li>
+<li><p><strong>Mean and Variance:</strong></p>
+<ul>
+<li>Mean: <span class="math inline">\(\mathbb{E}[Q] = k\)</span></li>
+<li>Variance: <span class="math inline">\(\mathbb{V}[Q] = 2k\)</span></li>
+</ul></li>
+<li><p><strong>Additivity:</strong> If <span class="math inline">\(Q_1 \sim \chi^2_{k_1}\)</span> and <span class="math inline">\(Q_2 \sim \chi^2_{k_2}\)</span> are independent, then <span class="math inline">\(Q_1 + Q_2 \sim \chi^2_{k_1 + k_2}\)</span>.</p></li>
+<li><p><strong>Special Case:</strong> For <span class="math inline">\(k = 1\)</span>, the chi-squared distribution is simply the square of a standard normal variable, <span class="math inline">\(Q = Z^2\)</span>.</p></li>
+</ol>
+<p>The chi-squared distribution is widely used in statistical tests, such as the chi-squared test for independence or goodness-of-fit, and in the construction of confidence intervals for variances.</p>
+</div>
+</div>
+<div id="t-distribution" class="section level3 hasAnchor" number="2.3.6">
+<h3><span class="header-section-number">2.3.6</span> <span class="math inline">\(t\)</span> Distribution<a href="prerequisites.html#t-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>t-distribution</strong>, also known as Student’s t-distribution, is a probability distribution that arises frequently in hypothesis testing, particularly when the sample size is small, and the population standard deviation is unknown. It is defined as the distribution of a standard normal random variable divided by the square root of an independent chi-squared random variable, scaled by its degrees of freedom.</p>
+<div id="definition-10" class="section level4 hasAnchor" number="2.3.6.1">
+<h4><span class="header-section-number">2.3.6.1</span> Definition<a href="prerequisites.html#definition-10" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let:
+- <span class="math inline">\(Z\)</span> be a standard normal random variable (<span class="math inline">\(Z \sim N(0, 1)\)</span>),
+- <span class="math inline">\(Q\)</span> be a chi-squared random variable with <span class="math inline">\(k\)</span> degrees of freedom (<span class="math inline">\(Q \sim \chi^2_k\)</span>), independent of <span class="math inline">\(Z\)</span>.</p>
+<p>Then, the random variable:</p>
+<p><span class="math display">\[
+T = \frac{Z}{\sqrt{\frac{Q}{k}}}
+\]</span></p>
+<p>follows a t-distribution with <span class="math inline">\(k\)</span> degrees of freedom. We write:</p>
+<p><span class="math display">\[
+T \sim t_k
+\]</span></p>
+</div>
+<div id="key-properties-of-the-t-distribution" class="section level4 hasAnchor" number="2.3.6.2">
+<h4><span class="header-section-number">2.3.6.2</span> Key Properties of the t-Distribution<a href="prerequisites.html#key-properties-of-the-t-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Degrees of Freedom (<span class="math inline">\(k\)</span>):</strong> The parameter <span class="math inline">\(k\)</span> determines the shape of the t-distribution. As <span class="math inline">\(k\)</span> increases, the t-distribution approaches the standard normal distribution.</p></li>
+<li><p><strong>Symmetry:</strong> The t-distribution is symmetric about zero, similar to the normal distribution.</p></li>
+<li><p><strong>Tails:</strong> The t-distribution has heavier tails than the normal distribution, meaning it gives more probability to extreme values. This reflects increased uncertainty when estimating the population mean with small sample sizes.</p></li>
+<li><p><strong>Moments:</strong></p>
+<ul>
+<li>Mean: <span class="math inline">\(\mathbb{E}[T] = 0\)</span> for <span class="math inline">\(k &gt; 1\)</span></li>
+<li>Variance: <span class="math inline">\(\mathbb{V}[T] = \frac{k}{k-2}\)</span> for <span class="math inline">\(k &gt; 2\)</span></li>
+<li>Higher moments exist only for <span class="math inline">\(k &gt; m\)</span>, where <span class="math inline">\(m\)</span> is the order of the moment.</li>
+</ul></li>
+</ol>
+</div>
+<div id="applications-2" class="section level4 hasAnchor" number="2.3.6.3">
+<h4><span class="header-section-number">2.3.6.3</span> Applications<a href="prerequisites.html#applications-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The t-distribution is widely used in:
+1. <strong>t-tests</strong> for hypothesis testing, such as testing means of small samples.
+2. Constructing <strong>confidence intervals</strong> for a population mean when the population standard deviation is unknown.
+3. <strong>Regression analysis</strong>, where it appears in tests for regression coefficients.</p>
+<p>The t-distribution plays a fundamental role in statistics, bridging the gap between small-sample and large-sample inference.</p>
+</div>
+</div>
+<div id="f-distribution" class="section level3 hasAnchor" number="2.3.7">
+<h3><span class="header-section-number">2.3.7</span> <span class="math inline">\(F\)</span> Distribution<a href="prerequisites.html#f-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>F-distribution</strong>, also known as Fisher-Snedecor distribution, arises frequently in statistics, especially in hypothesis testing and variance analysis (ANOVA). It is defined as the distribution of the ratio of two independent chi-squared random variables, each divided by their respective degrees of freedom.</p>
+<div id="definition-11" class="section level4 hasAnchor" number="2.3.7.1">
+<h4><span class="header-section-number">2.3.7.1</span> Definition<a href="prerequisites.html#definition-11" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let:
+- <span class="math inline">\(Q_1 \sim \chi^2_{k_1}\)</span>, a chi-squared random variable with <span class="math inline">\(k_1\)</span> degrees of freedom,
+- <span class="math inline">\(Q_2 \sim \chi^2_{k_2}\)</span>, a chi-squared random variable with <span class="math inline">\(k_2\)</span> degrees of freedom,
+- <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(Q_2\)</span> are independent.</p>
+<p>Then, the random variable:</p>
+<p><span class="math display">\[
+F = \frac{\frac{Q_1}{k_1}}{\frac{Q_2}{k_2}}
+\]</span></p>
+<p>follows an F-distribution with <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> degrees of freedom. We write:</p>
+<p><span class="math display">\[
+F \sim F(k_1, k_2)
+\]</span></p>
+</div>
+<div id="key-properties-of-the-f-distribution" class="section level4 hasAnchor" number="2.3.7.2">
+<h4><span class="header-section-number">2.3.7.2</span> Key Properties of the F-Distribution<a href="prerequisites.html#key-properties-of-the-f-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Degrees of Freedom:</strong> The parameters <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> determine the shape of the F-distribution.</p>
+<ul>
+<li><span class="math inline">\(k_1\)</span> (numerator degrees of freedom) is associated with the variability of the first chi-squared variable.</li>
+<li><span class="math inline">\(k_2\)</span> (denominator degrees of freedom) is associated with the variability of the second chi-squared variable.</li>
+</ul></li>
+<li><p><strong>Support:</strong> <span class="math inline">\(F\)</span> is defined for <span class="math inline">\(F \geq 0\)</span>.</p></li>
+<li><p><strong>Asymmetry:</strong> The F-distribution is not symmetric; it is skewed to the right, especially for small degrees of freedom. As <span class="math inline">\(k_1\)</span> and <span class="math inline">\(k_2\)</span> increase, it approaches a normal distribution.</p></li>
+<li><p><strong>Mean:</strong></p>
+<ul>
+<li><span class="math inline">\(\mathbb{E}[F] = \frac{k_2}{k_2 - 2}\)</span> for <span class="math inline">\(k_2 &gt; 2\)</span>.</li>
+</ul></li>
+<li><p><strong>Variance:</strong></p>
+<ul>
+<li><span class="math inline">\(\mathbb{V}[F] = \frac{2k_2^2 (k_1 + k_2 - 2)}{k_1 (k_2 - 2)^2 (k_2 - 4)}\)</span> for <span class="math inline">\(k_2 &gt; 4\)</span>.</li>
+</ul></li>
+<li><p><strong>Special Cases:</strong></p>
+<ul>
+<li>When <span class="math inline">\(k_1 = 1\)</span>, the F-distribution is equivalent to the square of a t-distribution with <span class="math inline">\(k_2\)</span> degrees of freedom: <span class="math inline">\(F(1, k_2) = t_{k_2}^2\)</span>.</li>
+</ul></li>
+</ol>
+</div>
+<div id="applications-3" class="section level4 hasAnchor" number="2.3.7.3">
+<h4><span class="header-section-number">2.3.7.3</span> Applications<a href="prerequisites.html#applications-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><strong>ANOVA (Analysis of Variance):</strong> The F-statistic is used to test whether multiple groups have the same variance or means.</li>
+<li><strong>Model Comparison:</strong> In regression, the F-distribution is used to compare nested models, assessing whether additional predictors improve the fit of the model.</li>
+<li><strong>Hypothesis Testing:</strong> The F-distribution appears in tests of equality of variances (Levene’s test or Bartlett’s test).</li>
+</ol>
+<p>The F-distribution is essential in statistics for comparing variances and testing model adequacy, making it a cornerstone of many inferential procedures.</p>
+</div>
+</div>
+</div>
+<div id="statistics" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Statistics<a href="prerequisites.html#statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Essential statistical concepts include:</p>
+<ul>
+<li><p><a href="prerequisites.html#bias-of-an-estimator">Bias of an Estimator</a></p></li>
+<li><p><a href="prerequisites.html#unbiased-estimator">Unbiased Estimator</a></p></li>
+<li><p><a href="prerequisites.html#mean-square-error-of-an-estimator">Mean Square Error of an Estimator</a></p></li>
+<li><p>Consistent</p></li>
+<li><p>Minimum Variance</p></li>
+<li><p><strong>Interval Estimation</strong></p></li>
+<li><p><strong>Hypothesis Testing</strong></p></li>
+</ul>
+<div id="bias-of-an-estimator" class="section level3 hasAnchor" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Bias of an Estimator<a href="prerequisites.html#bias-of-an-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>bias</strong> of an estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> for a vector parameter <span class="math inline">\(\mathbf{\theta}\)</span> is defined as the difference between the expected value of the estimator and the true value of the parameter. Formally, if <span class="math inline">\(\mathbf{\theta} \in \mathbb{R}^n\)</span> is a vector parameter, then the <strong>bias</strong> of the estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> is:</p>
+<p><span class="math display">\[
+\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}.
+\]</span></p>
+<div id="key-points-4" class="section level4 hasAnchor" number="2.4.1.1">
+<h4><span class="header-section-number">2.4.1.1</span> Key Points<a href="prerequisites.html#key-points-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Interpretation</strong>: Bias measures how far, on average, the estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> is from the true parameter <span class="math inline">\(\mathbf{\theta}\)</span>. If the bias is zero, the estimator is said to be <strong>unbiased</strong>.</p></li>
+<li><p><strong>Component-wise Bias</strong>: For each component of the estimator <span class="math inline">\(\hat{\mathbf{\theta}} = (\hat{\theta}_1, \dots, \hat{\theta}_n)^T\)</span>, the bias can be expressed as:
+<span class="math display">\[
+\text{Bias}(\hat{\theta}_i) = \mathbb{E}[\hat{\theta}_i] - \theta_i, \quad \text{for each } i = 1, \dots, n.
+\]</span>
+This component-wise breakdown is helpful for understanding how each part of the vector estimator deviates from the true values.</p></li>
+<li><p><strong>Total Bias</strong>: The total bias can be viewed as a vector, summarizing the systematic error in each dimension of the estimator.</p></li>
+</ol>
+</div>
+<div id="example-8" class="section level4 hasAnchor" number="2.4.1.2">
+<h4><span class="header-section-number">2.4.1.2</span> Example<a href="prerequisites.html#example-8" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In practice, if <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> is the sample mean vector of a random vector <span class="math inline">\(\mathbf{X}\)</span>, and <span class="math inline">\(\mathbf{\theta} = \mathbb{E}[\mathbf{X}]\)</span>, then <span class="math inline">\(\text{Bias}(\hat{\mathbf{\theta}})\)</span> will be zero, making the sample mean an unbiased estimator of the population mean.</p>
+</div>
+</div>
+<div id="unbiased-estimator" class="section level3 hasAnchor" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Unbiased Estimator<a href="prerequisites.html#unbiased-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An <strong>unbiased estimator</strong> of a vector parameter is an estimator that, on average, accurately estimates the true value of the parameter. Formally, let <span class="math inline">\(\mathbf{\theta} \in \mathbb{R}^n\)</span> be a vector parameter of interest, and let <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> be an estimator of <span class="math inline">\(\mathbf{\theta}\)</span>. Then, <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> is an <strong>unbiased estimator</strong> of <span class="math inline">\(\mathbf{\theta}\)</span> if the following condition holds:</p>
+<p><span class="math display">\[
+\mathbb{E}[\hat{\mathbf{\theta}}] = \mathbf{\theta} \quad \forall  {\boldsymbol \tau}\in  {\mathbb{R}} ^n.
+\]</span></p>
+<div id="key-points-5" class="section level4 hasAnchor" number="2.4.2.1">
+<h4><span class="header-section-number">2.4.2.1</span> Key Points<a href="prerequisites.html#key-points-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Component-wise Unbiasedness</strong>: Each component of <span class="math inline">\(\hat{\mathbf{\theta}}\)</span>, say <span class="math inline">\(\hat{\theta}_i\)</span>, must be an unbiased estimator of the corresponding component <span class="math inline">\(\theta_i\)</span> of <span class="math inline">\(\mathbf{\theta}\)</span>:
+<span class="math display">\[
+\mathbb{E}[\hat{\theta}_i] = \theta_i, \quad \text{for all } i = 1, \dots, n.
+\]</span></p></li>
+<li><p><strong>No Systematic Bias</strong>: Unbiasedness implies that, on average, the estimator neither overestimates nor underestimates the true value of <span class="math inline">\(\mathbf{\theta}\)</span> across repeated sampling.</p></li>
+<li><p><strong>Applications</strong>: Unbiased estimators are crucial in statistics, as they provide estimations that are theoretically centered around the true parameter values, though they may vary due to sampling variation.</p></li>
+</ol>
+<p>An example is the sample mean <span class="math inline">\(\mathbf{\bar{X}}\)</span> as an estimator for the population mean <span class="math inline">\(\mathbf{\mu}\)</span> of a random vector <span class="math inline">\(\mathbf{X}\)</span>, where <span class="math inline">\(\mathbb{E}[\mathbf{\bar{X}}] = \mathbf{\mu}\)</span>.</p>
+</div>
+</div>
+<div id="mean-square-error-of-an-estimator" class="section level3 hasAnchor" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> Mean Square Error of an Estimator<a href="prerequisites.html#mean-square-error-of-an-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>Mean Square Error (MSE)</strong> of an estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> for a vector parameter <span class="math inline">\(\mathbf{\theta}\)</span> measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector <span class="math inline">\(\mathbf{\theta} \in \mathbb{R}^n\)</span> and an estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span>, the MSE is defined as:</p>
+<p><span class="math display">\[
+{\mathbb{M}} (\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
+\]</span></p>
+<p>where <span class="math inline">\(\|\cdot\|\)</span> denotes the Euclidean (or 2-norm) of a vector. Expanding this expression, we can write:</p>
+<p><span class="math display">\[
+{\mathbb{M}} (\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
+\]</span></p>
+<div id="key-components" class="section level4 hasAnchor" number="2.4.3.1">
+<h4><span class="header-section-number">2.4.3.1</span> Key Components<a href="prerequisites.html#key-components" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The MSE can be decomposed into two main parts: <strong>variance</strong> and <strong>squared bias</strong>.</p>
+<p><span class="math display">\[
+{\mathbb{M}} (\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
+\]</span></p>
+<p>where:
+- <strong>Variance</strong>: <span class="math inline">\(\text{Var}(\hat{\mathbf{\theta}}) = \mathbb{E}[(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])^T]\)</span>, representing the variability in the estimator.
+- <strong>Bias</strong>: <span class="math inline">\(\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}\)</span>, representing the systematic deviation from the true parameter.</p>
+</div>
+<div id="key-properties-5" class="section level4 hasAnchor" number="2.4.3.2">
+<h4><span class="header-section-number">2.4.3.2</span> Key Properties<a href="prerequisites.html#key-properties-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Unbiased Estimator</strong>: If <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> is unbiased, then <span class="math inline">\(\text{Bias}(\hat{\mathbf{\theta}}) = 0\)</span>, and the MSE is simply the trace of the covariance matrix of <span class="math inline">\(\hat{\mathbf{\theta}}\)</span>:
+<span class="math display">\[
+{\mathbb{M}} (\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
+\]</span></p></li>
+<li><p><strong>Bias-Variance Trade-off</strong>: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.</p></li>
+<li><p><strong>Overall Error Metric</strong>: The MSE provides a comprehensive measure of the estimator’s accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.</p></li>
+</ol>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
