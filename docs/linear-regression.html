@@ -139,9 +139,6 @@
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="linear-regression.html"><a href="linear-regression.html#basic-bayesian-linear-regression"><i class="fa fa-check"></i><b>4.2.1</b> Basic Bayesian Linear Regression</a></li>
 <li class="chapter" data-level="4.2.2" data-path="linear-regression.html"><a href="linear-regression.html#bayesian-lasso-regression"><i class="fa fa-check"></i><b>4.2.2</b> Bayesian Lasso Regression</a></li>
-<li class="chapter" data-level="4.2.3" data-path="linear-regression.html"><a href="linear-regression.html#posterior-distribution-and-map-estimator"><i class="fa fa-check"></i><b>4.2.3</b> <strong>Posterior Distribution and MAP Estimator</strong></a></li>
-<li class="chapter" data-level="4.2.4" data-path="linear-regression.html"><a href="linear-regression.html#behavior-of-the-posterior-as-lambda-and-sigma2-vary"><i class="fa fa-check"></i><b>4.2.4</b> <strong>Behavior of the Posterior as <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span> Vary</strong></a></li>
-<li class="chapter" data-level="4.2.5" data-path="linear-regression.html"><a href="linear-regression.html#key-differences-from-ridge-regression"><i class="fa fa-check"></i><b>4.2.5</b> <strong>Key Differences from Ridge Regression</strong></a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -707,9 +704,8 @@ p(\tau_j^2 | \sigma^2) = \frac{\lambda^2}{2} \exp \left( -\frac{\lambda^2}{2} \t
 <p>Thus, the Bayesian Lasso can be <strong>interpreted as Bayesian ridge regression with an adaptive prior variance</strong> for each coefficient.</p>
 <hr />
 </div>
-</div>
-<div id="posterior-distribution-and-map-estimator" class="section level3 hasAnchor" number="4.2.3">
-<h3><span class="header-section-number">4.2.3</span> <strong>Posterior Distribution and MAP Estimator</strong><a href="linear-regression.html#posterior-distribution-and-map-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="posterior-distribution-and-map-estimator" class="section level4 hasAnchor" number="4.2.2.2">
+<h4><span class="header-section-number">4.2.2.2</span> Posterior Distribution and MAP Estimator<a href="linear-regression.html#posterior-distribution-and-map-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The <strong>posterior distribution</strong> of <span class="math inline">\(\boldsymbol{\beta}\)</span> is given by:</p>
 <p><span class="math display">\[
 p(\boldsymbol{\beta} | \mathbf{y}, \sigma^2) \propto p(\mathbf{y} | \boldsymbol{\beta}, \sigma^2) p(\boldsymbol{\beta} | \sigma^2).
@@ -731,8 +727,8 @@ p(\boldsymbol{\beta} | \mathbf{y}, \sigma^2) \propto p(\mathbf{y} | \boldsymbol{
 <p>Thus, the Bayesian Lasso <strong>provides a probabilistic justification</strong> for the Lasso estimator and explains how <strong>shrinkage is controlled by both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span></strong>.</p>
 <hr />
 </div>
-<div id="behavior-of-the-posterior-as-lambda-and-sigma2-vary" class="section level3 hasAnchor" number="4.2.4">
-<h3><span class="header-section-number">4.2.4</span> <strong>Behavior of the Posterior as <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span> Vary</strong><a href="linear-regression.html#behavior-of-the-posterior-as-lambda-and-sigma2-vary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="behavior-of-the-posterior-as-lambda-and-sigma2-vary" class="section level4 hasAnchor" number="4.2.2.3">
+<h4><span class="header-section-number">4.2.2.3</span> Behavior of the Posterior as <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span> Vary<a href="linear-regression.html#behavior-of-the-posterior-as-lambda-and-sigma2-vary" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <ul>
 <li><strong>As <span class="math inline">\(\lambda \to 0\)</span></strong>: The prior becomes <strong>uninformative</strong>, and the MAP estimate approaches the <strong>MLE (ordinary least squares)</strong>.<br />
 </li>
@@ -742,20 +738,8 @@ p(\boldsymbol{\beta} | \mathbf{y}, \sigma^2) \propto p(\mathbf{y} | \boldsymbol{
 </li>
 <li><strong>As <span class="math inline">\(\sigma^2 \to \infty\)</span></strong>: The likelihood dominates, reducing the influence of the prior and making the solution behave more like <strong>OLS</strong>.</li>
 </ul>
-<hr />
-</div>
-<div id="key-differences-from-ridge-regression" class="section level3 hasAnchor" number="4.2.5">
-<h3><span class="header-section-number">4.2.5</span> <strong>Key Differences from Ridge Regression</strong><a href="linear-regression.html#key-differences-from-ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Unlike Bayesian Ridge regression, where <span class="math inline">\(\boldsymbol{\beta}\)</span> follows a <strong>Gaussian prior</strong>, the <strong>Laplace prior</strong> in Bayesian Lasso results in <strong>sparser solutions</strong> by pushing many coefficients to <strong>exactly zero</strong>. This makes Bayesian Lasso particularly useful for:</p>
-<ul>
-<li><strong>Feature selection</strong> in high-dimensional settings.<br />
-</li>
-<li><strong>Interpretable models</strong>, where only the most relevant predictors remain.<br />
-</li>
-<li><strong>Handling multicollinearity</strong>, since irrelevant predictors shrink to zero rather than being retained with small weights.</li>
-</ul>
-<p>Would you like me to extend this discussion to <strong>Bayesian computation methods (e.g., Gibbs sampling) for the Bayesian Lasso</strong>?</p>
 
+</div>
 </div>
 </div>
 </div>

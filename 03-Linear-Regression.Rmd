@@ -644,7 +644,7 @@ Thus, the Bayesian Lasso can be **interpreted as Bayesian ridge regression with 
 
 ---
 
-### **Posterior Distribution and MAP Estimator**  
+#### Posterior Distribution and MAP Estimator  
 
 The **posterior distribution** of \( \boldsymbol{\beta} \) is given by:
 
@@ -674,21 +674,10 @@ Thus, the Bayesian Lasso **provides a probabilistic justification** for the Lass
 
 ---
 
-### **Behavior of the Posterior as \( \lambda \) and \( \sigma^2 \) Vary**  
+#### Behavior of the Posterior as \( \lambda \) and \( \sigma^2 \) Vary  
 
 - **As \( \lambda \to 0 \)**: The prior becomes **uninformative**, and the MAP estimate approaches the **MLE (ordinary least squares)**.  
 - **As \( \lambda \to \infty \)**: The prior dominates the likelihood, and the posterior distribution becomes **highly concentrated at zero** (extreme sparsity).  
 - **As \( \sigma^2 \to 0 \)**: The likelihood becomes narrow, making the Lasso penalty more influential, leading to **greater shrinkage**.  
 - **As \( \sigma^2 \to \infty \)**: The likelihood dominates, reducing the influence of the prior and making the solution behave more like **OLS**.
 
----
-
-### **Key Differences from Ridge Regression**  
-
-Unlike Bayesian Ridge regression, where \( \boldsymbol{\beta} \) follows a **Gaussian prior**, the **Laplace prior** in Bayesian Lasso results in **sparser solutions** by pushing many coefficients to **exactly zero**. This makes Bayesian Lasso particularly useful for:  
-
-- **Feature selection** in high-dimensional settings.  
-- **Interpretable models**, where only the most relevant predictors remain.  
-- **Handling multicollinearity**, since irrelevant predictors shrink to zero rather than being retained with small weights.  
-
-Would you like me to extend this discussion to **Bayesian computation methods (e.g., Gibbs sampling) for the Bayesian Lasso**?
