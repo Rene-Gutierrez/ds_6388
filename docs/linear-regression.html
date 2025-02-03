@@ -138,6 +138,10 @@
 <li class="chapter" data-level="4.2" data-path="linear-regression.html"><a href="linear-regression.html#bayesian-linear-regression"><i class="fa fa-check"></i><b>4.2</b> Bayesian Linear Regression</a>
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="linear-regression.html"><a href="linear-regression.html#basic-bayesian-linear-regression"><i class="fa fa-check"></i><b>4.2.1</b> Basic Bayesian Linear Regression</a></li>
+<li class="chapter" data-level="4.2.2" data-path="linear-regression.html"><a href="linear-regression.html#bayesian-lasso-regression"><i class="fa fa-check"></i><b>4.2.2</b> Bayesian Lasso Regression</a></li>
+<li class="chapter" data-level="4.2.3" data-path="linear-regression.html"><a href="linear-regression.html#posterior-distribution-and-map-estimator"><i class="fa fa-check"></i><b>4.2.3</b> <strong>Posterior Distribution and MAP Estimator</strong></a></li>
+<li class="chapter" data-level="4.2.4" data-path="linear-regression.html"><a href="linear-regression.html#behavior-of-the-posterior-as-lambda-and-sigma2-vary"><i class="fa fa-check"></i><b>4.2.4</b> <strong>Behavior of the Posterior as <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span> Vary</strong></a></li>
+<li class="chapter" data-level="4.2.5" data-path="linear-regression.html"><a href="linear-regression.html#key-differences-from-ridge-regression"><i class="fa fa-check"></i><b>4.2.5</b> <strong>Key Differences from Ridge Regression</strong></a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -674,8 +678,84 @@ p(\boldsymbol{\beta}) \propto \exp \left( -\frac{1}{2\sigma^2} \boldsymbol{\beta
 <li><strong>Gaussian Process priors</strong>: Used in <strong>nonparametric Bayesian regression</strong>, allowing for flexible modeling of relationships without assuming a fixed functional form.</li>
 </ul>
 <p>These richer prior choices allow <strong>Bayesian regression to adapt to a variety of settings</strong>, from high-dimensional problems to nonlinear relationships. Bayesian approaches also provide <strong>full posterior distributions</strong>, enabling uncertainty quantification in predictions—a key advantage over standard frequentist methods.</p>
-
 </div>
+</div>
+<div id="bayesian-lasso-regression" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Bayesian Lasso Regression<a href="linear-regression.html#bayesian-lasso-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Given the standard regression model:</p>
+<p><span class="math display">\[
+\mathbf{y} | \boldsymbol{\beta}, \sigma^2 \sim \mathcal{N}(\mathbf{X} \boldsymbol{\beta}, \sigma^2 \mathbf{I}),
+\]</span></p>
+<p>we place a <strong>Laplace prior</strong> on each coefficient <span class="math inline">\(\beta_j\)</span>, scaled by <span class="math inline">\(\sigma\)</span>, as follows:</p>
+<p><span class="math display">\[
+p(\beta_j | \sigma^2) = \frac{\lambda}{2\sigma} \exp \left( - \frac{\lambda}{2\sigma} | \beta_j | \right).
+\]</span></p>
+<p>This prior encourages sparsity, <strong>shrinking small coefficients toward zero</strong> while allowing some large ones.</p>
+<p>Unlike the basic Bayesian approach in the last section, the Bayesian Lasso does not
+have a closed form posterior distribution. However, it is easy to sample from following a hierarchical prior approach.</p>
+<hr />
+<div id="hierarchical-representation-of-the-laplace-prior" class="section level4 hasAnchor" number="4.2.2.1">
+<h4><span class="header-section-number">4.2.2.1</span> Hierarchical Representation of the Laplace Prior<a href="linear-regression.html#hierarchical-representation-of-the-laplace-prior" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <strong>Laplace prior</strong> can be rewritten as a <strong>hierarchical model</strong> using a <strong>Gaussian scale mixture representation</strong>. Specifically, we introduce auxiliary variance parameters <span class="math inline">\(\tau_j^2\)</span>, where:</p>
+<p><span class="math display">\[
+\beta_j | \tau_j^2, \sigma^2 \sim \mathcal{N}(0, \sigma^2 \tau_j^2).
+\]</span></p>
+<p>The prior on <span class="math inline">\(\tau_j^2\)</span> follows an <strong>exponential distribution</strong>:</p>
+<p><span class="math display">\[
+p(\tau_j^2 | \sigma^2) = \frac{\lambda^2}{2} \exp \left( -\frac{\lambda^2}{2} \tau_j^2 \right).
+\]</span></p>
+<p>Thus, the Bayesian Lasso can be <strong>interpreted as Bayesian ridge regression with an adaptive prior variance</strong> for each coefficient.</p>
+<hr />
+</div>
+</div>
+<div id="posterior-distribution-and-map-estimator" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> <strong>Posterior Distribution and MAP Estimator</strong><a href="linear-regression.html#posterior-distribution-and-map-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>posterior distribution</strong> of <span class="math inline">\(\boldsymbol{\beta}\)</span> is given by:</p>
+<p><span class="math display">\[
+p(\boldsymbol{\beta} | \mathbf{y}, \sigma^2) \propto p(\mathbf{y} | \boldsymbol{\beta}, \sigma^2) p(\boldsymbol{\beta} | \sigma^2).
+\]</span></p>
+<p>Since:
+- The <strong>likelihood</strong> is Gaussian:<br />
+<span class="math display">\[
+  p(\mathbf{y} | \boldsymbol{\beta}, \sigma^2) \propto \exp \left( - \frac{1}{2\sigma^2} \|\mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 \right),
+  \]</span>
+- The <strong>prior</strong> is Laplace:<br />
+<span class="math display">\[
+  p(\boldsymbol{\beta} | \sigma^2) \propto \exp \left( - \frac{\lambda}{2\sigma} \|\boldsymbol{\beta}\|_1 \right),
+  \]</span></p>
+<p>then the <strong>posterior mode</strong> (i.e., the Maximum A Posteriori (MAP) estimator) is obtained by solving:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}} = \arg \min_{\boldsymbol{\beta}} \left\{ \frac{1}{2\sigma^2} \|\mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \frac{\lambda}{2\sigma} \|\boldsymbol{\beta}\|_1 \right\}.
+\]</span></p>
+<p>This <strong>exactly recovers the traditional Lasso estimator</strong>, where the regularization term depends on <span class="math inline">\(\lambda / \sigma\)</span>.</p>
+<p>Thus, the Bayesian Lasso <strong>provides a probabilistic justification</strong> for the Lasso estimator and explains how <strong>shrinkage is controlled by both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span></strong>.</p>
+<hr />
+</div>
+<div id="behavior-of-the-posterior-as-lambda-and-sigma2-vary" class="section level3 hasAnchor" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> <strong>Behavior of the Posterior as <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\sigma^2\)</span> Vary</strong><a href="linear-regression.html#behavior-of-the-posterior-as-lambda-and-sigma2-vary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>As <span class="math inline">\(\lambda \to 0\)</span></strong>: The prior becomes <strong>uninformative</strong>, and the MAP estimate approaches the <strong>MLE (ordinary least squares)</strong>.<br />
+</li>
+<li><strong>As <span class="math inline">\(\lambda \to \infty\)</span></strong>: The prior dominates the likelihood, and the posterior distribution becomes <strong>highly concentrated at zero</strong> (extreme sparsity).<br />
+</li>
+<li><strong>As <span class="math inline">\(\sigma^2 \to 0\)</span></strong>: The likelihood becomes narrow, making the Lasso penalty more influential, leading to <strong>greater shrinkage</strong>.<br />
+</li>
+<li><strong>As <span class="math inline">\(\sigma^2 \to \infty\)</span></strong>: The likelihood dominates, reducing the influence of the prior and making the solution behave more like <strong>OLS</strong>.</li>
+</ul>
+<hr />
+</div>
+<div id="key-differences-from-ridge-regression" class="section level3 hasAnchor" number="4.2.5">
+<h3><span class="header-section-number">4.2.5</span> <strong>Key Differences from Ridge Regression</strong><a href="linear-regression.html#key-differences-from-ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Unlike Bayesian Ridge regression, where <span class="math inline">\(\boldsymbol{\beta}\)</span> follows a <strong>Gaussian prior</strong>, the <strong>Laplace prior</strong> in Bayesian Lasso results in <strong>sparser solutions</strong> by pushing many coefficients to <strong>exactly zero</strong>. This makes Bayesian Lasso particularly useful for:</p>
+<ul>
+<li><strong>Feature selection</strong> in high-dimensional settings.<br />
+</li>
+<li><strong>Interpretable models</strong>, where only the most relevant predictors remain.<br />
+</li>
+<li><strong>Handling multicollinearity</strong>, since irrelevant predictors shrink to zero rather than being retained with small weights.</li>
+</ul>
+<p>Would you like me to extend this discussion to <strong>Bayesian computation methods (e.g., Gibbs sampling) for the Bayesian Lasso</strong>?</p>
+
 </div>
 </div>
 </div>

@@ -132,3 +132,8 @@ posterior-distribution-of-boldsymbolbeta
 connection-to-ridge-regression
 behavior-of-the-posterior-distribution-as-lambda-varies
 conclusion-1
+bayesian-lasso-regression
+hierarchical-representation-of-the-laplace-prior
+posterior-distribution-and-map-estimator
+behavior-of-the-posterior-as-lambda-and-sigma2-vary
+key-differences-from-ridge-regression
