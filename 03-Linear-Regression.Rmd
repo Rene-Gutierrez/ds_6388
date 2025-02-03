@@ -383,3 +383,312 @@ In addition to Elastic Net, Ridge, and Lasso, there are other regularization met
 3. **Bayesian Regularization**:
    - **Formula**: Bayesian regularization methods, like **Bayesian Ridge Regression**, assume a probabilistic model for the coefficients and add a prior distribution (often Gaussian) to the coefficients. The regularization comes from the prior's influence on the model.
    - **Penalty**: The prior serves as a regularizer, encouraging smaller coefficients with the Gaussian prior.
+   
+---
+   
+## Bayesian Linear Regression  
+
+Bayesian regression provides a probabilistic framework for regression analysis by incorporating prior knowledge about the parameters. It offers a direct connection to **regularized regression**, by introducing a prior on the regression coefficients.
+
+### Basic Bayesian Linear Regression  
+
+As before, we consider the standard linear regression model:
+
+\[
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{e}, \quad \mathbf{e} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}).
+\]
+
+where:  
+- \( \mathbf{y} \) is the \( n \times 1 \) vector of observed responses,  
+- \( \mathbf{X} \) is the \( n \times p \) matrix of predictor variables,  
+- \( \boldsymbol{\beta} \) is the \( p \times 1 \) vector of regression coefficients,  
+- \( \mathbf{e} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}) \) is the noise term, assumed to follow a normal distribution with variance \( \sigma^2 \).  
+
+The **likelihood function** follows from the assumption that \( \mathbf{y} \) is normally distributed given \( \mathbf{X} \) and \( \boldsymbol{\beta} \):
+
+\[
+p(\mathbf{y} | \boldsymbol{\beta}) = \mathcal{N}(\mathbf{X} \boldsymbol{\beta}, \sigma^2 \mathbf{I}).
+\]
+
+In a Bayesian framework, we assume a **prior distribution** for \( \boldsymbol{\beta} \). There are several (infinite) alternatives to set a prior, however in this case, we are going to work with a very basic model, in fact in a more gneral setting a prior distribution for $\sigma^2$ is usually specified. 
+
+We take a **normal prior** with mean zero and covariance matrix \( \sigma^2 \mathbf{\Sigma}_\beta \), where \( \mathbf{\Sigma}_\beta \) captures prior beliefs about the relationships between the coefficients:
+
+\[
+p(\boldsymbol{\beta}) = \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{\Sigma}_\beta).
+\]
+
+where \( \mathbf{\Sigma}_\beta \) is a positive definite \( p \times p \) covariance matrix.
+
+---
+
+#### Posterior Distribution of \( \boldsymbol{\beta} \)  
+
+Applying **Bayes’ theorem**, the posterior is proportional to the product of the likelihood and the prior:
+
+\[
+p(\boldsymbol{\beta} | \mathbf{y}) \propto p(\mathbf{y} | \boldsymbol{\beta}) p(\boldsymbol{\beta}).
+\]
+
+Since both the **likelihood** and **prior** are Gaussian, the **posterior** will also be Gaussian. To derive its mean and covariance, we complete the square in the exponent.
+
+\[
+p(\mathbf{y} | \boldsymbol{\beta}) \propto \exp \left( -\frac{1}{2\sigma^2} \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 \right).
+\]
+
+Expanding:
+
+\[
+\| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 = (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})' (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}).
+\]
+
+\[
+p(\boldsymbol{\beta}) \propto \exp \left( -\frac{1}{2\sigma^2} \boldsymbol{\beta}' \mathbf{\Sigma}_\beta^{-1} \boldsymbol{\beta} \right).
+\]
+
+The posterior distribution is proportional to:
+
+\[
+\exp \left( -\frac{1}{2\sigma^2} \left[ (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})' (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + \boldsymbol{\beta}' \mathbf{\Sigma}_\beta^{-1} \boldsymbol{\beta} \right] \right).
+\]
+
+Expanding the quadratic term:
+
+\[
+\mathbf{y}' \mathbf{y} - 2 \mathbf{y}' \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}' \mathbf{X}' \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}' \mathbf{\Sigma}_\beta^{-1} \boldsymbol{\beta}.
+\]
+
+Rewriting,
+
+\[
+- 2 \mathbf{y}' \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}' (\mathbf{X}' \mathbf{X} + \mathbf{\Sigma}_\beta^{-1}) \boldsymbol{\beta}.
+\]
+
+Completing the square, we identify the posterior mean:
+
+\[
+\boldsymbol{\beta} | \mathbf{y} \sim \mathcal{N}(\boldsymbol{\mu}_\beta, \mathbf{\Sigma}_\beta^*),
+\]
+
+where:
+
+\[
+\mathbf{\Sigma}_\beta^* = \left( \mathbf{X}' \mathbf{X} + \mathbf{\Sigma}_\beta^{-1} \right)^{-1} \sigma^2,
+\]
+
+\[
+\boldsymbol{\mu}_\beta = \mathbf{\Sigma}_\beta^* \mathbf{X}' \mathbf{y}.
+\]
+
+---
+
+#### Connection to Ridge Regression  
+
+If we assume that the prior covariance is a **scaled identity matrix**, i.e.,
+
+\[
+\mathbf{\Sigma}_\beta = \frac{1}{\lambda} \mathbf{I},
+\]
+
+then its inverse is:
+
+\[
+\mathbf{\Sigma}_\beta^{-1} = \lambda \mathbf{I}.
+\]
+
+Substituting this into the posterior mean formula:
+
+\[
+\boldsymbol{\mu}_\beta = \left( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \mathbf{X}' \mathbf{y}.
+\]
+
+which is **exactly the Ridge estimator**:
+
+\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \left( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \mathbf{X}' \mathbf{y}.
+\]
+
+Thus, we see that Bayesian regression with a normal prior on \( \boldsymbol{\beta} \) corresponds to Ridge regression, where the **regularization parameter \( \lambda \)** is determined by the prior covariance.
+
+#### Behavior of the Posterior Distribution as \( \lambda \) Varies
+
+Since we have shown that the **posterior mean** of \( \boldsymbol{\beta} \) is:  
+
+\[
+\boldsymbol{\mu}_\beta = \left( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \mathbf{X}' \mathbf{y},
+\]
+
+and the **posterior covariance** is:  
+
+\[
+\mathbf{\Sigma}_\beta^* = \sigma^2 \left( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \right)^{-1},
+\]
+
+we can analyze the behavior of the **posterior distribution** under extreme values of \( \lambda \).
+
+1. When \( \lambda \to 0 \) (No Regularization, Pure MLE)
+
+As \( \lambda \to 0 \), the prior becomes **uninformative**, meaning we are not imposing any shrinkage on the coefficients. In this case:
+
+\[
+\left( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \to (\mathbf{X}' \mathbf{X})^{-1},
+\]
+
+assuming \( \mathbf{X}' \mathbf{X} \) is invertible. Then, the **posterior mean** simplifies to the **ordinary least squares (OLS) estimator**:
+
+\[
+\boldsymbol{\mu}_\beta \to (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}' \mathbf{y}.
+\]
+
+Likewise, the **posterior covariance** reduces to:
+
+\[
+\mathbf{\Sigma}_\beta^* \to \sigma^2 (\mathbf{X}' \mathbf{X})^{-1}.
+\]
+
+This shows that, when \( \lambda \to 0 \), **Bayesian regression becomes equivalent to the classical maximum likelihood estimate (MLE) from OLS**, with high variance when \( \mathbf{X}' \mathbf{X} \) is ill-conditioned.
+
+2. When \( \lambda \to \infty \) (Strong Prior, Heavy Shrinkage)
+
+As \( \lambda \to \infty \), the prior dominates and strongly shrinks \( \boldsymbol{\beta} \) toward **zero**. In this case:
+
+\[
+\left( \mathbf{X}' \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \approx \frac{1}{\lambda} \mathbf{I}, \quad \text{(for large \( \lambda \))}.
+\]
+
+Thus, the **posterior mean** behaves as:
+
+\[
+\boldsymbol{\mu}_\beta \approx \frac{1}{\lambda} \mathbf{X}' \mathbf{y} \to \mathbf{0} \quad \text{as} \quad \lambda \to \infty.
+\]
+
+Similarly, the **posterior covariance** reduces to:
+
+\[
+\mathbf{\Sigma}_\beta^* \approx \frac{\sigma^2}{\lambda} \mathbf{I} \to \mathbf{0}.
+\]
+
+This means that, for very large \( \lambda \), the posterior distribution becomes **highly concentrated around zero**:
+
+\[
+\boldsymbol{\beta} | \mathbf{y} \sim \mathcal{N}(\mathbf{0}, 0).
+\]
+
+**Interpretation:**
+- As \( \lambda \to \infty \), the prior **overwhelms the data** and forces all coefficients to shrink to zero.
+- The posterior variance also vanishes, meaning the uncertainty about \( \boldsymbol{\beta} \) disappears—everything is shrunk toward the prior mean (which is zero in this case).
+- This corresponds to **extreme regularization**, effectively setting all coefficients to zero, similar to a very strong Ridge penalty.
+
+Summary of \( \lambda \)-Dependence:  
+
+| \( \lambda \) | Posterior Mean \( \boldsymbol{\mu}_\beta \) | Posterior Covariance \( \mathbf{\Sigma}_\beta^* \) | Interpretation |
+|-------------|----------------------------------|----------------------------------|----------------|
+| \( \lambda \to 0 \) | OLS estimate: \( (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}' \mathbf{y} \) | \( \sigma^2 (\mathbf{X}' \mathbf{X})^{-1} \) | No regularization (pure MLE). Large variance if \( \mathbf{X}' \mathbf{X} \) is ill-conditioned. |
+| Small \( \lambda \) | Close to OLS | Slightly shrunk covariance | Light regularization. Small shrinkage toward zero. |
+| Large \( \lambda \) | Strongly shrunk toward zero | Shrunk covariance, but still adaptive to data | Ridge-like regularization, balances data and prior. |
+| \( \lambda \to \infty \) | \( \mathbf{0} \) | \( \mathbf{0} \) | Extreme shrinkage; model ignores data and forces coefficients to zero. |
+
+---
+
+#### Conclusion  
+
+The Bayesian regression model presented here is a **basic formulation** that assumes a **Gaussian likelihood** and a **normal prior** on the regression coefficients. This simple setup already reveals deep connections to **Ridge regression**, demonstrating how prior beliefs influence parameter estimation through shrinkage.
+
+Also note that the Bayesian framework allows you to perform Linear Regression even in the case where $p > n$ without the need to change models, as long as a proper prior for $\bgb$ is used.
+
+The model developed before, is just one possible **Bayesian approach to regression**. Many alternative priors can be used to **encode different assumptions** about the regression coefficients, leading to distinct forms of regularization:  
+
+- **Laplace prior**: Leads to **Bayesian Lasso**, which promotes sparsity by encouraging some coefficients to be exactly zero.  
+- **Spike-and-slab prior**: A mixture of a **point mass at zero** and a **diffuse normal distribution**, allowing for **automatic feature selection**.  
+- **Horseshoe prior**: A heavy-tailed prior that **shrinks small coefficients strongly** while allowing large ones to remain, making it useful for sparse models with some large effects.  
+- **Gaussian Process priors**: Used in **nonparametric Bayesian regression**, allowing for flexible modeling of relationships without assuming a fixed functional form.  
+
+These richer prior choices allow **Bayesian regression to adapt to a variety of settings**, from high-dimensional problems to nonlinear relationships. Bayesian approaches also provide **full posterior distributions**, enabling uncertainty quantification in predictions—a key advantage over standard frequentist methods.  
+
+### Bayesian Lasso Regression  
+
+Given the standard regression model:  
+
+\[
+\mathbf{y} | \boldsymbol{\beta}, \sigma^2 \sim \mathcal{N}(\mathbf{X} \boldsymbol{\beta}, \sigma^2 \mathbf{I}),
+\]
+
+we place a **Laplace prior** on each coefficient \( \beta_j \), scaled by \( \sigma \), as follows:
+
+\[
+p(\beta_j | \sigma^2) = \frac{\lambda}{2\sigma} \exp \left( - \frac{\lambda}{2\sigma} | \beta_j | \right).
+\]
+
+This prior encourages sparsity, **shrinking small coefficients toward zero** while allowing some large ones.
+
+Unlike the basic Bayesian approach in the last section, the Bayesian Lasso does not
+have a closed form posterior distribution. However, it is easy to sample from following a hierarchical prior approach.
+
+---
+
+#### Hierarchical Representation of the Laplace Prior
+
+The **Laplace prior** can be rewritten as a **hierarchical model** using a **Gaussian scale mixture representation**. Specifically, we introduce auxiliary variance parameters \( \tau_j^2 \), where:
+
+\[
+\beta_j | \tau_j^2, \sigma^2 \sim \mathcal{N}(0, \sigma^2 \tau_j^2).
+\]
+
+The prior on \( \tau_j^2 \) follows an **exponential distribution**:
+
+\[
+p(\tau_j^2 | \sigma^2) = \frac{\lambda^2}{2} \exp \left( -\frac{\lambda^2}{2} \tau_j^2 \right).
+\]
+
+Thus, the Bayesian Lasso can be **interpreted as Bayesian ridge regression with an adaptive prior variance** for each coefficient.
+
+---
+
+### **Posterior Distribution and MAP Estimator**  
+
+The **posterior distribution** of \( \boldsymbol{\beta} \) is given by:
+
+\[
+p(\boldsymbol{\beta} | \mathbf{y}, \sigma^2) \propto p(\mathbf{y} | \boldsymbol{\beta}, \sigma^2) p(\boldsymbol{\beta} | \sigma^2).
+\]
+
+Since:
+- The **likelihood** is Gaussian:  
+  \[
+  p(\mathbf{y} | \boldsymbol{\beta}, \sigma^2) \propto \exp \left( - \frac{1}{2\sigma^2} \|\mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 \right),
+  \]
+- The **prior** is Laplace:  
+  \[
+  p(\boldsymbol{\beta} | \sigma^2) \propto \exp \left( - \frac{\lambda}{2\sigma} \|\boldsymbol{\beta}\|_1 \right),
+  \]
+
+then the **posterior mode** (i.e., the Maximum A Posteriori (MAP) estimator) is obtained by solving:
+
+\[
+\hat{\boldsymbol{\beta}} = \arg \min_{\boldsymbol{\beta}} \left\{ \frac{1}{2\sigma^2} \|\mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \frac{\lambda}{2\sigma} \|\boldsymbol{\beta}\|_1 \right\}.
+\]
+
+This **exactly recovers the traditional Lasso estimator**, where the regularization term depends on \( \lambda / \sigma \).  
+
+Thus, the Bayesian Lasso **provides a probabilistic justification** for the Lasso estimator and explains how **shrinkage is controlled by both \( \lambda \) and \( \sigma^2 \)**.
+
+---
+
+### **Behavior of the Posterior as \( \lambda \) and \( \sigma^2 \) Vary**  
+
+- **As \( \lambda \to 0 \)**: The prior becomes **uninformative**, and the MAP estimate approaches the **MLE (ordinary least squares)**.  
+- **As \( \lambda \to \infty \)**: The prior dominates the likelihood, and the posterior distribution becomes **highly concentrated at zero** (extreme sparsity).  
+- **As \( \sigma^2 \to 0 \)**: The likelihood becomes narrow, making the Lasso penalty more influential, leading to **greater shrinkage**.  
+- **As \( \sigma^2 \to \infty \)**: The likelihood dominates, reducing the influence of the prior and making the solution behave more like **OLS**.
+
+---
+
+### **Key Differences from Ridge Regression**  
+
+Unlike Bayesian Ridge regression, where \( \boldsymbol{\beta} \) follows a **Gaussian prior**, the **Laplace prior** in Bayesian Lasso results in **sparser solutions** by pushing many coefficients to **exactly zero**. This makes Bayesian Lasso particularly useful for:  
+
+- **Feature selection** in high-dimensional settings.  
+- **Interpretable models**, where only the most relevant predictors remain.  
+- **Handling multicollinearity**, since irrelevant predictors shrink to zero rather than being retained with small weights.  
+
+Would you like me to extend this discussion to **Bayesian computation methods (e.g., Gibbs sampling) for the Bayesian Lasso**?

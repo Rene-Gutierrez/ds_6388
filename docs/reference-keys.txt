@@ -126,3 +126,9 @@ why-use-elastic-net
 optimization-problem
 connections-to-lasso-and-ridge-regression
 other-options-of-regularization
+bayesian-linear-regression
+basic-bayesian-linear-regression
+posterior-distribution-of-boldsymbolbeta
+connection-to-ridge-regression
+behavior-of-the-posterior-distribution-as-lambda-varies
+conclusion-1

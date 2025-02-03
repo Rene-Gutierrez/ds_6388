@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4 Linear Regression | DS 6388 Spring 2025</title>
   <meta name="description" content="4 Linear Regression | DS 6388 Spring 2025" />
-  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4 Linear Regression | DS 6388 Spring 2025" />
   <meta property="og:type" content="book" />
@@ -134,6 +134,10 @@
 <li class="chapter" data-level="4.1.4" data-path="linear-regression.html"><a href="linear-regression.html#elastic-net"><i class="fa fa-check"></i><b>4.1.4</b> Elastic Net</a></li>
 <li class="chapter" data-level="4.1.5" data-path="linear-regression.html"><a href="linear-regression.html#elastic-net-as-a-mixed-penalty"><i class="fa fa-check"></i><b>4.1.5</b> <strong>Elastic Net as a Mixed Penalty</strong></a></li>
 <li class="chapter" data-level="4.1.6" data-path="linear-regression.html"><a href="linear-regression.html#other-options-of-regularization"><i class="fa fa-check"></i><b>4.1.6</b> Other Options of Regularization</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="linear-regression.html"><a href="linear-regression.html#bayesian-linear-regression"><i class="fa fa-check"></i><b>4.2</b> Bayesian Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="linear-regression.html"><a href="linear-regression.html#basic-bayesian-linear-regression"><i class="fa fa-check"></i><b>4.2.1</b> Basic Bayesian Linear Regression</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -470,7 +474,208 @@ d_1^2 + \lambda &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\
 <li><strong>Penalty</strong>: The prior serves as a regularizer, encouraging smaller coefficients with the Gaussian prior.</li>
 </ul></li>
 </ol>
+<hr />
+</div>
+</div>
+<div id="bayesian-linear-regression" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Bayesian Linear Regression<a href="linear-regression.html#bayesian-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Bayesian regression provides a probabilistic framework for regression analysis by incorporating prior knowledge about the parameters. It offers a direct connection to <strong>regularized regression</strong>, by introducing a prior on the regression coefficients.</p>
+<div id="basic-bayesian-linear-regression" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Basic Bayesian Linear Regression<a href="linear-regression.html#basic-bayesian-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As before, we consider the standard linear regression model:</p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{e}, \quad \mathbf{e} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I}).
+\]</span></p>
+<p>where:<br />
+- <span class="math inline">\(\mathbf{y}\)</span> is the <span class="math inline">\(n \times 1\)</span> vector of observed responses,<br />
+- <span class="math inline">\(\mathbf{X}\)</span> is the <span class="math inline">\(n \times p\)</span> matrix of predictor variables,<br />
+- <span class="math inline">\(\boldsymbol{\beta}\)</span> is the <span class="math inline">\(p \times 1\)</span> vector of regression coefficients,<br />
+- <span class="math inline">\(\mathbf{e} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I})\)</span> is the noise term, assumed to follow a normal distribution with variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>The <strong>likelihood function</strong> follows from the assumption that <span class="math inline">\(\mathbf{y}\)</span> is normally distributed given <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>:</p>
+<p><span class="math display">\[
+p(\mathbf{y} | \boldsymbol{\beta}) = \mathcal{N}(\mathbf{X} \boldsymbol{\beta}, \sigma^2 \mathbf{I}).
+\]</span></p>
+<p>In a Bayesian framework, we assume a <strong>prior distribution</strong> for <span class="math inline">\(\boldsymbol{\beta}\)</span>. There are several (infinite) alternatives to set a prior, however in this case, we are going to work with a very basic model, in fact in a more gneral setting a prior distribution for <span class="math inline">\(\sigma^2\)</span> is usually specified.</p>
+<p>We take a <strong>normal prior</strong> with mean zero and covariance matrix <span class="math inline">\(\sigma^2 \mathbf{\Sigma}_\beta\)</span>, where <span class="math inline">\(\mathbf{\Sigma}_\beta\)</span> captures prior beliefs about the relationships between the coefficients:</p>
+<p><span class="math display">\[
+p(\boldsymbol{\beta}) = \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{\Sigma}_\beta).
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{\Sigma}_\beta\)</span> is a positive definite <span class="math inline">\(p \times p\)</span> covariance matrix.</p>
+<hr />
+<div id="posterior-distribution-of-boldsymbolbeta" class="section level4 hasAnchor" number="4.2.1.1">
+<h4><span class="header-section-number">4.2.1.1</span> Posterior Distribution of <span class="math inline">\(\boldsymbol{\beta}\)</span><a href="linear-regression.html#posterior-distribution-of-boldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Applying <strong>Bayes’ theorem</strong>, the posterior is proportional to the product of the likelihood and the prior:</p>
+<p><span class="math display">\[
+p(\boldsymbol{\beta} | \mathbf{y}) \propto p(\mathbf{y} | \boldsymbol{\beta}) p(\boldsymbol{\beta}).
+\]</span></p>
+<p>Since both the <strong>likelihood</strong> and <strong>prior</strong> are Gaussian, the <strong>posterior</strong> will also be Gaussian. To derive its mean and covariance, we complete the square in the exponent.</p>
+<p><span class="math display">\[
+p(\mathbf{y} | \boldsymbol{\beta}) \propto \exp \left( -\frac{1}{2\sigma^2} \| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 \right).
+\]</span></p>
+<p>Expanding:</p>
+<p><span class="math display">\[
+\| \mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 = (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})&#39; (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}).
+\]</span></p>
+<p><span class="math display">\[
+p(\boldsymbol{\beta}) \propto \exp \left( -\frac{1}{2\sigma^2} \boldsymbol{\beta}&#39; \mathbf{\Sigma}_\beta^{-1} \boldsymbol{\beta} \right).
+\]</span></p>
+<p>The posterior distribution is proportional to:</p>
+<p><span class="math display">\[
+\exp \left( -\frac{1}{2\sigma^2} \left[ (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})&#39; (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + \boldsymbol{\beta}&#39; \mathbf{\Sigma}_\beta^{-1} \boldsymbol{\beta} \right] \right).
+\]</span></p>
+<p>Expanding the quadratic term:</p>
+<p><span class="math display">\[
+\mathbf{y}&#39; \mathbf{y} - 2 \mathbf{y}&#39; \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}&#39; \mathbf{X}&#39; \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}&#39; \mathbf{\Sigma}_\beta^{-1} \boldsymbol{\beta}.
+\]</span></p>
+<p>Rewriting,</p>
+<p><span class="math display">\[
+- 2 \mathbf{y}&#39; \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\beta}&#39; (\mathbf{X}&#39; \mathbf{X} + \mathbf{\Sigma}_\beta^{-1}) \boldsymbol{\beta}.
+\]</span></p>
+<p>Completing the square, we identify the posterior mean:</p>
+<p><span class="math display">\[
+\boldsymbol{\beta} | \mathbf{y} \sim \mathcal{N}(\boldsymbol{\mu}_\beta, \mathbf{\Sigma}_\beta^*),
+\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_\beta^* = \left( \mathbf{X}&#39; \mathbf{X} + \mathbf{\Sigma}_\beta^{-1} \right)^{-1} \sigma^2,
+\]</span></p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_\beta = \mathbf{\Sigma}_\beta^* \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<hr />
+</div>
+<div id="connection-to-ridge-regression" class="section level4 hasAnchor" number="4.2.1.2">
+<h4><span class="header-section-number">4.2.1.2</span> Connection to Ridge Regression<a href="linear-regression.html#connection-to-ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If we assume that the prior covariance is a <strong>scaled identity matrix</strong>, i.e.,</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_\beta = \frac{1}{\lambda} \mathbf{I},
+\]</span></p>
+<p>then its inverse is:</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_\beta^{-1} = \lambda \mathbf{I}.
+\]</span></p>
+<p>Substituting this into the posterior mean formula:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_\beta = \left( \mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<p>which is <strong>exactly the Ridge estimator</strong>:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \left( \mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<p>Thus, we see that Bayesian regression with a normal prior on <span class="math inline">\(\boldsymbol{\beta}\)</span> corresponds to Ridge regression, where the <strong>regularization parameter <span class="math inline">\(\lambda\)</span></strong> is determined by the prior covariance.</p>
+</div>
+<div id="behavior-of-the-posterior-distribution-as-lambda-varies" class="section level4 hasAnchor" number="4.2.1.3">
+<h4><span class="header-section-number">4.2.1.3</span> Behavior of the Posterior Distribution as <span class="math inline">\(\lambda\)</span> Varies<a href="linear-regression.html#behavior-of-the-posterior-distribution-as-lambda-varies" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Since we have shown that the <strong>posterior mean</strong> of <span class="math inline">\(\boldsymbol{\beta}\)</span> is:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_\beta = \left( \mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \mathbf{X}&#39; \mathbf{y},
+\]</span></p>
+<p>and the <strong>posterior covariance</strong> is:</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_\beta^* = \sigma^2 \left( \mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} \right)^{-1},
+\]</span></p>
+<p>we can analyze the behavior of the <strong>posterior distribution</strong> under extreme values of <span class="math inline">\(\lambda\)</span>.</p>
+<ol style="list-style-type: decimal">
+<li>When <span class="math inline">\(\lambda \to 0\)</span> (No Regularization, Pure MLE)</li>
+</ol>
+<p>As <span class="math inline">\(\lambda \to 0\)</span>, the prior becomes <strong>uninformative</strong>, meaning we are not imposing any shrinkage on the coefficients. In this case:</p>
+<p><span class="math display">\[
+\left( \mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \to (\mathbf{X}&#39; \mathbf{X})^{-1},
+\]</span></p>
+<p>assuming <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is invertible. Then, the <strong>posterior mean</strong> simplifies to the <strong>ordinary least squares (OLS) estimator</strong>:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_\beta \to (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<p>Likewise, the <strong>posterior covariance</strong> reduces to:</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_\beta^* \to \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1}.
+\]</span></p>
+<p>This shows that, when <span class="math inline">\(\lambda \to 0\)</span>, <strong>Bayesian regression becomes equivalent to the classical maximum likelihood estimate (MLE) from OLS</strong>, with high variance when <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is ill-conditioned.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>When <span class="math inline">\(\lambda \to \infty\)</span> (Strong Prior, Heavy Shrinkage)</li>
+</ol>
+<p>As <span class="math inline">\(\lambda \to \infty\)</span>, the prior dominates and strongly shrinks <span class="math inline">\(\boldsymbol{\beta}\)</span> toward <strong>zero</strong>. In this case:</p>
+<p><span class="math display">\[
+\left( \mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I} \right)^{-1} \approx \frac{1}{\lambda} \mathbf{I}, \quad \text{(for large \( \lambda \))}.
+\]</span></p>
+<p>Thus, the <strong>posterior mean</strong> behaves as:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_\beta \approx \frac{1}{\lambda} \mathbf{X}&#39; \mathbf{y} \to \mathbf{0} \quad \text{as} \quad \lambda \to \infty.
+\]</span></p>
+<p>Similarly, the <strong>posterior covariance</strong> reduces to:</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_\beta^* \approx \frac{\sigma^2}{\lambda} \mathbf{I} \to \mathbf{0}.
+\]</span></p>
+<p>This means that, for very large <span class="math inline">\(\lambda\)</span>, the posterior distribution becomes <strong>highly concentrated around zero</strong>:</p>
+<p><span class="math display">\[
+\boldsymbol{\beta} | \mathbf{y} \sim \mathcal{N}(\mathbf{0}, 0).
+\]</span></p>
+<p><strong>Interpretation:</strong>
+- As <span class="math inline">\(\lambda \to \infty\)</span>, the prior <strong>overwhelms the data</strong> and forces all coefficients to shrink to zero.
+- The posterior variance also vanishes, meaning the uncertainty about <span class="math inline">\(\boldsymbol{\beta}\)</span> disappears—everything is shrunk toward the prior mean (which is zero in this case).
+- This corresponds to <strong>extreme regularization</strong>, effectively setting all coefficients to zero, similar to a very strong Ridge penalty.</p>
+<p>Summary of <span class="math inline">\(\lambda\)</span>-Dependence:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="13%" />
+<col width="35%" />
+<col width="35%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\lambda\)</span></th>
+<th>Posterior Mean <span class="math inline">\(\boldsymbol{\mu}_\beta\)</span></th>
+<th>Posterior Covariance <span class="math inline">\(\mathbf{\Sigma}_\beta^*\)</span></th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\lambda \to 0\)</span></td>
+<td>OLS estimate: <span class="math inline">\((\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}\)</span></td>
+<td><span class="math inline">\(\sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1}\)</span></td>
+<td>No regularization (pure MLE). Large variance if <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is ill-conditioned.</td>
+</tr>
+<tr class="even">
+<td>Small <span class="math inline">\(\lambda\)</span></td>
+<td>Close to OLS</td>
+<td>Slightly shrunk covariance</td>
+<td>Light regularization. Small shrinkage toward zero.</td>
+</tr>
+<tr class="odd">
+<td>Large <span class="math inline">\(\lambda\)</span></td>
+<td>Strongly shrunk toward zero</td>
+<td>Shrunk covariance, but still adaptive to data</td>
+<td>Ridge-like regularization, balances data and prior.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lambda \to \infty\)</span></td>
+<td><span class="math inline">\(\mathbf{0}\)</span></td>
+<td><span class="math inline">\(\mathbf{0}\)</span></td>
+<td>Extreme shrinkage; model ignores data and forces coefficients to zero.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="conclusion-1" class="section level4 hasAnchor" number="4.2.1.4">
+<h4><span class="header-section-number">4.2.1.4</span> Conclusion<a href="linear-regression.html#conclusion-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Bayesian regression model presented here is a <strong>basic formulation</strong> that assumes a <strong>Gaussian likelihood</strong> and a <strong>normal prior</strong> on the regression coefficients. This simple setup already reveals deep connections to <strong>Ridge regression</strong>, demonstrating how prior beliefs influence parameter estimation through shrinkage.</p>
+<p>Also note that the Bayesian framework allows you to perform Linear Regression even in the case where <span class="math inline">\(p &gt; n\)</span> without the need to change models, as long as a proper prior for <span class="math inline">\( {\boldsymbol \beta} \)</span> is used.</p>
+<p>The model developed before, is just one possible <strong>Bayesian approach to regression</strong>. Many alternative priors can be used to <strong>encode different assumptions</strong> about the regression coefficients, leading to distinct forms of regularization:</p>
+<ul>
+<li><strong>Laplace prior</strong>: Leads to <strong>Bayesian Lasso</strong>, which promotes sparsity by encouraging some coefficients to be exactly zero.<br />
+</li>
+<li><strong>Spike-and-slab prior</strong>: A mixture of a <strong>point mass at zero</strong> and a <strong>diffuse normal distribution</strong>, allowing for <strong>automatic feature selection</strong>.<br />
+</li>
+<li><strong>Horseshoe prior</strong>: A heavy-tailed prior that <strong>shrinks small coefficients strongly</strong> while allowing large ones to remain, making it useful for sparse models with some large effects.<br />
+</li>
+<li><strong>Gaussian Process priors</strong>: Used in <strong>nonparametric Bayesian regression</strong>, allowing for flexible modeling of relationships without assuming a fixed functional form.</li>
+</ul>
+<p>These richer prior choices allow <strong>Bayesian regression to adapt to a variety of settings</strong>, from high-dimensional problems to nonlinear relationships. Bayesian approaches also provide <strong>full posterior distributions</strong>, enabling uncertainty quantification in predictions—a key advantage over standard frequentist methods.</p>
 
+</div>
 </div>
 </div>
 </div>
