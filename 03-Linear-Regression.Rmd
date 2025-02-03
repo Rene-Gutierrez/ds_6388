@@ -616,7 +616,7 @@ Given the standard regression model:
 we place a **Laplace prior** on each coefficient \( \beta_j \), scaled by \( \sigma \), as follows:
 
 \[
-p(\beta_j | \sigma^2) = \frac{\lambda}{2\sigma} \exp \left( - \frac{\lambda}{2\sigma} | \beta_j | \right).
+p(\beta_j | \sigma^2) = \frac{\lambda}{2\sigma} \exp \left( - \frac{\lambda}{\sigma} | \beta_j | \right).
 \]
 
 This prior encourages sparsity, **shrinking small coefficients toward zero** while allowing some large ones.
@@ -637,7 +637,7 @@ The **Laplace prior** can be rewritten as a **hierarchical model** using a **Gau
 The prior on \( \tau_j^2 \) follows an **exponential distribution**:
 
 \[
-p(\tau_j^2 | \sigma^2) = \frac{\lambda^2}{2} \exp \left( -\frac{\lambda^2}{2} \tau_j^2 \right).
+p(\tau_j^2 | \lambda^2) = \frac{\lambda^2}{2} \exp \left( -\frac{\lambda^2}{2} \tau_j^2 \right).
 \]
 
 Thus, the Bayesian Lasso can be **interpreted as Bayesian ridge regression with an adaptive prior variance** for each coefficient.
@@ -665,10 +665,10 @@ Since:
 then the **posterior mode** (i.e., the Maximum A Posteriori (MAP) estimator) is obtained by solving:
 
 \[
-\hat{\boldsymbol{\beta}} = \arg \min_{\boldsymbol{\beta}} \left\{ \frac{1}{2\sigma^2} \|\mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \frac{\lambda}{2\sigma} \|\boldsymbol{\beta}\|_1 \right\}.
+\hat{\boldsymbol{\beta}} = \arg \min_{\boldsymbol{\beta}} \left\{ \|\mathbf{y} - \mathbf{X} \boldsymbol{\beta} \|_2^2 + \sigma \lambda \|\boldsymbol{\beta}\|_1 \right\}.
 \]
 
-This **exactly recovers the traditional Lasso estimator**, where the regularization term depends on \( \lambda / \sigma \).  
+This **exactly recovers the traditional Lasso estimator**, where the regularization term depends on \( \sigma \lambda \).  
 
 Thus, the Bayesian Lasso **provides a probabilistic justification** for the Lasso estimator and explains how **shrinkage is controlled by both \( \lambda \) and \( \sigma^2 \)**.
 
@@ -677,7 +677,5 @@ Thus, the Bayesian Lasso **provides a probabilistic justification** for the Lass
 #### Behavior of the Posterior as \( \lambda \) and \( \sigma^2 \) Vary  
 
 - **As \( \lambda \to 0 \)**: The prior becomes **uninformative**, and the MAP estimate approaches the **MLE (ordinary least squares)**.  
-- **As \( \lambda \to \infty \)**: The prior dominates the likelihood, and the posterior distribution becomes **highly concentrated at zero** (extreme sparsity).  
-- **As \( \sigma^2 \to 0 \)**: The likelihood becomes narrow, making the Lasso penalty more influential, leading to **greater shrinkage**.  
-- **As \( \sigma^2 \to \infty \)**: The likelihood dominates, reducing the influence of the prior and making the solution behave more like **OLS**.
+- **As \( \lambda \to \infty \)**: The prior dominates the likelihood, and the posterior distribution becomes **highly concentrated at zero** (extreme sparsity).
 
