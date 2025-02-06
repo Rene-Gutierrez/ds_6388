@@ -2531,11 +2531,13 @@ R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
    (\mathbf{X} \Lambda \mathbf{X}&#39; + \mathbf{I}) \mathbf{w} = (\mathbf{y} - \mathbf{v})
    \]</span></p>
 <p>This avoids inverting <span class="math inline">\(\mathbf{X}&#39; \mathbf{X} + \Lambda^{-1}\)</span>.</p>
-<p>Step 4: Compute the Updated Sample for <span class="math inline">\(\boldsymbol{\beta}\)</span>
-5. Compute:</p>
+<p>Step 4: Compute the Updated Sample for <span class="math inline">\(\boldsymbol{\beta}\)</span></p>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Compute:</p>
 <p><span class="math display">\[
-   \boldsymbol{\beta} = \mathbf{u} + \Lambda \mathbf{X}&#39; \mathbf{w}
-   \]</span></p>
+\boldsymbol{\beta} = \mathbf{u} + \Lambda \mathbf{X}&#39; \mathbf{w}
+\]</span></p></li>
+</ol>
 <p>📌 <strong>Key Insight:</strong> Instead of inverting a <span class="math inline">\(p \times p\)</span> matrix, the algorithm <strong>solves a linear system of size <span class="math inline">\(n \times n\)</span>, reducing computational complexity from <span class="math inline">\(O(p^3)\)</span> to <span class="math inline">\(O(n^3)\)</span></strong>.</p>
 <hr />
 </div>

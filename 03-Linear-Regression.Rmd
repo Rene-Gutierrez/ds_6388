@@ -1913,6 +1913,7 @@ Step 3: Solve a Linear System
    This avoids inverting \( \mathbf{X}' \mathbf{X} + \Lambda^{-1} \).
 
 Step 4: Compute the Updated Sample for \( \boldsymbol{\beta} \)
+
 5. Compute:
 
    \[
