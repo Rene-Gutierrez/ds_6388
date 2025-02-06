@@ -1726,10 +1726,85 @@ kable(as.matrix(coef_table), caption = "Comparison of Post-processed Coefficient
 - **Bayesian Ridge needs post-processing** to enforce sparsity.
 - **Horseshoe Prior is adaptive**, but post-processing enhances sparsity.
 
-## Efficient COmputation
+---
 
-When dealing with $p > n$ some computations like matrix decomposition and inversion are expensive, so it would be better to do it in terms of $n$ than in terms of $p$. For a matrix of size $n \times p$,  Matrix inversion is order of operations and somethig like cholesky decomposition is order computations. So there are some computational tricks that can be done to make this things faster.
+## Efficient Computation  
 
-### Machine Learning
+When dealing with **high-dimensional settings** where \( p > n \), direct computation of **matrix inverses and decompositions** becomes computationally expensive. Specifically:  
 
-Use the Woodbury Identity to show that ridge regression matrix inversion can be more efficiently computed.
+- **Matrix inversion** for an \( n \times p \) matrix is typically \( O(p^3) \), which is prohibitive when \( p \) is large.
+- **Cholesky decomposition**, commonly used for solving linear systems, is \( O(p^3) \) as well.
+
+To make computations more **efficient**, we can express operations in terms of **\( n \) rather than \( p \)** whenever possible. A key technique in **Machine Learning and Statistics** is the **Woodbury Matrix Identity**, which allows us to rewrite certain matrix inversions in a computationally cheaper form.
+
+---
+
+### Efficient Computation of Ridge Regression using the Woodbury Identity  
+
+Ridge regression estimates the coefficients \( \boldsymbol{\beta} \) as:  
+
+\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}' \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}' \mathbf{y}
+\]
+
+where:  
+- \( \mathbf{X} \) is an \( n \times p \) design matrix,  
+- \( \lambda \mathbf{I} \) is a regularization term (where \( \lambda > 0 \) ensures invertibility),  
+- \( \mathbf{y} \) is an \( n \times 1 \) response vector.  
+
+Computing \( (\mathbf{X}' \mathbf{X} + \lambda \mathbf{I})^{-1} \) **directly** is expensive when \( p \) is large. Instead, we use the **Woodbury Identity**, which states:  
+
+\[
+(\mathbf{A} + \mathbf{U} \mathbf{C} \mathbf{V})^{-1} = \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} (\mathbf{C}^{-1} + \mathbf{V} \mathbf{A}^{-1} \mathbf{U})^{-1} \mathbf{V} \mathbf{A}^{-1}
+\]
+
+To apply this to **Ridge Regression**, let’s define:  
+
+- \( \mathbf{A} = \lambda \mathbf{I}_p \) (a \( p \times p \) diagonal matrix),  
+- \( \mathbf{U} = \mathbf{X}' \) (a \( p \times n \) matrix),  
+- \( \mathbf{C} = \mathbf{I}_n \) (an \( n \times n \) identity matrix),  
+- \( \mathbf{V} = \mathbf{X} \) (an \( n \times p \) matrix).  
+
+Applying the **Woodbury Identity**:  
+
+\[
+(\mathbf{X}' \mathbf{X} + \lambda \mathbf{I})^{-1} = \lambda^{-1} \mathbf{I} - \lambda^{-1} \mathbf{X}' (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}')^{-1} \mathbf{X} \lambda^{-1}
+\]
+
+Substituting this into the Ridge Regression equation:  
+
+\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \left( \lambda^{-1} \mathbf{I} - \lambda^{-1} \mathbf{X}' (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}')^{-1} \mathbf{X} \lambda^{-1} \right) \mathbf{X}' \mathbf{y}
+\]
+
+Rearranging:  
+
+\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \lambda^{-1} \mathbf{X}' \mathbf{y} - \lambda^{-1} \mathbf{X}' (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}')^{-1} \mathbf{X} \lambda^{-1} \mathbf{X}' \mathbf{y}
+\]
+
+Defining **\( n \times n \) matrix inversion instead of \( p \times p \)**:  
+
+\[
+\mathbf{M} = (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}')^{-1}
+\]
+
+\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \lambda^{-1} \mathbf{X}' \mathbf{y} - \lambda^{-1} \mathbf{X}' \mathbf{M} \mathbf{X} \lambda^{-1} \mathbf{X}' \mathbf{y}
+\]
+
+Computational Benefits:
+
+- **Direct inversion of \( \mathbf{X}' \mathbf{X} + \lambda \bI \) (size \( p \times p \)) is \( O(p^3) \)**.
+- **Computing \( \mathbf{M} \) involves inverting an \( n \times n \) matrix**, which is **only \( O(n^3) \) (much faster when \( p \gg n \))**.
+- Since \( n \ll p \) in high-dimensional settings, this trick significantly reduces computational cost.  
+
+---
+
+Conclusion:
+
+- **Using the Woodbury Identity**, we reformulate the Ridge Regression inversion in terms of \( n \) instead of \( p \).
+- This approach is particularly useful in **high-dimensional settings** where \( p > n \).
+- Many **Bayesian methods**, such as Gaussian Process Regression and Variational Inference, also rely on the **Woodbury identity** for computational efficiency.
+
+

@@ -216,9 +216,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3.8" data-path="linear-regression.html"><a href="linear-regression.html#bayesian-horseshoe-prior"><i class="fa fa-check"></i><b>4.3.8</b> Bayesian Horseshoe Prior</a></li>
 <li class="chapter" data-level="4.3.9" data-path="linear-regression.html"><a href="linear-regression.html#results-comparisson"><i class="fa fa-check"></i><b>4.3.9</b> Results Comparisson</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="linear-regression.html"><a href="linear-regression.html#efficient-computation"><i class="fa fa-check"></i><b>4.4</b> Efficient COmputation</a>
+<li class="chapter" data-level="4.4" data-path="linear-regression.html"><a href="linear-regression.html#efficient-computation"><i class="fa fa-check"></i><b>4.4</b> Efficient Computation</a>
 <ul>
-<li class="chapter" data-level="4.4.1" data-path="linear-regression.html"><a href="linear-regression.html#machine-learning-1"><i class="fa fa-check"></i><b>4.4.1</b> Machine Learning</a></li>
+<li class="chapter" data-level="4.4.1" data-path="linear-regression.html"><a href="linear-regression.html#efficient-computation-of-ridge-regression-using-the-woodbury-identity"><i class="fa fa-check"></i><b>4.4.1</b> Efficient Computation of Ridge Regression using the Woodbury Identity</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -2382,15 +2382,75 @@ R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
 - <strong>Lasso and Bayesian Lasso</strong> naturally set some coefficients <strong>exactly to zero</strong>.
 - <strong>Bayesian Ridge needs post-processing</strong> to enforce sparsity.
 - <strong>Horseshoe Prior is adaptive</strong>, but post-processing enhances sparsity.</p>
+<hr />
 </div>
 </div>
 </div>
 <div id="efficient-computation" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Efficient COmputation<a href="linear-regression.html#efficient-computation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When dealing with <span class="math inline">\(p &gt; n\)</span> some computations like matrix decomposition and inversion are expensive, so it would be better to do it in terms of <span class="math inline">\(n\)</span> than in terms of <span class="math inline">\(p\)</span>. For a matrix of size <span class="math inline">\(n \times p\)</span>, Matrix inversion is order of operations and somethig like cholesky decomposition is order computations. So there are some computational tricks that can be done to make this things faster.</p>
-<div id="machine-learning-1" class="section level3 hasAnchor" number="4.4.1">
-<h3><span class="header-section-number">4.4.1</span> Machine Learning<a href="linear-regression.html#machine-learning-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Use the Woodbury Identity to show that ridge regression matrix inversion can be more efficiently computed.</p>
+<h2><span class="header-section-number">4.4</span> Efficient Computation<a href="linear-regression.html#efficient-computation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When dealing with <strong>high-dimensional settings</strong> where <span class="math inline">\(p &gt; n\)</span>, direct computation of <strong>matrix inverses and decompositions</strong> becomes computationally expensive. Specifically:</p>
+<ul>
+<li><strong>Matrix inversion</strong> for an <span class="math inline">\(n \times p\)</span> matrix is typically <span class="math inline">\(O(p^3)\)</span>, which is prohibitive when <span class="math inline">\(p\)</span> is large.</li>
+<li><strong>Cholesky decomposition</strong>, commonly used for solving linear systems, is <span class="math inline">\(O(p^3)\)</span> as well.</li>
+</ul>
+<p>To make computations more <strong>efficient</strong>, we can express operations in terms of <strong><span class="math inline">\(n\)</span> rather than <span class="math inline">\(p\)</span></strong> whenever possible. A key technique in <strong>Machine Learning and Statistics</strong> is the <strong>Woodbury Matrix Identity</strong>, which allows us to rewrite certain matrix inversions in a computationally cheaper form.</p>
+<hr />
+<div id="efficient-computation-of-ridge-regression-using-the-woodbury-identity" class="section level3 hasAnchor" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Efficient Computation of Ridge Regression using the Woodbury Identity<a href="linear-regression.html#efficient-computation-of-ridge-regression-using-the-woodbury-identity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Ridge regression estimates the coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> as:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}&#39; \mathbf{y}
+\]</span></p>
+<p>where:<br />
+- <span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> design matrix,<br />
+- <span class="math inline">\(\lambda \mathbf{I}\)</span> is a regularization term (where <span class="math inline">\(\lambda &gt; 0\)</span> ensures invertibility),<br />
+- <span class="math inline">\(\mathbf{y}\)</span> is an <span class="math inline">\(n \times 1\)</span> response vector.</p>
+<p>Computing <span class="math inline">\((\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I})^{-1}\)</span> <strong>directly</strong> is expensive when <span class="math inline">\(p\)</span> is large. Instead, we use the <strong>Woodbury Identity</strong>, which states:</p>
+<p><span class="math display">\[
+(\mathbf{A} + \mathbf{U} \mathbf{C} \mathbf{V})^{-1} = \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} (\mathbf{C}^{-1} + \mathbf{V} \mathbf{A}^{-1} \mathbf{U})^{-1} \mathbf{V} \mathbf{A}^{-1}
+\]</span></p>
+<p>To apply this to <strong>Ridge Regression</strong>, let’s define:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{A} = \lambda \mathbf{I}_p\)</span> (a <span class="math inline">\(p \times p\)</span> diagonal matrix),<br />
+</li>
+<li><span class="math inline">\(\mathbf{U} = \mathbf{X}&#39;\)</span> (a <span class="math inline">\(p \times n\)</span> matrix),<br />
+</li>
+<li><span class="math inline">\(\mathbf{C} = \mathbf{I}_n\)</span> (an <span class="math inline">\(n \times n\)</span> identity matrix),<br />
+</li>
+<li><span class="math inline">\(\mathbf{V} = \mathbf{X}\)</span> (an <span class="math inline">\(n \times p\)</span> matrix).</li>
+</ul>
+<p>Applying the <strong>Woodbury Identity</strong>:</p>
+<p><span class="math display">\[
+(\mathbf{X}&#39; \mathbf{X} + \lambda \mathbf{I})^{-1} = \lambda^{-1} \mathbf{I} - \lambda^{-1} \mathbf{X}&#39; (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}&#39;)^{-1} \mathbf{X} \lambda^{-1}
+\]</span></p>
+<p>Substituting this into the Ridge Regression equation:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \left( \lambda^{-1} \mathbf{I} - \lambda^{-1} \mathbf{X}&#39; (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}&#39;)^{-1} \mathbf{X} \lambda^{-1} \right) \mathbf{X}&#39; \mathbf{y}
+\]</span></p>
+<p>Rearranging:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \lambda^{-1} \mathbf{X}&#39; \mathbf{y} - \lambda^{-1} \mathbf{X}&#39; (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}&#39;)^{-1} \mathbf{X} \lambda^{-1} \mathbf{X}&#39; \mathbf{y}
+\]</span></p>
+<p>Defining <strong><span class="math inline">\(n \times n\)</span> matrix inversion instead of <span class="math inline">\(p \times p\)</span></strong>:</p>
+<p><span class="math display">\[
+\mathbf{M} = (\mathbf{I} + \mathbf{X} \lambda^{-1} \mathbf{X}&#39;)^{-1}
+\]</span></p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = \lambda^{-1} \mathbf{X}&#39; \mathbf{y} - \lambda^{-1} \mathbf{X}&#39; \mathbf{M} \mathbf{X} \lambda^{-1} \mathbf{X}&#39; \mathbf{y}
+\]</span></p>
+<p>Computational Benefits:</p>
+<ul>
+<li><strong>Direct inversion of <span class="math inline">\(\mathbf{X}&#39; \mathbf{X} + \lambda  {\boldsymbol I} \)</span> (size <span class="math inline">\(p \times p\)</span>) is <span class="math inline">\(O(p^3)\)</span></strong>.</li>
+<li><strong>Computing <span class="math inline">\(\mathbf{M}\)</span> involves inverting an <span class="math inline">\(n \times n\)</span> matrix</strong>, which is <strong>only <span class="math inline">\(O(n^3)\)</span> (much faster when <span class="math inline">\(p \gg n\)</span>)</strong>.</li>
+<li>Since <span class="math inline">\(n \ll p\)</span> in high-dimensional settings, this trick significantly reduces computational cost.</li>
+</ul>
+<hr />
+<p>Conclusion:</p>
+<ul>
+<li><strong>Using the Woodbury Identity</strong>, we reformulate the Ridge Regression inversion in terms of <span class="math inline">\(n\)</span> instead of <span class="math inline">\(p\)</span>.</li>
+<li>This approach is particularly useful in <strong>high-dimensional settings</strong> where <span class="math inline">\(p &gt; n\)</span>.</li>
+<li>Many <strong>Bayesian methods</strong>, such as Gaussian Process Regression and Variational Inference, also rely on the <strong>Woodbury identity</strong> for computational efficiency.</li>
+</ul>
 
 </div>
 </div>
