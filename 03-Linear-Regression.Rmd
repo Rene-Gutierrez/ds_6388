@@ -679,3 +679,1057 @@ Thus, the Bayesian Lasso **provides a probabilistic justification** for the Lass
 - **As \( \lambda \to 0 \)**: The prior becomes **uninformative**, and the MAP estimate approaches the **MLE (ordinary least squares)**.  
 - **As \( \lambda \to \infty \)**: The prior dominates the likelihood, and the posterior distribution becomes **highly concentrated at zero** (extreme sparsity).
 
+---
+
+## Computational Comparisson
+
+We generate a synthetic dataset where only a subset of the predictors are relevant. We compare:
+
+* Ridge regression.
+* Lasso regression.
+* Basic Bayesian Regression.
+* Bayesian Lasso Regression.
+* Horseshoe Prior Bayesian Regression.
+
+---
+
+### Set-Up
+
+First we need some functions and libraries:
+
+```{r lr-setup, include=FALSE}
+library(glmnet)
+library(monomvn)
+library(mvtnorm)
+library(knitr)
+source("./horseshoe_sampler.R")
+source("./fast_sampler.R")
+source("./fast_horseshoe.R")
+set.seed(222025)
+```
+
+```r
+library(glmnet)
+```
+- Loads the **glmnet** package, which is used for **Lasso, Ridge, and Elastic Net** regression.  
+- The `glmnet` package provides functions like `cv.glmnet()` and `glmnet()` to perform **penalized regression** with cross-validation.  
+
+```r
+library(monomvn)
+```
+- Loads the **monomvn** package, which provides Bayesian regression models, including **Bayesian Lasso and Bayesian Ridge**.  
+
+```r
+library(mvtnorm)
+```
+- Loads the **mvtnorm** package, which allows working with the **multivariate normal distribution**.  
+- Used for **simulating correlated predictors** in the design matrix (`X`) and for Bayesian sampling.  
+
+```r
+source("./horseshoe_sampler.R")
+source("./fast_sampler.R")
+source("./fast_horseshoe.R")
+```
+- Loads external R scripts (`horseshoe_sampler.R`, `fast_sampler.R`, and `fast_horseshoe.R`), which likely contain **Bayesian sampling functions** for **Horseshoe priors**.  
+- These scripts implement **Markov Chain Monte Carlo (MCMC) algorithms** or other methods to generate posterior samples.  
+
+```r
+set.seed(222025)
+```
+- **Sets the random seed** to ensure that results are **reproducible**.  
+- Ensures that simulated data and stochastic processes (e.g., cross-validation, Bayesian sampling) yield the **same results** every time the script is run.  
+
+```{r lr-simulation-settings}
+numTra <- 300         # Training samples
+numSam <- numTra * 2  # Total samples
+numVar <- 500         # Number of predictors
+sizBlo <- 10          # Block size for Correlation Matrix
+numNze <- 10          # Number of nonzero coefficients
+sigNoi <- 1           # Signal to Noise Ratio
+```
+
+We have that:
+
+- `numTra`: The number of samples available for training.
+- `numSam`: The total number of samples in the dataset, including both training and testing data. It is set to twice the number of training samples.
+- `numVar`: The number of predictor variables (features) in the dataset.
+- `sizBlo`: The size of blocks in the correlation structure of the design matrix. This determines how many variables are within each block.
+- `numNze`: The number of **nonzero** coefficients in the true regression model. These correspond to the features that actually influence the response variable.
+- `sigNoi`: The **signal-to-noise ratio**, which controls the relative strength of the true signal (nonzero coefficients) compared to the noise in the observations.
+
+---
+
+### Simulation
+
+```{r lr-data-generation, cache=TRUE}
+# X, b and y simulation
+disCor <- 0.5  # Correlation decay
+C      <- exp(- disCor * abs(rep(1, sizBlo) %*% t(1:sizBlo) - (1:sizBlo) %*% t(rep(1, sizBlo))))
+X      <- matrix(NA, nrow = numSam, ncol = 0)
+for(i in 1:(numVar / sizBlo)){
+  X <- cbind(X, rmvnorm(n = numSam, sigma = C))
+}
+
+# Generates Coefficients and y
+coeDecRat   <- 4
+b           <- rep(0, numVar)
+b[1:numNze] <- exp(- (1:numNze) / coeDecRat)
+s2          <- (mean(b[1:numNze]) / sigNoi)^2
+y           <- X %*% b + rnorm(n = numSam, sd = sqrt(s2))
+
+# Coefficient Values
+print(b[1:(2 * numNze)])
+
+# Response Variable Variance
+print(var(y))
+
+# Error Standard Deviation
+print(s2)
+```
+This chunk of code **generates the design matrix \( \mathbf{X} \), regression coefficients \( \mathbf{b} \), and response variable \( \mathbf{y} \)** for a simulated linear regression problem. It incorporates a **correlated feature structure**, meaning some predictors are related to each other.  
+
+```r
+disCor <- 0.5  # Correlation decay
+```
+- **`disCor`** controls how quickly correlations **decay** between predictors in the same block.
+- A **higher value** means stronger correlations between nearby variables, while a **lower value** leads to weaker correlations.  
+
+```r
+C <- exp(- disCor * abs(rep(1, sizBlo) %*% t(1:sizBlo) - (1:sizBlo) %*% t(rep(1, sizBlo))))
+```
+- **`C`** is a **block correlation matrix** of size `sizBlo × sizBlo`.  
+- The matrix is **Toeplitz-like**, meaning each predictor is **correlated with its neighbors**, and correlation **decays exponentially** as you move further away.  
+- The function `exp(-disCor * distance)` ensures that correlations are strongest within blocks and weaken with distance.  
+
+```r
+X <- matrix(NA, nrow = numSam, ncol = 0)
+for(i in 1:(numVar / sizBlo)){
+  X <- cbind(X, rmvnorm(n = numSam, sigma = C))
+}
+```
+- **`X`** is initialized as an empty matrix.  
+- The **for-loop** constructs \( \mathbf{X} \) by generating **blocks of correlated features** using `rmvnorm()` (from `mvtnorm` package), which samples from a multivariate normal distribution with covariance matrix `C`.  
+- Each block of predictors has size `sizBlo`, and the total number of blocks is `numVar / sizBlo`.  
+
+```r
+coeDecRat   <- 4  # Controls how fast coefficients decay
+b           <- rep(0, numVar)  # Initializes all coefficients to zero
+b[1:numNze] <- exp(-(1:numNze) / coeDecRat)
+```
+- **`coeDecRat`** controls the decay rate of the **true regression coefficients**.  
+- Only the **first `numNze` coefficients** are **nonzero**, and they follow an **exponential decay pattern**:  
+  \[
+  b_j = \exp(-j / \text{coeDecRat}), \quad \text{for } j = 1, \dots, \text{numNze}
+  \]
+- This means **important variables** have larger effects, and their influence decreases exponentially.  
+ 
+```r
+sigNoi <- mean(b[1:numNze]) / 2
+```
+- **`sigNoi`** represents the **signal-to-noise ratio**:  
+  - Higher `sigNoi` → stronger signal, less noise.  
+  - Lower `sigNoi` → weaker signal, more noise.  
+
+```r
+s2 <- (mean(b[1:numNze]) / sigNoi)^2
+```
+- **`s2`** is the variance of the noise term.  
+- It ensures that the ratio of **signal to noise** remains controlled.  
+
+```r
+y <- X %*% b + rnorm(n = numSam, sd = sqrt(s2))
+```
+
+```r
+print(b[1:(2 * numNze)])  # Print the first few coefficients
+```
+- Displays the first `2 * numNze` coefficients to confirm they follow the expected decay pattern and zero coefficients afterwards.
+
+```r
+print(var(y))  # Print the variance of the response variable
+```
+- **Checks the total variance of \( y \)**, which is affected by both the signal and the noise.
+
+```r
+print(s2)  # Print error variance
+```
+- **Prints the variance of the noise** to verify the expected level of randomness in the response variable.
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `disCor` | Decay parameter controlling correlation between predictors. |
+| `C` | Correlation matrix defining **block-wise correlated predictors**. |
+| `X` | Design matrix, with **correlated predictor blocks**. |
+| `coeDecRat` | Decay rate for **true coefficients**, controlling sparsity. |
+| `b` | True regression coefficients, only `numNze` are **nonzero**. |
+| `s2` | Noise variance, ensuring controlled randomness in \( y \). |
+| `y` | Response variable, generated from \( X \) and \( b \) with noise. |
+
+```{r lr-split-data}
+traInd <- sample(1:numSam, numTra, replace = FALSE)
+traY <- y[traInd]
+traX <- X[traInd, ]
+tesY <- y[-traInd]
+tesX <- X[-traInd, ]
+```
+
+This block **splits the dataset** into **training and testing sets**, which is crucial for evaluating model performance.
+
+Step-by-Step Explanation:
+```r
+traInd <- sample(1:numSam, numTra, replace = FALSE)
+```
+- **`sample(1:numSam, numTra, replace = FALSE)`**  
+  - Randomly selects **`numTra`** indices from **`1:numSam`** (the full dataset).  
+  - **`replace = FALSE`** ensures that no index is selected more than once, maintaining a **random subset** without duplication.  
+- **`traInd`** stores the **indices of the training samples**.  
+ 
+```r
+traY <- y[traInd]
+traX <- X[traInd, ]
+```
+- **`traY`**: Subset of **`y`** containing only the selected training indices → **training response values**.  
+- **`traX`**: Corresponding rows from **design matrix `X`** → **training predictor values**.  
+ 
+```r
+tesY <- y[-traInd]
+tesX <- X[-traInd, ]
+```
+- **`tesY`**: Subset of `y` **excluding training indices** → **test response values**.  
+- **`tesX`**: Corresponding rows from `X` **excluding training indices** → **test predictor values**.  
+
+Summary of Variables:
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `traInd` | Indices randomly chosen for training. |
+| `traX` | Training set predictors (subset of `X`). |
+| `traY` | Training set response values (subset of `y`). |
+| `tesX` | Test set predictors (remaining rows of `X`). |
+| `tesY` | Test set response values (remaining rows of `y`). |
+
+
+Why This Matters?
+1. **Prevents overfitting**: The model is trained on `traX, traY` but evaluated on `tesX, tesY`, ensuring it generalizes to unseen data.  
+2. **Mimics real-world scenarios**: In practice, models predict new data points, so testing on unseen data **measures true performance**.  
+3. **Ensures unbiased evaluation**: A **random split** avoids bias in model evaluation, ensuring the test set represents different feature patterns.
+
+---
+
+### OLS
+
+Then we first OLS
+```{r lr-ols}
+outOLS                <- lm(traY ~ traX - 1)
+coeOLS                <- outOLS$coefficients
+coeOLS[is.na(coeOLS)] <- 0
+mseOLS                <- mean((tesX %*% coeOLS - tesY)^2)
+pr2OLS                <- 1 - mseOLS / var(tesY)
+```
+
+This block **fits an OLS regression model**, extracts the estimated coefficients, and evaluates the model’s performance on the test set.
+
+```r
+outOLS <- lm(traY ~ traX - 1)
+```
+- **`lm(traY ~ traX - 1)`**:  
+  - Fits a **linear model** where `traY` is the response variable and `traX` is the design matrix.  
+  - The **`-1`** removes the default intercept, ensuring that all coefficients correspond directly to the predictors in `traX`.  
+- **`outOLS`** stores the fitted model, including coefficients and residuals.  
+
+```r
+coeOLS <- outOLS$coefficients
+```
+- **Retrieves the estimated regression coefficients** from the fitted model.  
+
+```r
+coeOLS[is.na(coeOLS)] <- 0
+```
+- **Replaces any `NA` values with `0`** (this can happen when certain predictors are collinear, leading to undefined coefficients).  
+
+```r
+mseOLS <- mean((tesX %*% coeOLS - tesY)^2)
+```
+- Computes the **Mean Squared Error (MSE)** on the test set:
+  \[
+  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i - y_i )^2
+  \]
+- **`tesX %*% coeOLS`** calculates predicted values \( \hat{y} \) on the test data.  
+
+```r
+pr2OLS <- 1 - mseOLS / var(tesY)
+```
+- Computes the **predictive R-squared** \( R^2 \):
+  \[
+  R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
+  \]
+- **Interpretation**:
+  - **\( R^2 \approx 1 \)** → Model explains most of the variance in `tesY` (good performance).
+  - **\( R^2 \approx 0 \)** → Model performs as poorly as simply predicting the mean.
+  - **\( R^2 < 0 \)** → Model performs **worse than a constant predictor** (severe overfitting or poor generalization).
+
+Summary of Key Variables:
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `outOLS` | OLS model fitted to the training data. |
+| `coeOLS` | Estimated coefficients from the OLS model. |
+| `mseOLS` | Mean Squared Error on the test set (lower is better). |
+| `pr2OLS` | Predictive \( R^2 \), measuring how well the model generalizes to new data. |
+
+Why This Matters?
+
+- **OLS assumes no multicollinearity** → Since `traX` contains **correlated predictors**, OLS may suffer from **unstable coefficient estimates**.
+- **Regularization (e.g., Ridge, Lasso) is often needed** to improve performance when predictors are highly correlated.
+- **Comparison to Ridge/Lasso/Bayesian models** will highlight how regularization techniques handle multicollinearity **better than OLS**.
+
+---
+
+### Ridge Regression
+
+```{r lr-ridge}
+cvRID  <- cv.glmnet(x = traX, y = traY, alpha = 0)
+outRID <- glmnet(x = traX, y = traY, alpha = 0, lambda = cvRID$lambda.min)
+preRID <- predict(outRID, newx = tesX)
+mseRID <- mean((preRID - tesY)^2)
+pr2RID <- 1 - mseRID / var(tesY)
+```
+
+This block fits a **Ridge Regression model**, selects an optimal regularization parameter \( \lambda \) via cross-validation, and evaluates the model’s performance on the test set.
+
+```r
+cvRID <- cv.glmnet(x = traX, y = traY, alpha = 0)
+```
+- **`cv.glmnet()`** performs **cross-validation** to find the best \( \lambda \) (regularization strength).  
+- **`alpha = 0`** specifies **Ridge Regression** (if `alpha = 1`, it would perform Lasso instead).  
+- The function:
+  - Splits the training data into **folds**.
+  - Trains Ridge regression models with different \( \lambda \) values.
+  - Selects the best \( \lambda \) by **minimizing cross-validated MSE**.
+
+```r
+outRID <- glmnet(x = traX, y = traY, alpha = 0, lambda = cvRID$lambda.min)
+```
+- **Fits a Ridge Regression model** using the best \( \lambda \) found from `cv.glmnet()`.
+- **Key arguments**:
+  - `x = traX`, `y = traY`: Training data.
+  - `alpha = 0`: Specifies Ridge Regression.
+  - `lambda = cvRID$lambda.min`: Uses the optimal \( \lambda \) from cross-validation.
+- **Effect of Ridge Regularization**:
+  - Shrinks **all** coefficients (unlike Lasso, which can set some to zero).
+  - Reduces variance by **stabilizing estimates**, especially in **highly correlated predictor settings**.
+
+```r
+preRID <- predict(outRID, newx = tesX)
+```
+- Uses the trained **Ridge model** (`outRID`) to predict response values on the test set (`tesX`).
+
+```r
+mseRID <- mean((preRID - tesY)^2)
+```
+- Computes the **Mean Squared Error (MSE)** on the test data:
+  \[
+  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i - y_i )^2
+  \]
+- **Lower MSE** indicates better predictive performance.
+
+```r
+pr2RID <- 1 - mseRID / var(tesY)
+```
+- Computes the **predictive \( R^2 \)**:
+  \[
+  R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
+  \]
+- **Interpretation**:
+  - **\( R^2 \approx 1 \)** → Model explains most of the variance (good performance).
+  - **\( R^2 \approx 0 \)** → Model performs similarly to a constant predictor.
+  - **\( R^2 < 0 \)** → Model performs worse than predicting the mean (poor generalization).
+
+Summary of Key Variables:
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `cvRID` | Performs cross-validation to select optimal \( \lambda \). |
+| `outRID` | Trained Ridge Regression model with best \( \lambda \). |
+| `preRID` | Predicted values for the test set. |
+| `mseRID` | Mean Squared Error on the test set (lower is better). |
+| `pr2RID` | Predictive \( R^2 \), measuring model generalization. |
+
+Why Use Ridge Regression?
+
+- **Handles multicollinearity**: When predictors are highly correlated, OLS estimates become unstable. Ridge stabilizes them.
+- **Reduces overfitting**: Adding a penalty term \( \lambda \|\boldsymbol{\beta}\|_2^2 \) discourages overly large coefficients.
+- **Retains all features**: Unlike Lasso, Ridge does **not** force coefficients to be exactly zero.
+
+---
+
+### Lasso
+
+```{r lr-lasso}
+cvLAS  <- cv.glmnet(x = traX, y = traY, alpha = 1)
+plot(cvLAS)
+plot(cvLAS$glmnet.fit)
+outLAS <- glmnet(x = traX, y = traY, alpha = 1, lambda = cvLAS$lambda.min)
+preLAS <- predict(outLAS, newx = tesX)
+mseLAS <- mean((preLAS - tesY)^2)
+pr2LAS <- 1 - mseLAS / var(tesY)
+```
+
+This block fits a **Lasso Regression model**, selects an optimal regularization parameter \( \lambda \) via cross-validation, and evaluates the model’s performance on the test set.
+
+```r
+cvLAS <- cv.glmnet(x = traX, y = traY, alpha = 1)
+```
+- **`cv.glmnet()`** performs **cross-validation** to find the best \( \lambda \) (regularization strength).  
+- **`alpha = 1`** specifies **Lasso Regression** (if `alpha = 0`, it would perform Ridge Regression).  
+- The function:
+  - Splits the training data into **folds**.
+  - Trains Lasso models with different \( \lambda \) values.
+  - Selects the best \( \lambda \) by **minimizing cross-validated MSE**.
+
+```r
+plot(cvLAS)
+plot(cvLAS$glmnet.fit)
+```
+- **`plot(cvLAS)`**:
+  - Plots the cross-validation error for different values of \( \lambda \).
+  - Shows the selected \( \lambda \) (the one that minimizes error).
+- **`plot(cvLAS$glmnet.fit)`**:
+  - Plots the **Lasso path**: how coefficients change as \( \lambda \) increases.
+  - Higher \( \lambda \) values shrink more coefficients to **zero**, performing feature selection.
+
+```r
+outLAS <- glmnet(x = traX, y = traY, alpha = 1, lambda = cvLAS$lambda.min)
+```
+- **Fits a Lasso Regression model** using the best \( \lambda \) found from `cv.glmnet()`.
+- **Key arguments**:
+  - `x = traX`, `y = traY`: Training data.
+  - `alpha = 1`: Specifies **Lasso Regression**.
+  - `lambda = cvLAS$lambda.min`: Uses the optimal \( \lambda \) from cross-validation.
+- **Effect of Lasso Regularization**:
+  - Shrinks some **coefficients to exactly zero**, performing **automatic feature selection**.
+  - Helps when **only a subset of predictors is relevant**.
+
+```r
+preLAS <- predict(outLAS, newx = tesX)
+```
+- Uses the trained **Lasso model** (`outLAS`) to predict response values on the test set (`tesX`).
+
+```r
+mseLAS <- mean((preLAS - tesY)^2)
+```
+- Computes the **Mean Squared Error (MSE)** on the test data:
+  \[
+  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i - y_i )^2
+  \]
+- **Lower MSE** indicates better predictive performance.
+
+```r
+pr2LAS <- 1 - mseLAS / var(tesY)
+```
+- Computes the **predictive \( R^2 \)**:
+  \[
+  R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
+  \]
+- **Interpretation**:
+  - **\( R^2 \approx 1 \)** → Model explains most of the variance (good performance).
+  - **\( R^2 \approx 0 \)** → Model performs similarly to a constant predictor.
+  - **\( R^2 < 0 \)** → Model performs worse than predicting the mean (poor generalization).
+
+---
+
+Summary of Key Variables:
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `cvLAS` | Performs cross-validation to select optimal \( \lambda \). |
+| `outLAS` | Trained Lasso Regression model with best \( \lambda \). |
+| `preLAS` | Predicted values for the test set. |
+| `mseLAS` | Mean Squared Error on the test set (lower is better). |
+| `pr2LAS` | Predictive \( R^2 \), measuring model generalization. |
+
+Why Use Lasso Regression?
+
+- **Feature Selection**: Unlike Ridge, Lasso can shrink some coefficients **exactly to zero**, removing irrelevant predictors.
+- **Handles high-dimensional data**: When \( p > n \), Lasso helps by selecting the most relevant features.
+- **Interpretable models**: Because some coefficients are set to zero, Lasso produces simpler models.
+
+---
+
+### Basic Bayesian Regression
+
+```{r lr-bayesian-ridge}
+outBAY <- rmvnorm(n = 2000, mean = outRID$beta, sigma = s2 * solve(t(X) %*% X + cvRID$lambda.min * diag(numVar)))
+coeBAY <- apply(X = outBAY, MARGIN = 2, FUN = median)
+preBAY <- tesX %*% coeBAY
+mseBAY <- mean((preBAY - tesY)^2)
+pr2BAY <- 1 - mseBAY / var(tesY)
+```
+
+```r
+outBAY <- rmvnorm(n = 2000, 
+                  mean = outRID$beta, 
+                  sigma = s2 * solve(t(X) %*% X + cvRID$lambda.min * diag(numVar)))
+```
+- **`rmvnorm()`** generates **2,000 samples** from a **multivariate normal distribution**, approximating the posterior distribution of the regression coefficients \( \boldsymbol{\beta} \).
+- **Posterior Mean**: Uses the Ridge Regression solution (`outRID$beta`) as the mean of the distribution.
+- **Posterior Covariance**:  
+  \[
+  \sigma^2 (\mathbf{X}' \mathbf{X} + \lambda \mathbf{I})^{-1}
+  \]
+  - `s2 * solve(t(X) %*% X + cvRID$lambda.min * diag(numVar))` is the **posterior covariance matrix**, incorporating both the observed data and the prior information.
+  - The **\( \lambda \mathbf{I} \) term** (from Ridge) ensures **stability** even if \( \mathbf{X}' \mathbf{X} \) is singular.
+
+📌 **Key Idea**: Unlike Ridge, which gives a **point estimate** for \( \boldsymbol{\beta} \), Bayesian Ridge treats \( \boldsymbol{\beta} \) as a **random variable** and samples from its posterior distribution.
+
+```r
+coeBAY <- apply(X = outBAY, MARGIN = 2, FUN = median)
+```
+- For each coefficient \( \beta_j \), we **take the median** across the 2,000 posterior samples.
+- This is a **Bayesian point estimate**, similar to the Ridge solution but incorporating **posterior uncertainty**.
+
+```r
+preBAY <- tesX %*% coeBAY
+```
+- Uses the **Bayesian posterior median coefficients** to predict `tesY`.
+
+```r
+mseBAY <- mean((preBAY - tesY)^2)
+```
+- Computes the **Mean Squared Error (MSE)** on the test data:
+  \[
+  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i - y_i )^2
+  \]
+- **Lower MSE** indicates better predictive performance.
+
+```r
+pr2BAY <- 1 - mseBAY / var(tesY)
+```
+- Computes the **predictive \( R^2 \)**:
+  \[
+  R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
+  \]
+- **Interpretation**:
+  - **\( R^2 \approx 1 \)** → Model explains most of the variance (good performance).
+  - **\( R^2 \approx 0 \)** → Model performs similarly to a constant predictor.
+  - **\( R^2 < 0 \)** → Model performs worse than predicting the mean (poor generalization).
+
+Summary of Key Variables:
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `outBAY` | Posterior samples of \( \boldsymbol{\beta} \) from a **Bayesian Ridge** model. |
+| `coeBAY` | Posterior **median** coefficients (Bayesian point estimate). |
+| `preBAY` | Predicted values for the test set. |
+| `mseBAY` | Mean Squared Error on the test set (lower is better). |
+| `pr2BAY` | Predictive \( R^2 \), measuring model generalization. |
+
+Why Use Bayesian Ridge Regression?
+
+- **Incorporates uncertainty**: Instead of a single estimate, we get a **posterior distribution** over \( \boldsymbol{\beta} \).
+- **Handles multicollinearity**: Like Ridge, the prior **shrinks** coefficients to prevent instability.
+- **Flexibility**: Bayesian methods allow incorporating **informative priors** when prior knowledge is available.
+
+### Bayesian Lasso
+
+```{r lr-bayesian-lasso, cache=TRUE}
+outBLA <- blasso(X = traX, y = traY, T = 500)
+coeBLA <- apply(X = outBLA$beta, MARGIN = 2, FUN = median)
+preBLA <- tesX %*% coeBLA
+mseBLA <- mean((preBLA - tesY)^2)
+pr2BLA <- 1 - mseBLA / var(tesY)
+```
+
+This block implements a **Bayesian version of Lasso Regression**, where instead of solving a convex optimization problem (like traditional Lasso), it **samples from the posterior distribution** of the regression coefficients using a Bayesian framework.
+
+```r
+outBLA <- blasso(X = traX, y = traY, T = 50)
+```
+- **`blasso()`** performs **Bayesian Lasso regression**, which introduces a **Laplace (double-exponential) prior** on \( \boldsymbol{\beta} \).
+- **Key argument**:
+  - `T = 50`: Runs **50 iterations** of a **Markov Chain Monte Carlo (MCMC) sampler** to draw posterior samples of \( \boldsymbol{\beta} \).
+
+📌 **Bayesian Lasso vs. Traditional Lasso**  
+- **Traditional Lasso**: Estimates \( \boldsymbol{\beta} \) by **solving an optimization problem** with an \( \ell_1 \)-penalty.
+- **Bayesian Lasso**: Places a **Laplace prior** on \( \boldsymbol{\beta} \), then **samples** from the posterior.
+- Unlike Traditional Lasso, the Bayesian Lasso doesn't perform exact variable selection.
+
+```r
+coeBLA <- apply(X = outBLA$beta, MARGIN = 2, FUN = median)
+```
+- **Takes the median** of the sampled coefficients across the 50 iterations.
+- This provides a **point estimate** similar to the Lasso solution but incorporates **posterior uncertainty**.
+
+```r
+preBLA <- tesX %*% coeBLA
+```
+- Uses the **posterior median coefficients** to predict response values on the test set.
+
+```r
+mseBLA <- mean((preBLA - tesY)^2)
+```
+- Computes the **Mean Squared Error (MSE)** on the test data:
+  \[
+  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i - y_i )^2
+  \]
+- **Lower MSE** indicates better predictive performance.
+
+```r
+pr2BLA <- 1 - mseBLA / var(tesY)
+```
+- Computes the **predictive \( R^2 \)**:
+  \[
+  R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
+  \]
+- **Interpretation**:
+  - **\( R^2 \approx 1 \)** → Model explains most of the variance (good performance).
+  - **\( R^2 \approx 0 \)** → Model performs similarly to a constant predictor.
+  - **\( R^2 < 0 \)** → Model performs worse than predicting the mean (poor generalization).
+
+Summary of Key Variables: 
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `outBLA` | Posterior samples of \( \boldsymbol{\beta} \) from the **Bayesian Lasso** model. |
+| `coeBLA` | Posterior **median** coefficients (Bayesian point estimate). |
+| `preBLA` | Predicted values for the test set. |
+| `mseBLA` | Mean Squared Error on the test set (lower is better). |
+| `pr2BLA` | Predictive \( R^2 \), measuring model generalization. |
+
+Why Use Bayesian Lasso Regression?
+
+- **Incorporates Uncertainty**: Unlike standard Lasso, it provides **posterior distributions** instead of just point estimates.
+- **More Robust to Noise**: Bayesian priors smooth out **overfitting issues** that can occur in traditional Lasso.
+
+---
+
+### Bayesian Horseshoe Prior
+
+```{r lr-horseshoe, cache=TRUE}
+outHOR <- horseshoe_sampler(X = X, y = y, S = 500)
+coeHOR <- apply(X = outHOR$B, MARGIN = 2, FUN = median)
+preHOR <- tesX %*% coeHOR
+mseHOR <- mean((preHOR - tesY)^2)
+pr2HOR <- 1 - mseHOR / var(tesY)
+```
+
+This block implements **Bayesian regression using the Horseshoe prior**, which is particularly useful for **sparse models** where only a small subset of predictors are truly relevant. The Horseshoe prior is known for **strong shrinkage** of irrelevant coefficients while allowing **large signals to remain unshrunk**.  In this case custom code is used to perform faster sampling when $p > n$.
+
+```r
+outHOR <- horseshoe_sampler(X = X, y = y, S = 500)
+```
+- **`horseshoe_sampler()`** performs **Bayesian regression with a Horseshoe prior**, which is an **adaptive shrinkage prior**.
+- **Key argument**:
+  - `S = 500`: Runs **500 MCMC iterations** to generate posterior samples of the coefficients \( \boldsymbol{\beta} \).
+
+📌 **Horseshoe Prior vs. Other Bayesian Methods**  
+- **Bayesian Ridge**: Uses a **Gaussian prior**, shrinking all coefficients uniformly.
+- **Bayesian Lasso**: Uses a **Laplace prior**, putting more weight at zero in the prior.
+- **Horseshoe Prior**: Uses a **hierarchical prior** that **strongly shrinks small coefficients** but allows large coefficients to stay large.  
+
+```r
+coeHOR <- apply(X = outHOR$B, MARGIN = 2, FUN = median)
+```
+- **Takes the median** of the posterior samples for each coefficient.
+- This provides a **point estimate** similar to Bayesian Lasso but with **adaptive shrinkage**.
+
+```r
+preHOR <- tesX %*% coeHOR
+```
+- Uses the **posterior median coefficients** to predict response values on the test set.
+
+```r
+mseHOR <- mean((preHOR - tesY)^2)
+```
+- Computes the **Mean Squared Error (MSE)** on the test data:
+  \[
+  \text{MSE} = \frac{1}{n} \sum_{i=1}^{n} ( \hat{y}_i - y_i )^2
+  \]
+- **Lower MSE** indicates better predictive performance.
+
+```r
+pr2HOR <- 1 - mseHOR / var(tesY)
+```
+- Computes the **predictive \( R^2 \)**:
+  \[
+  R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
+  \]
+- **Interpretation**:
+  - **\( R^2 \approx 1 \)** → Model explains most of the variance (good performance).
+  - **\( R^2 \approx 0 \)** → Model performs similarly to a constant predictor.
+  - **\( R^2 < 0 \)** → Model performs worse than predicting the mean (poor generalization).
+
+Summary of Key Variables:
+
+| **Variable** | **Description** |
+|-------------|----------------|
+| `outHOR` | Posterior samples of \( \boldsymbol{\beta} \) from the **Horseshoe prior** model. |
+| `coeHOR` | Posterior **median** coefficients (Bayesian point estimate). |
+| `preHOR` | Predicted values for the test set. |
+| `mseHOR` | Mean Squared Error on the test set (lower is better). |
+| `pr2HOR` | Predictive \( R^2 \), measuring model generalization. |
+
+Why Use the Horseshoe Prior?
+
+- **Handles Sparse Models Well**: Encourages **strong shrinkage** for irrelevant coefficients while keeping relevant ones intact.
+- **Better than Lasso for Small Signals**: Lasso tends to shrink **all** coefficients, while Horseshoe allows some to stay large.
+- **Works in High-Dimensional Settings**: Performs well when \( p > n \), where traditional methods like OLS and Ridge struggle.
+
+### Results Comparisson
+
+#### Estimation Comparisson
+
+```{r lr-plots-estimates-non-zero-coefficient}
+# Plots Both
+coeInd <- 1
+denBAY <- density(x = outBAY[, coeInd])
+denBLA <- density(x = outBLA$beta[101:500, coeInd])
+denHOR <- density(x = outHOR$B[101:500, coeInd])
+xmin   <- min(b[coeInd],
+              outRID$beta[coeInd],
+              outLAS$beta[coeInd],
+              outBAY[, coeInd],
+              outBLA$beta[101:500, coeInd],
+              outHOR$B[101:500, coeInd])
+xmax   <- max(b[coeInd],
+              outRID$beta[coeInd],
+              outLAS$beta[coeInd],
+              outBAY[, coeInd],
+              outBLA$beta[101:500, coeInd],
+              outHOR$B[101:500, coeInd])
+ymax   <- max(denBAY$y, denBLA$y, denHOR$y)
+plot(denBAY,
+     col  = rgb(1, 0, 0),
+     xlim = c(xmin, xmax),
+     ylim = c(   0, ymax),
+     main = paste0("Coefficient ", coeInd),
+     xlab = bquote(beta[.(coeInd)]))
+polygon(denBAY,
+        col    = rgb(1, 0, 0, 0.5),
+        border = NA)
+par(new=TRUE)
+plot(denBLA,
+     col  = rgb(1, 0, 1),
+     xlim = c(xmin, xmax),
+     ylim = c(   0, ymax),
+     main = "",
+     xaxt = "n",
+     xlab = "")
+polygon(denBLA,
+        col = rgb(1, 0, 1, 0.5),
+        border = NA)
+par(new=TRUE)
+plot(denHOR,
+     col  = rgb(0, 1, 1),
+     xlim = c(xmin, xmax),
+     ylim = c(   0, ymax),
+     main = "",
+     xaxt = "n",
+     xlab = "")
+polygon(denHOR,
+        col = rgb(0, 1, 1, 0.5),
+        border = NA)
+abline(v = b[coeInd],           lwd = 2, col = rgb(0, 0, 0))
+abline(v = outRID$beta[coeInd], lwd = 2, col = rgb(0, 0, 1))
+abline(v = outLAS$beta[coeInd], lwd = 2, col = rgb(0, 1, 0))
+```
+
+This code **visualizes the posterior distributions** of a **single regression coefficient** \( \beta_{\text{coeInd}} \) estimated using **Bayesian Ridge, Bayesian Lasso, and Bayesian Horseshoe priors**. Additionally, it compares these estimates to those from **Ridge and Lasso** regression.
+
+
+Why This Matters?
+
+- **Ridge (blue line)** shrinks coefficients but **never sets them exactly to zero**.
+- **Lasso (green line)** performs feature selection by setting some coefficients **exactly to zero**.
+- **Bayesian Ridge (red curve)** resembles Ridge but **accounts for uncertainty**.
+- **Bayesian Lasso (purple curve)** is similar to Lasso but **includes a distribution over coefficients**.
+- **Horseshoe (cyan curve)** applies **strong shrinkage** to small coefficients while allowing **important ones to remain large**.
+
+```r
+coeInd <- 1
+```
+- **`coeInd = 1`** selects the **first coefficient** (\( \beta_1 \)) for visualization.
+- The user can change this to plot other coefficients.
+
+```r
+denBAY <- density(x = outBAY[, coeInd])
+denBLA <- density(x = outBLA$beta[101:500, coeInd])
+denHOR <- density(x = outHOR$B[101:500, coeInd])
+```
+- **`density()`** estimates the probability density function (PDF) of the sampled coefficients.
+- **Bayesian Models:**
+  - **`outBAY[, coeInd]`**: Posterior samples from **Bayesian Ridge Regression**.
+  - **`outBLA$beta[101:500, coeInd]`**: Posterior samples from **Bayesian Lasso** (excluding first 100 as burn-in).
+  - **`outHOR$B[101:500, coeInd]`**: Posterior samples from **Bayesian Horseshoe** (excluding first 100 as burn-in).
+
+📌 **Why exclude the first 100 samples?**
+- In **MCMC sampling**, the first few iterations (burn-in period) may not be from the true posterior distribution.
+
+```r
+xmin <- min(b[coeInd],
+            outRID$beta[coeInd],
+            outLAS$beta[coeInd],
+            outBAY[, coeInd],
+            outBLA$beta[101:500, coeInd],
+            outHOR$B[101:500, coeInd])
+
+xmax <- max(b[coeInd],
+            outRID$beta[coeInd],
+            outLAS$beta[coeInd],
+            outBAY[, coeInd],
+            outBLA$beta[101:500, coeInd],
+            outHOR$B[101:500, coeInd])
+
+ymax <- max(denBAY$y, denBLA$y, denHOR$y)
+```
+- **`xmin` & `xmax`**: Find the minimum and maximum values of the estimated coefficients to set the x-axis range.
+- **`ymax`**: Finds the maximum density value across all models to set the y-axis range.
+
+```r
+plot(denBAY,
+     col  = rgb(1, 0, 0),
+     xlim = c(xmin, xmax),
+     ylim = c(0, ymax),
+     main = paste0("Coefficient ", coeInd),
+     xlab = bquote(beta[.(coeInd)]))
+polygon(denBAY,
+        col    = rgb(1, 0, 0, 0.5),
+        border = NA)
+```
+- **Plots the density of Bayesian Ridge estimates (in red)**.
+- **`polygon()`** fills the area under the curve for better visualization.
+
+```r
+par(new=TRUE)
+plot(denBLA,
+     col  = rgb(1, 0, 1),
+     xlim = c(xmin, xmax),
+     ylim = c(0, ymax),
+     main = "",
+     xaxt = "n",
+     xlab = "")
+polygon(denBLA,
+        col = rgb(1, 0, 1, 0.5),
+        border = NA)
+```
+- **Plots Bayesian Lasso estimates (in purple)**.
+- **`par(new=TRUE)`** allows overlaying this plot on the previous one.
+
+```r
+par(new=TRUE)
+plot(denHOR,
+     col  = rgb(0, 1, 1),
+     xlim = c(xmin, xmax),
+     ylim = c(0, ymax),
+     main = "",
+     xaxt = "n",
+     xlab = "")
+polygon(denHOR,
+        col = rgb(0, 1, 1, 0.5),
+        border = NA)
+```
+- **Plots Bayesian Horseshoe estimates (in cyan/light blue)**.
+- The densities **overlap**, allowing a direct comparison of uncertainty across models.
+
+```r
+abline(v = b[coeInd],           lwd = 2, col = rgb(0, 0, 0)) # True coefficient (black)
+abline(v = outRID$beta[coeInd], lwd = 2, col = rgb(0, 0, 1)) # Ridge estimate (blue)
+abline(v = outLAS$beta[coeInd], lwd = 2, col = rgb(0, 1, 0)) # Lasso estimate (green)
+```
+- **Black line** → True coefficient value.
+- **Blue line** → Ridge estimate.
+- **Green line** → Lasso estimate.
+
+📌 **Why are Ridge and Lasso shown separately?**  
+- Unlike Bayesian methods, Ridge and Lasso provide **point estimates** instead of full posterior distributions.
+
+#### Performance Metrics
+
+```{r lr-coefficient-comparisson}
+# Create a table with rounded values
+coef_table <- round(cbind(
+  True_Beta = b, 
+  OLS = outOLS$coefficients, 
+  Ridge = as.numeric(outRID$beta), 
+  Lasso = as.numeric(outLAS$beta), 
+  B_Ridge = coeBAY, 
+  B_Lasso = coeBLA, 
+  Horseshoe = coeHOR
+)[1:15, ], 4)
+
+rownames(coef_table) <- paste0("Coefficient ", 1:15)
+
+# Print as a formatted table
+kable(as.matrix(coef_table), caption = "Comparison of Coefficient Estimates Across Methods")
+```
+
+**Observations:**
+- **OLS** coefficients tend to be **large and unstable** due to multicollinearity.
+- **Ridge** shrinks all coefficients but **keeps them nonzero**.
+- **Lasso** performs **feature selection**, setting some coefficients **exactly to zero**.
+- **Bayesian methods** provide **uncertainty-aware estimates** and **adaptive shrinkage**.
+- **Horseshoe** applies **strong shrinkage to irrelevant coefficients** while keeping relevant ones **unshrunk**.
+
+Would you like to include a **heatmap visualization** of these coefficient estimates? 🚀
+
+---
+
+#### Predictive Performance
+
+```{r lr-performance-mse-pr2}
+# Create a performance table
+performance_table <- data.frame(
+  Method = c("OLS", "Ridge", "Lasso", "Bayesian Ridge", "Bayesian Lasso", "Horseshoe"),
+  MSE = round(c(mseOLS, mseRID, mseLAS, mseBAY, mseBLA, mseHOR), 4),
+  Predictive_R2 = round(c(pr2OLS, pr2RID, pr2LAS, pr2BAY, pr2BLA, pr2HOR), 4)
+)
+
+# Print as a formatted table
+kable(performance_table, caption = "Model Comparison: MSE and Predictive R²")
+```
+**Interpretation**
+
+- **Lower MSE** → Better predictive performance.
+- **Higher \( R^2 \)** → Model explains more variance in the test set.
+- **OLS** likely performs the worst due to overfitting and instability.
+- **Ridge** improves stability but retains all predictors.
+- **Lasso** performs feature selection, possibly improving interpretability.
+- **Bayesian methods** incorporate uncertainty and adaptive shrinkage.
+- **Horseshoe** is expected to perform well in sparse settings.
+
+#### Variable Selection Post-Processing
+
+```{r lr-post-processed-coefficient-comparisson}
+# No post-processing necessary
+estBLA <- apply(X = outBLA$beta, MARGIN = 2, FUN = median)
+estLAS <- as.numeric(outLAS$beta)
+# Post-processing for Ridge regression 
+estRID <- outRID$beta
+kmeRID <- kmeans(x = as.numeric(abs(outRID$beta)), centers = 2)
+if(kmeRID$centers[1] > kmeRID$centers[2]){
+  estRID[kmeRID$cluster == 2] <-  0
+} else {
+  estRID[kmeRID$cluster == 1] <-  0
+}
+estRID <- as.numeric(estRID)
+# Post-processing for Basic Bayesian regression
+kmeBAY <- kmeans(x = as.numeric(abs(outBAY)), centers = 2)
+if(kmeBAY$centers[1] > kmeBAY$centers[2]){
+  outBAY[kmeBAY$cluster == 2] <-  0
+} else {
+  outBAY[kmeBAY$cluster == 1] <-  0
+}
+estBAY <- apply(X = outBAY, MARGIN = 2, FUN = median)
+# Post-processing for Horseshoe Regression
+coeHOR <- outHOR$B
+kmeHOR <- kmeans(x = as.numeric(abs(coeHOR)), centers = 2)
+if(kmeHOR$centers[1] > kmeHOR$centers[2]){
+  coeHOR[kmeHOR$cluster == 2] <-  0
+} else {
+  coeHOR[kmeHOR$cluster == 1] <-  0
+}
+estHOR <- apply(X = coeHOR, MARGIN = 2, FUN = median)
+
+# Create a table with rounded values
+coef_table <- round(cbind(
+  True_Beta = b, 
+  Ridge     = estRID, 
+  Lasso     = estLAS, 
+  B_Ridge   = estBAY, 
+  B_Lasso   = estBLA, 
+  Horseshoe = estHOR
+)[1:15, ], 4)
+
+rownames(coef_table) <- paste0("Coefficient ", 1:15)
+
+# Print as a formatted table
+kable(as.matrix(coef_table), caption = "Comparison of Post-processed Coefficient Across Methods")
+```
+
+This block refines and compares the **coefficient estimates** across **different regression methods**. Some methods, like Bayesian Ridge and Horseshoe, **require post-processing** to identify which coefficients should be set to zero. The final output is a table comparing the **first 15 coefficients** across methods.
+
+```r
+estBLA <- apply(X = outBLA$beta, MARGIN = 2, FUN = median)
+estLAS <- as.numeric(outLAS$beta)
+```
+- **`estBLA`**: Extracts **posterior median** estimates from **Bayesian Lasso**.  
+- **`estLAS`**: Converts **Lasso coefficients** to a numeric vector.  
+- **No post-processing is required** for these methods since Lasso and Bayesian Lasso naturally **set some coefficients to zero**.
+
+```r
+estRID <- outRID$beta
+kmeRID <- kmeans(x = as.numeric(abs(outRID$beta)), centers = 2)
+if(kmeRID$centers[1] > kmeRID$centers[2]){
+  estRID[kmeRID$cluster == 2] <-  0
+} else {
+  estRID[kmeRID$cluster == 1] <-  0
+}
+estRID <- as.numeric(estRID)
+```
+- **Ridge Regression retains all coefficients** (i.e., does **not** set any to zero).  
+- **Post-processing approach**:  
+  - Uses **K-means clustering** to **separate large and small coefficients** into two groups (`centers = 2`).
+  - The group with the **smaller average magnitude** is assumed to contain **insignificant coefficients**, so they are **set to zero**.
+
+📌 **Why is this needed?**  
+- Ridge does not perform **feature selection**, so this helps **identify zero coefficients**.
+
+
+```r
+kmeBAY <- kmeans(x = as.numeric(abs(outBAY)), centers = 2)
+if(kmeBAY$centers[1] > kmeBAY$centers[2]){
+  outBAY[kmeBAY$cluster == 2] <-  0
+} else {
+  outBAY[kmeBAY$cluster == 1] <-  0
+}
+estBAY <- apply(X = outBAY, MARGIN = 2, FUN = median)
+```
+- Bayesian Ridge also **does not perform feature selection**, so we apply **K-means post-processing**.  
+- The **median of the posterior samples** is used as the final estimate.  
+
+```r
+coeHOR <- outHOR$B
+kmeHOR <- kmeans(x = as.numeric(abs(coeHOR)), centers = 2)
+if(kmeHOR$centers[1] > kmeHOR$centers[2]){
+  coeHOR[kmeHOR$cluster == 2] <-  0
+} else {
+  coeHOR[kmeHOR$cluster == 1] <-  0
+}
+estHOR <- apply(X = coeHOR, MARGIN = 2, FUN = median)
+```
+- The **Horseshoe prior naturally encourages sparsity**, but we **reinforce it** using the **K-means clustering method**.
+- The **posterior median** is used as the final estimate.  
+
+```r
+# Create a table with rounded values
+coef_table <- round(cbind(
+  True_Beta = b, 
+  Ridge     = estRID, 
+  Lasso     = estLAS, 
+  B_Ridge   = estBAY, 
+  B_Lasso   = estBLA, 
+  Horseshoe = estHOR
+)[1:15, ], 4)
+
+rownames(coef_table) <- paste0("Coefficient ", 1:15)
+
+# Print as a formatted table
+kable(as.matrix(coef_table), caption = "Comparison of Post-processed Coefficient Across Methods")
+```
+- **Combines all coefficient estimates** (True \( \beta \), Ridge, Lasso, Bayesian Ridge, Bayesian Lasso, Horseshoe).
+- **Rounds values to 4 decimal places** for readability.
+- **Formats the table using `kable()`** for a clean output.
+
+**Key Insights**
+- **OLS and Ridge Regression** retain all coefficients → Ridge needs post-processing to remove small values.
+- **Lasso and Bayesian Lasso** naturally set some coefficients **exactly to zero**.
+- **Bayesian Ridge needs post-processing** to enforce sparsity.
+- **Horseshoe Prior is adaptive**, but post-processing enhances sparsity.
+
+## Efficient COmputation
+
+When dealing with $p > n$ some computations like matrix decomposition and inversion are expensive, so it would be better to do it in terms of $n$ than in terms of $p$. For a matrix of size $n \times p$,  Matrix inversion is order of operations and somethig like cholesky decomposition is order computations. So there are some computational tricks that can be done to make this things faster.
+
+### Machine Learning
+
+Use the Woodbury Identity to show that ridge regression matrix inversion can be more efficiently computed.
