@@ -219,6 +219,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.4" data-path="linear-regression.html"><a href="linear-regression.html#efficient-computation"><i class="fa fa-check"></i><b>4.4</b> Efficient Computation</a>
 <ul>
 <li class="chapter" data-level="4.4.1" data-path="linear-regression.html"><a href="linear-regression.html#efficient-computation-of-ridge-regression-using-the-woodbury-identity"><i class="fa fa-check"></i><b>4.4.1</b> Efficient Computation of Ridge Regression using the Woodbury Identity</a></li>
+<li class="chapter" data-level="4.4.2" data-path="linear-regression.html"><a href="linear-regression.html#efficient-bayesian-sampling-for-gaussian-scale-mixture-priors"><i class="fa fa-check"></i><b>4.4.2</b> Efficient Bayesian Sampling for Gaussian Scale-Mixture Priors</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -2444,14 +2445,110 @@ R^2 = 1 - \frac{\text{MSE}}{\text{Var}(\text{Test } y)}
 <li><strong>Computing <span class="math inline">\(\mathbf{M}\)</span> involves inverting an <span class="math inline">\(n \times n\)</span> matrix</strong>, which is <strong>only <span class="math inline">\(O(n^3)\)</span> (much faster when <span class="math inline">\(p \gg n\)</span>)</strong>.</li>
 <li>Since <span class="math inline">\(n \ll p\)</span> in high-dimensional settings, this trick significantly reduces computational cost.</li>
 </ul>
-<hr />
 <p>Conclusion:</p>
 <ul>
 <li><strong>Using the Woodbury Identity</strong>, we reformulate the Ridge Regression inversion in terms of <span class="math inline">\(n\)</span> instead of <span class="math inline">\(p\)</span>.</li>
 <li>This approach is particularly useful in <strong>high-dimensional settings</strong> where <span class="math inline">\(p &gt; n\)</span>.</li>
 <li>Many <strong>Bayesian methods</strong>, such as Gaussian Process Regression and Variational Inference, also rely on the <strong>Woodbury identity</strong> for computational efficiency.</li>
 </ul>
+<hr />
+</div>
+<div id="efficient-bayesian-sampling-for-gaussian-scale-mixture-priors" class="section level3 hasAnchor" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Efficient Bayesian Sampling for Gaussian Scale-Mixture Priors<a href="linear-regression.html#efficient-bayesian-sampling-for-gaussian-scale-mixture-priors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><em>(Based on Bhattacharya et al. (2016), “Fast Sampling with Gaussian Scale-Mixture Priors in High-Dimensional Regression”)</em></p>
+<hr />
+<div id="motivation" class="section level4 hasAnchor" number="4.4.2.1">
+<h4><span class="header-section-number">4.4.2.1</span> Motivation<a href="linear-regression.html#motivation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Gaussian scale-mixture priors, such as the <strong>Horseshoe prior</strong> and <strong>Bayesian Lasso</strong>, are widely used for high-dimensional regression due to their <strong>adaptive shrinkage properties</strong>. These priors impose <strong>global-local shrinkage</strong> on regression coefficients, ensuring that <strong>irrelevant predictors are strongly shrunk</strong>, while allowing <strong>large signals to remain unshrunk</strong>.</p>
+<p>However, standard <strong>Markov Chain Monte Carlo (MCMC) sampling</strong> for these priors can be computationally expensive when <span class="math inline">\(p \gg n\)</span>, particularly due to the <strong>matrix inversion</strong> required in Gibbs sampling steps. Existing approaches rely on <strong>Cholesky decomposition</strong>, which has a <strong>computational complexity of <span class="math inline">\(O(p^3)\)</span></strong>, making it prohibitive for large-scale problems.</p>
+<p>Bhattacharya et al. (2016) propose an <strong>exact sampling algorithm</strong> that avoids direct matrix inversion by leveraging:
+1. <strong>Latent variable augmentation</strong> to restructure the sampling problem.
+2. <strong>Sherman–Morrison–Woodbury identity</strong> to reduce matrix inversion complexity from <span class="math inline">\(O(p^3)\)</span> to <span class="math inline">\(O(n^3)\)</span>.
+3. <strong>Block Gibbs sampling</strong>, allowing efficient updates of the regression coefficients.</p>
+<p>This method <strong>scales linearly with <span class="math inline">\(p\)</span></strong>, making Bayesian inference feasible in high-dimensional settings.</p>
+<hr />
+</div>
+<div id="model-setup-gaussian-scale-mixture-priors-in-bayesian-regression" class="section level4 hasAnchor" number="4.4.2.2">
+<h4><span class="header-section-number">4.4.2.2</span> Model Setup: Gaussian Scale-Mixture Priors in Bayesian Regression<a href="linear-regression.html#model-setup-gaussian-scale-mixture-priors-in-bayesian-regression" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We consider the standard <strong>Bayesian linear regression model</strong>:</p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{e}, \quad \mathbf{e} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I})
+\]</span></p>
+<p>where:
+- <span class="math inline">\(\mathbf{X}\)</span> is the <span class="math inline">\(n \times p\)</span> design matrix.
+- <span class="math inline">\(\boldsymbol{\beta}\)</span> is the <span class="math inline">\(p\)</span>-dimensional vector of regression coefficients.
+- <span class="math inline">\(\mathbf{y}\)</span> is the <span class="math inline">\(n\)</span>-dimensional response vector.
+- <span class="math inline">\(\mathbf{e}\)</span> represents independent Gaussian noise.</p>
+<p>A <strong>Gaussian scale-mixture prior</strong> is imposed on <span class="math inline">\(\boldsymbol{\beta}\)</span>:</p>
+<p><span class="math display">\[
+\beta_j | \lambda_j, \tau, \sigma^2 \sim \mathcal{N}(0, \lambda_j^2 \tau^2 \sigma^2)
+\]</span></p>
+<p>where:
+- <span class="math inline">\(\lambda_j\)</span> are <strong>local shrinkage parameters</strong>, controlling the sparsity of each coefficient.
+- <span class="math inline">\(\tau\)</span> is a <strong>global shrinkage parameter</strong>, controlling overall sparsity.
+- Different choices of <span class="math inline">\(p(\lambda_j)\)</span> lead to different priors (e.g., Horseshoe, Bayesian Lasso).</p>
+<p>The <strong>full conditional posterior of <span class="math inline">\(\boldsymbol{\beta}\)</span></strong> is given by:</p>
+<p><span class="math display">\[
+\boldsymbol{\beta} | \mathbf{y}, \lambda, \tau, \sigma^2 \sim \mathcal{N} \left( \mathbf{A}^{-1} \mathbf{X}&#39; \mathbf{y}, \sigma^2 \mathbf{A}^{-1} \right)
+\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[
+\mathbf{A} = \mathbf{X}&#39; \mathbf{X} + \Lambda^{-1}, \quad \Lambda = \tau^2 \text{diag}(\lambda_1^2, ..., \lambda_p^2).
+\]</span></p>
+<p>Computing <span class="math inline">\(\mathbf{A}^{-1}\)</span> directly is <strong>prohibitively expensive</strong> for large <span class="math inline">\(p\)</span>, motivating the need for an <strong>efficient sampling algorithm</strong>.</p>
+<p>To sample from:</p>
+<p><span class="math display">\[
+\boldsymbol{\beta} \sim \mathcal{N} \left( \mathbf{A}^{-1} \mathbf{X}&#39; \mathbf{y}, \sigma^2 \mathbf{A}^{-1} \right)
+\]</span></p>
+<p>define:</p>
+<p><span class="math display">\[
+\mathbf{Q} = (\mathbf{X}&#39; \mathbf{X} + \Lambda^{-1})^{-1}, \quad \mathbf{b} = \mathbf{X}&#39; \mathbf{y}.
+\]</span></p>
+<p>Instead of inverting <span class="math inline">\(\mathbf{Q}\)</span>, introduce an <strong>auxiliary variable</strong>:</p>
+<p><span class="math display">\[
+\mathbf{v} = \mathbf{X} \boldsymbol{\beta} + \mathbf{z}, \quad \mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
+\]</span></p>
+<p>which allows a <strong>Woodbury-based reformulation</strong> of the problem.</p>
+<hr />
+</div>
+<div id="fast-gibbs-sampling-algorithm" class="section level4 hasAnchor" number="4.4.2.3">
+<h4><span class="header-section-number">4.4.2.3</span> Fast Gibbs Sampling Algorithm<a href="linear-regression.html#fast-gibbs-sampling-algorithm" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Step 1: Sample Auxiliary Variables</p>
+<ol style="list-style-type: decimal">
+<li>Sample <span class="math inline">\(\mathbf{u} \sim \mathcal{N}(\mathbf{0}, \Lambda)\)</span>.</li>
+<li>Sample <span class="math inline">\(\boldsymbol{\delta} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}_n)\)</span>.</li>
+</ol>
+<p>Step 2: Compute a Latent Variable</p>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Compute:</p>
+<p><span class="math display">\[
+\mathbf{v} = \mathbf{X} \mathbf{u} + \boldsymbol{\delta}
+\]</span></p></li>
+</ol>
+<p>Step 3: Solve a Linear System
+4. Solve for <span class="math inline">\(\mathbf{w}\)</span> in:</p>
+<p><span class="math display">\[
+   (\mathbf{X} \Lambda \mathbf{X}&#39; + \mathbf{I}) \mathbf{w} = (\mathbf{y} - \mathbf{v})
+   \]</span></p>
+<p>This avoids inverting <span class="math inline">\(\mathbf{X}&#39; \mathbf{X} + \Lambda^{-1}\)</span>.</p>
+<p>Step 4: Compute the Updated Sample for <span class="math inline">\(\boldsymbol{\beta}\)</span>
+5. Compute:</p>
+<p><span class="math display">\[
+   \boldsymbol{\beta} = \mathbf{u} + \Lambda \mathbf{X}&#39; \mathbf{w}
+   \]</span></p>
+<p>📌 <strong>Key Insight:</strong> Instead of inverting a <span class="math inline">\(p \times p\)</span> matrix, the algorithm <strong>solves a linear system of size <span class="math inline">\(n \times n\)</span>, reducing computational complexity from <span class="math inline">\(O(p^3)\)</span> to <span class="math inline">\(O(n^3)\)</span></strong>.</p>
+<hr />
+</div>
+<div id="computational-efficiency" class="section level4 hasAnchor" number="4.4.2.4">
+<h4><span class="header-section-number">4.4.2.4</span> Computational Efficiency<a href="linear-regression.html#computational-efficiency" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Standard MCMC:</strong> Requires inverting <span class="math inline">\(p \times p\)</span> matrices (<span class="math inline">\(O(p^3)\)</span>).</li>
+<li><strong>Proposed method:</strong> Uses matrix multiplications and solves a system of size <span class="math inline">\(n \times n\)</span> (<span class="math inline">\(O(n^3)\)</span>).</li>
+<li><strong>When <span class="math inline">\(p \gg n\)</span>, this leads to significant computational savings</strong>.</li>
+</ul>
+<p>For example, the algorithm <strong>achieves a 250× speedup when <span class="math inline">\(p = 5000\)</span></strong> compared to standard methods.</p>
 
+</div>
 </div>
 </div>
 </div>

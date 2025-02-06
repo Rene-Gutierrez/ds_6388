@@ -1799,12 +1799,133 @@ Computational Benefits:
 - **Computing \( \mathbf{M} \) involves inverting an \( n \times n \) matrix**, which is **only \( O(n^3) \) (much faster when \( p \gg n \))**.
 - Since \( n \ll p \) in high-dimensional settings, this trick significantly reduces computational cost.  
 
----
-
 Conclusion:
 
 - **Using the Woodbury Identity**, we reformulate the Ridge Regression inversion in terms of \( n \) instead of \( p \).
 - This approach is particularly useful in **high-dimensional settings** where \( p > n \).
 - Many **Bayesian methods**, such as Gaussian Process Regression and Variational Inference, also rely on the **Woodbury identity** for computational efficiency.
 
+---
 
+### Efficient Bayesian Sampling for Gaussian Scale-Mixture Priors
+*(Based on Bhattacharya et al. (2016), "Fast Sampling with Gaussian Scale-Mixture Priors in High-Dimensional Regression")*  
+
+---
+
+#### Motivation  
+
+Gaussian scale-mixture priors, such as the **Horseshoe prior** and **Bayesian Lasso**, are widely used for high-dimensional regression due to their **adaptive shrinkage properties**. These priors impose **global-local shrinkage** on regression coefficients, ensuring that **irrelevant predictors are strongly shrunk**, while allowing **large signals to remain unshrunk**.
+
+However, standard **Markov Chain Monte Carlo (MCMC) sampling** for these priors can be computationally expensive when \( p \gg n \), particularly due to the **matrix inversion** required in Gibbs sampling steps. Existing approaches rely on **Cholesky decomposition**, which has a **computational complexity of \( O(p^3) \)**, making it prohibitive for large-scale problems.
+
+Bhattacharya et al. (2016) propose an **exact sampling algorithm** that avoids direct matrix inversion by leveraging:
+1. **Latent variable augmentation** to restructure the sampling problem.
+2. **Sherman–Morrison–Woodbury identity** to reduce matrix inversion complexity from \( O(p^3) \) to \( O(n^3) \).
+3. **Block Gibbs sampling**, allowing efficient updates of the regression coefficients.
+
+This method **scales linearly with \( p \)**, making Bayesian inference feasible in high-dimensional settings.
+
+---
+
+#### Model Setup: Gaussian Scale-Mixture Priors in Bayesian Regression
+
+We consider the standard **Bayesian linear regression model**:
+
+\[
+\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{e}, \quad \mathbf{e} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I})
+\]
+
+where:
+- \( \mathbf{X} \) is the \( n \times p \) design matrix.
+- \( \boldsymbol{\beta} \) is the \( p \)-dimensional vector of regression coefficients.
+- \( \mathbf{y} \) is the \( n \)-dimensional response vector.
+- \( \mathbf{e} \) represents independent Gaussian noise.
+
+A **Gaussian scale-mixture prior** is imposed on \( \boldsymbol{\beta} \):
+
+\[
+\beta_j | \lambda_j, \tau, \sigma^2 \sim \mathcal{N}(0, \lambda_j^2 \tau^2 \sigma^2)
+\]
+
+where:
+- \( \lambda_j \) are **local shrinkage parameters**, controlling the sparsity of each coefficient.
+- \( \tau \) is a **global shrinkage parameter**, controlling overall sparsity.
+- Different choices of \( p(\lambda_j) \) lead to different priors (e.g., Horseshoe, Bayesian Lasso).
+
+The **full conditional posterior of \( \boldsymbol{\beta} \)** is given by:
+
+\[
+\boldsymbol{\beta} | \mathbf{y}, \lambda, \tau, \sigma^2 \sim \mathcal{N} \left( \mathbf{A}^{-1} \mathbf{X}' \mathbf{y}, \sigma^2 \mathbf{A}^{-1} \right)
+\]
+
+where:
+
+\[
+\mathbf{A} = \mathbf{X}' \mathbf{X} + \Lambda^{-1}, \quad \Lambda = \tau^2 \text{diag}(\lambda_1^2, ..., \lambda_p^2).
+\]
+
+Computing \( \mathbf{A}^{-1} \) directly is **prohibitively expensive** for large \( p \), motivating the need for an **efficient sampling algorithm**.
+
+To sample from:
+
+\[
+\boldsymbol{\beta} \sim \mathcal{N} \left( \mathbf{A}^{-1} \mathbf{X}' \mathbf{y}, \sigma^2 \mathbf{A}^{-1} \right)
+\]
+
+define:
+
+\[
+\mathbf{Q} = (\mathbf{X}' \mathbf{X} + \Lambda^{-1})^{-1}, \quad \mathbf{b} = \mathbf{X}' \mathbf{y}.
+\]
+
+Instead of inverting \( \mathbf{Q} \), introduce an **auxiliary variable**:
+
+\[
+\mathbf{v} = \mathbf{X} \boldsymbol{\beta} + \mathbf{z}, \quad \mathbf{z} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})
+\]
+
+which allows a **Woodbury-based reformulation** of the problem.
+
+---
+
+#### Fast Gibbs Sampling Algorithm
+
+Step 1: Sample Auxiliary Variables
+
+1. Sample \( \mathbf{u} \sim \mathcal{N}(\mathbf{0}, \Lambda) \).
+2. Sample \( \boldsymbol{\delta} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}_n) \).
+
+Step 2: Compute a Latent Variable
+
+3. Compute:
+
+   \[
+   \mathbf{v} = \mathbf{X} \mathbf{u} + \boldsymbol{\delta}
+   \]
+
+Step 3: Solve a Linear System
+4. Solve for \( \mathbf{w} \) in:
+
+   \[
+   (\mathbf{X} \Lambda \mathbf{X}' + \mathbf{I}) \mathbf{w} = (\mathbf{y} - \mathbf{v})
+   \]
+
+   This avoids inverting \( \mathbf{X}' \mathbf{X} + \Lambda^{-1} \).
+
+Step 4: Compute the Updated Sample for \( \boldsymbol{\beta} \)
+5. Compute:
+
+   \[
+   \boldsymbol{\beta} = \mathbf{u} + \Lambda \mathbf{X}' \mathbf{w}
+   \]
+
+📌 **Key Insight:** Instead of inverting a \( p \times p \) matrix, the algorithm **solves a linear system of size \( n \times n \), reducing computational complexity from \( O(p^3) \) to \( O(n^3) \)**.
+
+---
+
+#### Computational Efficiency
+- **Standard MCMC:** Requires inverting \( p \times p \) matrices (\( O(p^3) \)).
+- **Proposed method:** Uses matrix multiplications and solves a system of size \( n \times n \) (\( O(n^3) \)).
+- **When \( p \gg n \), this leads to significant computational savings**.
+
+For example, the algorithm **achieves a 250× speedup when \( p = 5000 \)** compared to standard methods.

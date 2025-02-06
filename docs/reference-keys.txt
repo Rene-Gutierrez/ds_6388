@@ -155,3 +155,8 @@ predictive-performance
 variable-selection-post-processing
 efficient-computation
 efficient-computation-of-ridge-regression-using-the-woodbury-identity
+efficient-bayesian-sampling-for-gaussian-scale-mixture-priors
+motivation
+model-setup-gaussian-scale-mixture-priors-in-bayesian-regression
+fast-gibbs-sampling-algorithm
+computational-efficiency
