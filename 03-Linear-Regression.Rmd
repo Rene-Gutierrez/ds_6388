@@ -1904,6 +1904,7 @@ Step 2: Compute a Latent Variable
    \]
 
 Step 3: Solve a Linear System
+
 4. Solve for \( \mathbf{w} \) in:
 
    \[
