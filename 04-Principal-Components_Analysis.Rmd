@@ -1,0 +1,546 @@
+# Principal Component Analysis
+
+Principal Component Analysis (PCA) is a widely used dimensionality reduction technique in statistics and machine learning. While it is often introduced as a method for **finding orthogonal directions of maximum variance**, another fundamental perspective is that **PCA provides the best low-rank approximation of the data matrix \( \mathbf{X} \)**.  
+
+In many real-world datasets, the observed variables exhibit significant redundancy due to correlations between features. This means that the **true intrinsic dimensionality** of the data is often much lower than the number of measured variables. PCA exploits this redundancy by representing the data using a **lower-dimensional subspace** while preserving as much of the original information as possible.
+
+---
+
+## PCA as a Low-Rank Approximation of \( \mathbf{X} \)
+
+Let \( \mathbf{X} \) be an \( n \times p \) data matrix, where \( n \) is the number of observations and \( p \) is the number of variables. The goal of PCA is to find a low-rank representation of \( \mathbf{X} \) that captures its most important structure. This is achieved through the **Singular Value Decomposition (SVD)**:
+
+\[
+\mathbf{X} = \sum_{i=1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i'
+\]
+
+where:
+- \( \sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_r > 0 \) are the **singular values** of \( \mathbf{X} \),
+- \( \mathbf{u}_i \) and \( \mathbf{v}_i \) are the corresponding **left and right singular vectors**,
+- \( r = \text{rank}(\mathbf{X}) \).
+
+PCA provides a **rank-\( k \) approximation** by retaining only the **top \( k \) singular values and singular vectors**, leading to:
+
+\[
+\mathbf{X}_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+By the **Eckart–Young–Mirsky theorem**, this is the best approximation to \( \mathbf{X} \) under the **Frobenius norm**, meaning it minimizes the reconstruction error:
+
+\[
+\|\mathbf{X} - \mathbf{X}_k\|_F^2 = \sum_{i=k+1}^{r} \sigma_i^2.
+\]
+
+---
+
+### Why Low-Rank Approximation Matters  
+
+1. **Dimensionality Reduction**  
+   - The original data matrix \( \mathbf{X} \) is often high-dimensional and contains redundant information.  
+   - PCA allows us to approximate \( \mathbf{X} \) with a much smaller representation while preserving most of the variance.  
+
+2. **Noise Reduction**  
+   - Higher-order singular values \( \sigma_{k+1}, \dots, \sigma_r \) are often associated with noise rather than meaningful structure.  
+   - Truncating these components leads to a **denoised version of the data**.
+
+3. **Compression and Storage Efficiency**  
+   - Instead of storing \( n \times p \) raw data values, we only need to store the **top \( k \) singular values and vectors**, which is much more memory-efficient.
+
+4. **Feature Extraction**  
+   - The **principal components** (columns of \( \mathbf{V}_k \)) define a new **basis** for the data that is more informative and often interpretable.  
+   - These features can be used for **classification, clustering, and visualization**.
+
+---
+
+### The Singular Value Solution is the Best Low-Rank Approximation (Eckart–Young–Mirsky Theorem)  
+
+We want to prove that the **truncated Singular Value Decomposition (SVD)** provides the **best rank-\( k \) approximation** to a matrix \( \mathbf{X} \) in the **Frobenius norm** and **spectral norm**. This result is known as the **Eckart–Young–Mirsky theorem**.
+
+---
+
+#### Problem Statement (Eckart–Young–Mirsky Theorem)
+Let \( \mathbf{X} \) be an \( n \times p \) matrix with **full SVD**:
+
+\[
+\mathbf{X} = \sum_{i=1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i'
+\]
+
+where:
+- \( \sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_r > 0 \) are the **singular values** (ordered decreasingly),
+- \( \mathbf{u}_i \) are the left singular vectors (columns of \( \mathbf{U} \), an \( n \times n \) orthonormal matrix),
+- \( \mathbf{v}_i \) are the right singular vectors (columns of \( \mathbf{V} \), a \( p \times p \) orthonormal matrix),
+- \( r = \text{rank}(\mathbf{X}) \).
+
+We seek a **rank-\( k \) matrix** \( \mathbf{Y} \) that best approximates \( \mathbf{X} \) by minimizing the **Frobenius norm error**:
+
+\[
+\min_{\text{rank}(\mathbf{Y}) = k} \|\mathbf{X} - \mathbf{Y}\|_F.
+\]
+
+The theorem states that the best rank-\( k \) approximation is given by the **truncated SVD**:
+
+\[
+\mathbf{X}_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+We now prove this claim.
+
+---
+
+#### Proof (Eckart–Young–Mirsky Theorem)
+
+We will show this in four steps.
+
+1. Step 1: The **Frobenius norm** of \( \mathbf{X} \) is:
+
+\[
+\|\mathbf{X}\|_F^2 = \sum_{i=1}^{r} \sigma_i^2.
+\]
+
+2. Step 2: Any **rank-\( k \) approximation** \( \mathbf{Y} \) can be written in terms of **some** linear combination of singular vectors:
+
+\[
+\mathbf{Y} = \sum_{i=1}^{k} a_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+3. Step 3: The residual error
+
+\[
+\|\mathbf{X} - \mathbf{Y}\|_F^2 = \sum_{i=1}^{k} (\sigma_i - a_i)^2 + \sum_{i=k+1}^{r} \sigma_i^2
+\]
+
+4. Step 4: The optimal choice is **\( a_i = \sigma_i \)** for the first \( k \) terms and **\( a_i = 0 \) for the rest**.
+
+For Step 1, we want to show that the **Frobenius norm** of a matrix \( \mathbf{X} \) is equal to the sum of the squared singular values:
+
+\[
+\|\mathbf{X}\|_F^2 = \sum_{i=1}^{r} \sigma_i^2.
+\]
+
+The **Frobenius norm** of an \( n \times p \) matrix \( \mathbf{X} \) is defined as:
+
+\[
+\|\mathbf{X}\|_F = \sqrt{\sum_{i=1}^{n} \sum_{j=1}^{p} x_{ij}^2}.
+\]
+
+Squaring both sides:
+
+\[
+\|\mathbf{X}\|_F^2 = \sum_{i=1}^{n} \sum_{j=1}^{p} x_{ij}^2.
+\]
+
+An alternative way to express the Frobenius norm is using the **trace function**:
+
+\[
+\|\mathbf{X}\|_F^2 = \text{Tr}(\mathbf{X}' \mathbf{X}).
+\]
+
+where \( \text{Tr}(\mathbf{A}) \) denotes the **trace** (sum of the diagonal elements) of a square matrix \( \mathbf{A} \).
+
+To see this note that
+
+\[
+\|\mathbf{X}\|_F^2 = \sum_{i=1}^{n} \sum_{j=1}^{p} x_{ij}^2 = \sum_{j=1}^{p} \sum_{i=1}^{n} x_{ij}^2 = \sum_{j=1}^{p} \bx_j' \bx_j = \text{Tr}(\mathbf{X}' \mathbf{X}).
+\]
+
+From the **SVD decomposition**, we write:
+
+\[
+\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}'
+\]
+
+where:
+- \( \mathbf{U} \) is an \( n \times n \) orthonormal matrix of **left singular vectors**,
+- \( \mathbf{V} \) is a \( p \times p \) orthonormal matrix of **right singular vectors**,
+- \( \mathbf{\Sigma} \) is an \( n \times p \) diagonal matrix of **singular values**:
+
+\[
+\mathbf{\Sigma} =
+\begin{bmatrix}
+\sigma_1 & 0 & 0 & \cdots & 0 \\
+0 & \sigma_2 & 0 & \cdots & 0 \\
+0 & 0 & \sigma_3 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & \sigma_r \\
+\vdots & \vdots & \vdots & \vdots & \vdots
+\end{bmatrix}.
+\]
+
+The rank of \( \mathbf{X} \) is \( r \), meaning it has **\( r \) nonzero singular values**.
+
+Now, compute \( \mathbf{X}' \mathbf{X} \):
+
+\[
+\mathbf{X}' \mathbf{X} = (\mathbf{U} \mathbf{\Sigma} \mathbf{V}')' (\mathbf{U} \mathbf{\Sigma} \mathbf{V}').
+\]
+
+Using the transpose property \( (\mathbf{A} \mathbf{B})' = \mathbf{B}' \mathbf{A}' \):
+
+\[
+\mathbf{X}' \mathbf{X} = \mathbf{V} \mathbf{\Sigma}' \mathbf{U}' \mathbf{U} \mathbf{\Sigma} \mathbf{V}'.
+\]
+
+Since \( \mathbf{U} \) is orthonormal (\( \mathbf{U}' \mathbf{U} = \mathbf{I} \)), this simplifies to:
+
+\[
+\mathbf{X}' \mathbf{X} = \mathbf{V} \mathbf{\Sigma}' \mathbf{\Sigma} \mathbf{V}'.
+\]
+
+Since \( \mathbf{\Sigma}' \mathbf{\Sigma} \) is a diagonal matrix with squared singular values \( \sigma_i^2 \), we get:
+
+\[
+\mathbf{X}' \mathbf{X} = \mathbf{V}
+\begin{bmatrix}
+\sigma_1^2 & 0 & \cdots & 0 \\
+0 & \sigma_2^2 & \cdots & 0 \\
+0 & 0 & \ddots & 0 \\
+0 & 0 & 0 & \sigma_r^2
+\end{bmatrix}
+\mathbf{V}'.
+\]
+
+Taking the **trace** on both sides:
+
+\[
+\text{Tr}(\mathbf{X}' \mathbf{X}) = \text{Tr}(\mathbf{V} \mathbf{\Sigma}' \mathbf{\Sigma} \mathbf{V}').
+\]
+
+Since the trace is invariant under cyclic permutations:
+
+\[
+\text{Tr}(\mathbf{X}' \mathbf{X}) = \text{Tr}( \mathbf{V}' \mathbf{V} \mathbf{\Sigma}' \mathbf{\Sigma}) = \text{Tr}(\mathbf{\Sigma}' \mathbf{\Sigma}).
+\]
+
+Since \( \mathbf{\Sigma}' \mathbf{\Sigma} \) is diagonal, its trace is simply the sum of the diagonal elements:
+
+\[
+\text{Tr}(\mathbf{\Sigma}' \mathbf{\Sigma}) = \sum_{i=1}^{r} \sigma_i^2.
+\]
+
+Since we previously established that:
+
+\[
+\|\mathbf{X}\|_F^2 = \text{Tr}(\mathbf{X}' \mathbf{X}),
+\]
+
+we conclude:
+
+\[
+\|\mathbf{X}\|_F^2 = \sum_{i=1}^{r} \sigma_i^2.
+\]
+
+For Step 2, we claim that any rank-\( k \) matrix \( \mathbf{Y} \) can be expressed as:
+
+\[
+\mathbf{Y} = \sum_{i=1}^{k} a_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+This follows from the fact that  the outer products of the singular vectors,
+
+\[
+\mathbf{u}_i \mathbf{v}_i'
+\]
+
+form an **orthonormal basis** for matrices in \( \mathbb{R}^{n \times p} \), meaning that any rank-\( k \) matrix can be expressed as a linear combination of at most \( k \) of these elements.
+
+To see this, consider the inner product between two **singular vector outer products**, defined as:
+
+\[
+\langle \mathbf{u}_i \mathbf{v}_i', \mathbf{u}_j \mathbf{v}_j' \rangle_F.
+\]
+
+By the **Frobenius inner product**, the inner product between two matrices \( \mathbf{A} \) and \( \mathbf{B} \) is:
+
+\[
+\langle \mathbf{A}, \mathbf{B} \rangle_F = \text{Tr}(\mathbf{A}' \mathbf{B}).
+\]
+
+Applying this to the singular vectors:
+
+\[
+\langle \mathbf{u}_i \mathbf{v}_i', \mathbf{u}_j \mathbf{v}_j' \rangle_F = \text{Tr} \big( (\mathbf{u}_i \mathbf{v}_i')' (\mathbf{u}_j \mathbf{v}_j') \big).
+\]
+
+Using the transpose property \( (\mathbf{A} \mathbf{B})' = \mathbf{B}' \mathbf{A}' \), we get:
+
+\[
+\langle \mathbf{u}_i \mathbf{v}_i', \mathbf{u}_j \mathbf{v}_j' \rangle_F = \text{Tr} \big( \mathbf{v}_i \mathbf{u}_i' \mathbf{u}_j \mathbf{v}_j' \big).
+\]
+
+Since \( \mathbf{U} \) and \( \mathbf{V} \) are **orthonormal**, we use:
+
+\[
+\mathbf{u}_i' \mathbf{u}_j = \delta_{ij}, \quad \mathbf{v}_i' \mathbf{v}_j = \delta_{ij}.
+\]
+
+where $\delta_{ij} = 1$, if $i=j$ and $\delta_{ij} = 0$, if $i \neq j$.
+
+Thus,
+
+\[
+\langle \mathbf{u}_i \mathbf{v}_i', \mathbf{u}_j \mathbf{v}_j' \rangle_F = \delta_{ij}.
+\]
+
+This proves that $\{ \mathbf{u}_i \mathbf{v}_i' \}_{i=1}^{k}$ are **orthonormal under the Frobenius inner product**, therefore linearly independent and forming an spanning bases for a rank $k$ matrix.
+
+For Step 3, mote that the **error matrix** is:
+
+\[
+\mathbf{X} - \mathbf{Y} = \sum_{i=1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i' - \sum_{i=1}^{k} a_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+Rewriting this sum:
+
+\[
+\mathbf{X} - \mathbf{Y} = \sum_{i=1}^{k} (\sigma_i - a_i) \mathbf{u}_i \mathbf{v}_i' + \sum_{i=k+1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+Since the **singular vector outer products** \( \mathbf{u}_i \mathbf{v}_i' \) form an **orthonormal basis** under the Frobenius norm, the squared Frobenius norm of a sum of such terms is the **sum of the squared coefficients**:
+
+\[
+\|\mathbf{X} - \mathbf{Y}\|_F^2 = \sum_{i=1}^{k} (\sigma_i - a_i)^2 + \sum_{i=k+1}^{r} \sigma_i^2.
+\]
+
+Finally, in Step 4, we need to minimize the approximation error:
+
+\[
+\sum_{i=1}^{k} (\sigma_i - a_i)^2 + \sum_{i=k+1}^{r} \sigma_i^2,
+\]
+
+the best choice is clearly:
+
+\[
+a_i = \sigma_i, \quad \text{for } i = 1, \dots, k.
+\]
+
+Thus, the **best rank-\( k \) approximation** is:
+
+\[
+\mathbf{X}_k = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \mathbf{v}_i'.
+\]
+
+This minimizes the error:
+
+\[
+\|\mathbf{X} - \mathbf{X}_k\|_F^2 = \sum_{i=k+1}^{r} \sigma_i^2.
+\]
+
+which confirms the **Eckart–Young–Mirsky theorem**.
+
+---
+
+### Eckart–Young–Mirsky Theorem for the Spectral Norm
+
+The **Eckart–Young–Mirsky theorem** is a fundamental result in matrix approximation, stating that the **best rank-k approximation** of a matrix in terms of the **spectral norm** is obtained through its **singular value decomposition (SVD)**. However, unlike in the Frobenius norm case, the solution is not always unique in the spectral norm.
+
+---
+
+#### Spectral Norm Theorem Statement
+For any matrix \( \mathbf{X} \in \mathbb{R}^{n \times p} \) with singular values \( \sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r > 0 \), the rank-k matrix \( \mathbf{X}_k \) that minimizes the spectral norm error \( \|\mathbf{X} - \mathbf{Y}\|_2 \) is given by:
+
+\[
+\mathbf{X}_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i',
+\]
+
+where \( \mathbf{u}_i \) and \( \mathbf{v}_i \) are the left and right singular vectors corresponding to \( \sigma_i \).
+
+The minimal spectral norm error is:
+
+\[
+\|\mathbf{X} - \mathbf{X}_k\|_2 = \sigma_{k+1}.
+\]
+
+---
+
+#### Spectral Norm Proof Sketch
+
+The spectral norm of a matrix is its largest singular value. Given any rank-k matrix \( \mathbf{Y} \) written as before \( \mathbf{Y} = \sum_{i=1}^{k} a_i \mathbf{u}_i \mathbf{v}_i' \), its singular values are \( a_1, a_2, \dots, a_k \). The error matrix \( \mathbf{X} - \mathbf{Y} \) has singular values:
+
+\[
+\{ |\sigma_1 - a_1|, |\sigma_2 - a_2|, \dots, |\sigma_k - a_k|, \sigma_{k+1}, \dots, \sigma_r \}.
+\]
+
+To minimize the spectral norm of the error, one must ensure that:
+
+\[
+\max \{ |\sigma_1 - a_1|, |\sigma_2 - a_2|, \dots, \sigma_{k+1} \}
+\]
+
+is as small as possible. A way to achieve the minimal error \( \sigma_{k+1} \) is to set \( a_i = \sigma_i \) for \( i=1, \dots, k \), as with the spectral norm, but we can construct different rank-k matrices that also achieve this value.
+
+---
+
+#### Non-Uniqueness for the Spectral Norm
+
+Unlike in the Frobenius norm case, where the truncated SVD solution is unique, the spectral norm allows for **multiple solutions**. If we require:
+
+\[
+|\sigma_i - a_i| \leq \sigma_{k+1}, \quad \forall i=1, \dots, k,
+\]
+
+any such choice of \( a_i \) will yield the same spectral norm error \( \sigma_{k+1} \). This provides a class of rank-k approximations that achieve the minimal spectral norm error.
+
+---
+
+##### How to Find Alternative Solutions
+
+To find alternative rank-k approximations with the same spectral norm error, one can:
+
+1. **Perturb Singular Values**: Adjust \( a_i \) such that \( |\sigma_i - a_i| \leq \sigma_{k+1} \), ensuring no singular value difference exceeds \( \sigma_{k+1} \).
+2. **Linear Combinations of Singular Vectors**: Combine singular vectors corresponding to equal singular values to create different approximations.
+
+---
+
+#### Conclusion for the Spectral Norm
+
+The **Eckart–Young–Mirsky theorem** guarantees the minimal spectral norm error with the truncated SVD solution. However, in cases of spectral norm approximation, the solution is **not unique**. By carefully choosing singular values and vectors within the specified bounds, one can construct **alternative solutions** that achieve the same minimal error.
+
+This flexibility in spectral norm approximation highlights the subtle difference between approximations in spectral and Frobenius norms, making it an important consideration in applications like low-rank matrix approximation, data compression, and principal component analysis.
+
+## Variance Maximization in PCA
+
+Principal Component Analysis (PCA) is traditionally introduced as a method that finds directions (principal components) along which the variance of the data is maximized.
+
+Given a data matrix \( \mathbf{X} \in \mathbb{R}^{n \times p} \) with centered columns, PCA seeks an orthonormal set of vectors \( \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_p\} \) such that:
+
+- The first principal component \( \mathbf{v}_1 \) maximizes the variance:
+  \[
+  \mathbf{v}_1 = \arg \max_{\|\mathbf{v}\|=1} \text{Var}(\mathbf{X}\mathbf{v}) = \arg \max_{\|\mathbf{v}\|=1} \|\mathbf{X}\mathbf{v}\|_2^2.
+  \]
+- Subsequent principal components are chosen orthogonal to the previous ones and also maximize the variance.
+
+Each principal component corresponds to a singular vector from the Singular Value Decomposition (SVD) of \( \mathbf{X} \):
+\[
+\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}',
+\]
+where \( \mathbf{\Sigma} \) contains the singular values \( \sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r > 0 \).
+
+The first \( k \) principal components are the first \( k \) columns of \( \mathbf{V} \):
+\[
+\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k,
+\]
+with the corresponding principal component scores given by:
+\[
+\mathbf{X} \mathbf{v}_i = \sigma_i \mathbf{u}_i, \quad i = 1, 2, \dots, k.
+\]
+
+---
+
+### First Principal Cmponent
+
+We aim to find the direction \( \mathbf{v}_1 \in \mathbb{R}^p \) (a unit vector, \( \| \mathbf{v}_1 \| = 1 \)) that maximizes the **variance** of the data when projected onto \( \mathbf{v}_1 \).
+
+The dataset is represented by \( \mathbf{X} \in \mathbb{R}^{n \times p} \) (with centered columns), and the projection of \( \mathbf{X} \) onto \( \mathbf{v}_1 \) is given by \( \mathbf{Xv}_1 \).
+
+---
+
+#### Variance of the Projection
+
+The variance of the projected data \( \mathbf{Xv}_1 \) is:
+
+\[
+\text{Var}(\mathbf{Xv}_1) = \frac{1}{n} \| \mathbf{Xv}_1 \|_2^2 = \frac{1}{n} (\mathbf{Xv}_1)'(\mathbf{Xv}_1).
+\]
+
+Expanding this:
+
+\[
+\text{Var}(\mathbf{Xv}_1) = \frac{1}{n} \mathbf{v}_1' \mathbf{X}' \mathbf{X} \mathbf{v}_1.
+\]
+
+Since \( \frac{1}{n} \mathbf{X}' \mathbf{X} \) is the **sample covariance matrix** \( \mathbf{S} \), we rewrite the objective as:
+
+\[
+\text{maximize } \mathbf{v}_1' \mathbf{S} \mathbf{v}_1 \quad \text{subject to} \quad \| \mathbf{v}_1 \| = 1.
+\]
+
+---
+
+#### Optimization Problem (Rayleigh Quotient)
+
+This is a constrained optimization problem that can be solved using the method of **Lagrange multipliers**:
+
+\[
+\mathcal{L}(\mathbf{v}_1, \lambda) = \mathbf{v}_1' \mathbf{S} \mathbf{v}_1 - \lambda (\mathbf{v}_1' \mathbf{v}_1 - 1).
+\]
+
+Taking the derivative with respect to \( \mathbf{v}_1 \) and setting it to zero gives:
+
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{v}_1} = 2 \mathbf{S} \mathbf{v}_1 - 2 \lambda \mathbf{v}_1 = 0.
+\]
+
+Thus:
+
+\[
+\mathbf{S} \mathbf{v}_1 = \lambda \mathbf{v}_1.
+\]
+
+---
+
+#### Eigenvalue Problem 
+
+This is an **eigenvalue problem** where \( \lambda \) is an eigenvalue of \( \mathbf{S} \) and \( \mathbf{v}_1 \) is the corresponding eigenvector. The direction \( \mathbf{v}_1 \) that maximizes the variance is the **eigenvector corresponding to the largest eigenvalue** \( \lambda_1 \).
+
+Hence, the **first principal component** \( \mathbf{v}_1 \) is the eigenvector of \( \mathbf{S} \) associated with the largest eigenvalue \( \lambda_1 \), and the **maximum variance** is \( \lambda_1 \).
+
+---
+
+#### Connection to SVD
+
+Recall that the **SVD** of \( \mathbf{X} \) is:
+
+\[
+\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}'.
+\]
+
+The sample covariance matrix \( \mathbf{S} = \frac{1}{n} \mathbf{X}' \mathbf{X} \) can be written as:
+
+\[
+\mathbf{S} = \frac{1}{n} \mathbf{V} \mathbf{\Sigma}' \mathbf{U}' \mathbf{U} \mathbf{\Sigma} \mathbf{V}' = \frac{1}{n} \mathbf{V} \mathbf{\Sigma}^2 \mathbf{V}'.
+\]
+
+The eigenvectors of \( \mathbf{S} \) are the columns of \( \mathbf{V} \), and the eigenvalues are the squared singular values \( \sigma_i^2 \) divided by \( n \).
+
+Thus:
+- The **first principal component direction** \( \mathbf{v}_1 \) is the first column of \( \mathbf{V} \) from the SVD.
+- The **variance explained** by the first principal component is \( \frac{\sigma_1^2}{n} \).
+
+---
+
+### Second Principal Component
+
+The **second principal component** \( \mathbf{v}_2 \) is the direction that:
+- Maximizes the variance of the projected data \( \mathbf{Xv}_2 \),
+- Subject to being **orthogonal** to the first principal component \( \mathbf{v}_1 \).
+
+---
+
+#### Optimization Problem
+
+We want to maximize:
+\[
+\text{Var}(\mathbf{Xv}_2) = \mathbf{v}_2' \mathbf{S} \mathbf{v}_2
+\]
+subject to:
+\[
+\|\mathbf{v}_2\| = 1 \quad \text{and} \quad \mathbf{v}_2' \mathbf{v}_1 = 0.
+\]
+
+---
+
+#### Solution Using Lagrange Multipliers
+
+The constraint \( \mathbf{v}_2' \mathbf{v}_1 = 0 \) ensures orthogonality to the first principal component.
+
+Solving this optimization problem leads to:
+\[
+\mathbf{S} \mathbf{v}_2 = \lambda_2 \mathbf{v}_2
+\]
+where \( \mathbf{v}_2 \) is the **eigenvector associated with the second largest eigenvalue** \( \lambda_2 \) of \( \mathbf{S} \).
+
+---
+
+#### Intuition
+
+Since the first principal component \( \mathbf{v}_1 \) has already captured the maximum variance, the second principal component \( \mathbf{v}_2 \) captures the next largest amount of variance while being orthogonal to \( \mathbf{v}_1 \). We can continue in this way to find the next Principal Components.
