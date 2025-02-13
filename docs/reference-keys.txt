@@ -182,3 +182,9 @@ second-principal-component
 optimization-problem-1
 solution-using-lagrange-multipliers
 intuition
+parafac-decomposition
+what-is-a-tensor
+motivation-why-generalize-pca-to-tensors
+parafac-decomposition-definition
+how-is-parafac-related-to-pca
+key-properties-of-parafac-decomposition

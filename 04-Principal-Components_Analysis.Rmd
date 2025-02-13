@@ -544,3 +544,67 @@ where \( \mathbf{v}_2 \) is the **eigenvector associated with the second largest
 #### Intuition
 
 Since the first principal component \( \mathbf{v}_1 \) has already captured the maximum variance, the second principal component \( \mathbf{v}_2 \) captures the next largest amount of variance while being orthogonal to \( \mathbf{v}_1 \). We can continue in this way to find the next Principal Components.
+
+## PARAFAC decomposition
+
+The **PARAFAC decomposition** (also known as CANDECOMP/PARAFAC or CP decomposition) is a natural extension of the concept of **Principal Component Analysis (PCA)** from matrices to **higher-order tensors**.
+
+---
+
+### What is a Tensor?
+
+A **tensor** is a multi-dimensional array, extending the concept of vectors (1D arrays) and matrices (2D arrays) to higher dimensions:
+- A **vector** is a tensor of order 1.
+- A **matrix** is a tensor of order 2.
+- A **tensor** of order \( N \) has \( N \) dimensions (also called modes).
+
+For example:
+- An image is a matrix (2D tensor).
+- A color video can be represented as a 3D tensor (height × width × time).
+
+---
+
+### Motivation: Why Generalize PCA to Tensors?
+
+PCA works well with matrices, but many real-world data are naturally represented as tensors:
+- **Psychology**: Data from multiple individuals across multiple tests and times.
+- **Signal Processing**: Multi-channel EEG data recorded over time.
+- **Chemometrics**: Spectral data collected over different conditions.
+
+PCA provides a low-rank approximation for matrices by decomposing them into principal components. The PARAFAC decomposition extends this idea to tensors, finding components along each dimension simultaneously.
+
+---
+
+### PARAFAC Decomposition Definition
+
+Given a tensor \( \mathcal{X} \in \mathbb{R}^{I_1 \times I_2 \times \cdots \times I_N} \), the **PARAFAC decomposition** expresses \( \mathcal{X} \) as a sum of \( R \) rank-1 tensors:
+
+\[
+\mathcal{X} \approx \sum_{r=1}^{R} \mathbf{a}_r^{(1)} \circ \mathbf{a}_r^{(2)} \circ \cdots \circ \mathbf{a}_r^{(N)},
+\]
+
+where:
+- \( R \) is the **rank** of the decomposition.
+- \( \mathbf{a}_r^{(n)} \in \mathbb{R}^{I_n} \) are vectors along the \( n \)-th mode.
+- \( \circ \) denotes the **outer product**.
+- Each rank-1 tensor \( \mathbf{a}_r^{(1)} \circ \mathbf{a}_r^{(2)} \circ \cdots \circ \mathbf{a}_r^{(N)} \) is analogous to a **principal component** in PCA.
+
+---
+
+### How is PARAFAC Related to PCA?
+
+- **PCA** decomposes a matrix \( \mathbf{X} \) into a sum of rank-1 matrices:
+  \[
+  \mathbf{X} \approx \sum_{r=1}^{R} \sigma_r \mathbf{u}_r \mathbf{v}_r',
+  \]
+  where \( \mathbf{u}_r \) and \( \mathbf{v}_r \) are left and right singular vectors, and \( \sigma_r \) are singular values.
+  
+- **PARAFAC** generalizes this concept by decomposing a tensor \( \mathcal{X} \) into a sum of rank-1 tensors. Just like PCA finds directions that capture the most variance in a matrix, PARAFAC finds **multi-dimensional factors** that capture the most structure in a tensor.
+
+---
+
+### Key Properties of PARAFAC Decomposition
+
+- **Uniqueness**: Unlike PCA (where different rotations of principal components can yield the same solution), the PARAFAC decomposition is unique under mild conditions. This uniqueness makes PARAFAC particularly useful for interpretability.
+- **Low-rank Approximation**: PARAFAC provides a low-rank approximation of tensors, analogous to PCA for matrices.
+- **Interpretability**: Each component can be interpreted as a factor along each mode, making it valuable in fields like chemometrics and neuroscience.

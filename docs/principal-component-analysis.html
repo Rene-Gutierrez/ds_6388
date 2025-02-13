@@ -235,6 +235,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2.1" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#first-principal-cmponent"><i class="fa fa-check"></i><b>5.2.1</b> First Principal Cmponent</a></li>
 <li class="chapter" data-level="5.2.2" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#second-principal-component"><i class="fa fa-check"></i><b>5.2.2</b> Second Principal Component</a></li>
 </ul></li>
+<li class="chapter" data-level="5.3" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#parafac-decomposition"><i class="fa fa-check"></i><b>5.3</b> PARAFAC decomposition</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#what-is-a-tensor"><i class="fa fa-check"></i><b>5.3.1</b> What is a Tensor?</a></li>
+<li class="chapter" data-level="5.3.2" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#motivation-why-generalize-pca-to-tensors"><i class="fa fa-check"></i><b>5.3.2</b> Motivation: Why Generalize PCA to Tensors?</a></li>
+<li class="chapter" data-level="5.3.3" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#parafac-decomposition-definition"><i class="fa fa-check"></i><b>5.3.3</b> PARAFAC Decomposition Definition</a></li>
+<li class="chapter" data-level="5.3.4" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#how-is-parafac-related-to-pca"><i class="fa fa-check"></i><b>5.3.4</b> How is PARAFAC Related to PCA?</a></li>
+<li class="chapter" data-level="5.3.5" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#key-properties-of-parafac-decomposition"><i class="fa fa-check"></i><b>5.3.5</b> Key Properties of PARAFAC Decomposition</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -677,8 +685,66 @@ where <span class="math inline">\(\mathbf{v}_2\)</span> is the <strong>eigenvect
 <div id="intuition" class="section level4 hasAnchor" number="5.2.2.3">
 <h4><span class="header-section-number">5.2.2.3</span> Intuition<a href="principal-component-analysis.html#intuition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Since the first principal component <span class="math inline">\(\mathbf{v}_1\)</span> has already captured the maximum variance, the second principal component <span class="math inline">\(\mathbf{v}_2\)</span> captures the next largest amount of variance while being orthogonal to <span class="math inline">\(\mathbf{v}_1\)</span>. We can continue in this way to find the next Principal Components.</p>
-
 </div>
+</div>
+</div>
+<div id="parafac-decomposition" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> PARAFAC decomposition<a href="principal-component-analysis.html#parafac-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>PARAFAC decomposition</strong> (also known as CANDECOMP/PARAFAC or CP decomposition) is a natural extension of the concept of <strong>Principal Component Analysis (PCA)</strong> from matrices to <strong>higher-order tensors</strong>.</p>
+<hr />
+<div id="what-is-a-tensor" class="section level3 hasAnchor" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> What is a Tensor?<a href="principal-component-analysis.html#what-is-a-tensor" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A <strong>tensor</strong> is a multi-dimensional array, extending the concept of vectors (1D arrays) and matrices (2D arrays) to higher dimensions:
+- A <strong>vector</strong> is a tensor of order 1.
+- A <strong>matrix</strong> is a tensor of order 2.
+- A <strong>tensor</strong> of order <span class="math inline">\(N\)</span> has <span class="math inline">\(N\)</span> dimensions (also called modes).</p>
+<p>For example:
+- An image is a matrix (2D tensor).
+- A color video can be represented as a 3D tensor (height × width × time).</p>
+<hr />
+</div>
+<div id="motivation-why-generalize-pca-to-tensors" class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Motivation: Why Generalize PCA to Tensors?<a href="principal-component-analysis.html#motivation-why-generalize-pca-to-tensors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>PCA works well with matrices, but many real-world data are naturally represented as tensors:
+- <strong>Psychology</strong>: Data from multiple individuals across multiple tests and times.
+- <strong>Signal Processing</strong>: Multi-channel EEG data recorded over time.
+- <strong>Chemometrics</strong>: Spectral data collected over different conditions.</p>
+<p>PCA provides a low-rank approximation for matrices by decomposing them into principal components. The PARAFAC decomposition extends this idea to tensors, finding components along each dimension simultaneously.</p>
+<hr />
+</div>
+<div id="parafac-decomposition-definition" class="section level3 hasAnchor" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> PARAFAC Decomposition Definition<a href="principal-component-analysis.html#parafac-decomposition-definition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Given a tensor <span class="math inline">\(\mathcal{X} \in \mathbb{R}^{I_1 \times I_2 \times \cdots \times I_N}\)</span>, the <strong>PARAFAC decomposition</strong> expresses <span class="math inline">\(\mathcal{X}\)</span> as a sum of <span class="math inline">\(R\)</span> rank-1 tensors:</p>
+<p><span class="math display">\[
+\mathcal{X} \approx \sum_{r=1}^{R} \mathbf{a}_r^{(1)} \circ \mathbf{a}_r^{(2)} \circ \cdots \circ \mathbf{a}_r^{(N)},
+\]</span></p>
+<p>where:
+- <span class="math inline">\(R\)</span> is the <strong>rank</strong> of the decomposition.
+- <span class="math inline">\(\mathbf{a}_r^{(n)} \in \mathbb{R}^{I_n}\)</span> are vectors along the <span class="math inline">\(n\)</span>-th mode.
+- <span class="math inline">\(\circ\)</span> denotes the <strong>outer product</strong>.
+- Each rank-1 tensor <span class="math inline">\(\mathbf{a}_r^{(1)} \circ \mathbf{a}_r^{(2)} \circ \cdots \circ \mathbf{a}_r^{(N)}\)</span> is analogous to a <strong>principal component</strong> in PCA.</p>
+<hr />
+</div>
+<div id="how-is-parafac-related-to-pca" class="section level3 hasAnchor" number="5.3.4">
+<h3><span class="header-section-number">5.3.4</span> How is PARAFAC Related to PCA?<a href="principal-component-analysis.html#how-is-parafac-related-to-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p><strong>PCA</strong> decomposes a matrix <span class="math inline">\(\mathbf{X}\)</span> into a sum of rank-1 matrices:
+<span class="math display">\[
+\mathbf{X} \approx \sum_{r=1}^{R} \sigma_r \mathbf{u}_r \mathbf{v}_r&#39;,
+\]</span>
+where <span class="math inline">\(\mathbf{u}_r\)</span> and <span class="math inline">\(\mathbf{v}_r\)</span> are left and right singular vectors, and <span class="math inline">\(\sigma_r\)</span> are singular values.</p></li>
+<li><p><strong>PARAFAC</strong> generalizes this concept by decomposing a tensor <span class="math inline">\(\mathcal{X}\)</span> into a sum of rank-1 tensors. Just like PCA finds directions that capture the most variance in a matrix, PARAFAC finds <strong>multi-dimensional factors</strong> that capture the most structure in a tensor.</p></li>
+</ul>
+<hr />
+</div>
+<div id="key-properties-of-parafac-decomposition" class="section level3 hasAnchor" number="5.3.5">
+<h3><span class="header-section-number">5.3.5</span> Key Properties of PARAFAC Decomposition<a href="principal-component-analysis.html#key-properties-of-parafac-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Uniqueness</strong>: Unlike PCA (where different rotations of principal components can yield the same solution), the PARAFAC decomposition is unique under mild conditions. This uniqueness makes PARAFAC particularly useful for interpretability.</li>
+<li><strong>Low-rank Approximation</strong>: PARAFAC provides a low-rank approximation of tensors, analogous to PCA for matrices.</li>
+<li><strong>Interpretability</strong>: Each component can be interpreted as a factor along each mode, making it valuable in fields like chemometrics and neuroscience.</li>
+</ul>
+
 </div>
 </div>
 </div>
