@@ -193,4 +193,9 @@ high-dimensional-pca-p-gg-n
 key-idea
 steps-for-efficient-computation
 why-does-this-work
-efficient-computation-1
+efficient-computation-pca-p-gg-n
+pca-methods
+simulate-a-data-set
+compare-results
+computational-efficiency-comparison
+larger-example

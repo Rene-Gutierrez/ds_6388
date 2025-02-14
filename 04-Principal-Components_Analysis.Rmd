@@ -659,9 +659,13 @@ where \( \mathbf{u}_i \) are the left singular vectors of \( \mathbf{X} \).
 
 This approach is crucial for handling high-dimensional data efficiently, ensuring that PCA remains computationally feasible even when \( p \gg n \).
 
-#### Efficient Computation
+Here’s an explanation with added comments to your provided R Markdown code, keeping the code unchanged:
 
-Create the two methods two perform PCA
+---
+
+#### Efficient Computation PCA $p \gg n$
+
+##### PCA Methods
 
 ```{r pca-methods}
 # PCA using X'X (traditional method)
@@ -691,7 +695,14 @@ pca_efficient <- function(X) {
 }
 ```
 
-Simulate a Data Set
+*Explanation*:
+
+- The **traditional method** computes PCA from \( X'X \), which is large when \( p \gg n \).
+- The **efficient method** computes PCA from \( X X' \), a smaller matrix when \( p \gg n \), then derives the principal components and scores from that decomposition.
+
+---
+
+##### Simulate a Data Set
 
 ```{r pca-small-dataset, cache=TRUE}
 # Simulate high-dimensional data
@@ -715,7 +726,14 @@ for(i in 1:(p / sizBlo)){
 }
 ```
 
-Compare the results to check they are the same
+*Explanation*:
+
+- Simulates a dataset with \( n = 100 \) samples and \( p = 1000 \) features.
+- Correlation is introduced within blocks of features using an exponential decay structure with \( \rho = 0.5 \).
+
+---
+
+##### Compare Results
 
 ```{r pca-results-comparison, cache=TRUE}
 # Performs PCA by Both Methods
@@ -736,9 +754,17 @@ par(mar   = c(2,2,0,0))
 plot(outTra$varExp[1:50])
 ```
 
-Compare the results in terms of computational efficiency
+*Explanation*:
 
-```{r pca-computational-efficiency-small}
+- Compares the results from both PCA methods to ensure they are identical.
+- Displays the first two principal components and scores side by side.
+- Plots the variance explained by the top 50 components for both methods.
+
+---
+
+##### Computational Efficiency Comparison
+
+```{r pca-computational-efficiency-small, cache=TRUE}
 # Load necessary library
 library(microbenchmark)
 
@@ -753,9 +779,16 @@ benchmark_results <- microbenchmark(
 print(benchmark_results)
 ```
 
-Now, we try a bigger example
+*Explanation*:
 
-```{r pca-big-dataset, cache=TRUE}
+- Uses `microbenchmark` to measure and compare the runtime of both PCA methods.
+- Demonstrates the computational advantage of the efficient method when \( p \gg n \).
+
+---
+
+##### Larger Example
+
+```{r pca-computational-efficiency-big, cache=TRUE}
 # Simulate high-dimensional data
 set.seed(123)
 n <- 100    # Number of samples
@@ -786,3 +819,7 @@ benchmark_results <- microbenchmark(
 # Print the results
 print(benchmark_results)
 ```
+
+*Explanation*:
+
+- Repeats the PCA and timing comparison on a larger dataset with \( p = 2000 \) features to demonstrate the increasing efficiency of the \( X X' \)-based method as \( p \) grows.
