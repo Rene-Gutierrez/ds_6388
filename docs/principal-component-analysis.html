@@ -246,6 +246,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.4" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#high-dimensional-pca"><i class="fa fa-check"></i><b>5.4</b> High-Dimensional PCA</a>
 <ul>
 <li class="chapter" data-level="5.4.1" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#high-dimensional-pca-p-gg-n"><i class="fa fa-check"></i><b>5.4.1</b> High-Dimensional PCA (<span class="math inline">\(p \gg n\)</span>)</a></li>
+<li class="chapter" data-level="5.4.2" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#randomized-pca"><i class="fa fa-check"></i><b>5.4.2</b> Randomized PCA</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#principal-components-regression"><i class="fa fa-check"></i><b>5.5</b> Principal Components Regression</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#what-is-principal-components-regression"><i class="fa fa-check"></i><b>5.5.1</b> What is Principal Components Regression?</a></li>
+<li class="chapter" data-level="5.5.2" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#why-use-pcr"><i class="fa fa-check"></i><b>5.5.2</b> Why Use PCR?</a></li>
+<li class="chapter" data-level="5.5.3" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#mathematical-formulation"><i class="fa fa-check"></i><b>5.5.3</b> Mathematical Formulation</a></li>
+<li class="chapter" data-level="5.5.4" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#choosing-the-number-of-components"><i class="fa fa-check"></i><b>5.5.4</b> Choosing the Number of Components</a></li>
+<li class="chapter" data-level="5.5.5" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#advantages-of-pcr"><i class="fa fa-check"></i><b>5.5.5</b> Advantages of PCR</a></li>
+<li class="chapter" data-level="5.5.6" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#disadvantages"><i class="fa fa-check"></i><b>5.5.6</b> Disadvantages</a></li>
+<li class="chapter" data-level="5.5.7" data-path="principal-component-analysis.html"><a href="principal-component-analysis.html#randomized-pca-and-pcr"><i class="fa fa-check"></i><b>5.5.7</b> Randomized PCA and PCR</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -517,6 +528,59 @@ a_i = \sigma_i, \quad \text{for } i = 1, \dots, k.
 <p>which confirms the <strong>Eckart–Young–Mirsky theorem</strong>.</p>
 <hr />
 </div>
+<div id="uniqueness-of-the-solution" class="section level4 hasAnchor" number="5.1.2.3">
+<h4><span class="header-section-number">5.1.2.3</span> Uniqueness of the Solution<a href="principal-component-analysis.html#uniqueness-of-the-solution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The <strong>Eckart–Young–Mirsky theorem</strong> guarantees that the <strong>best rank-<span class="math inline">\(k\)</span> approximation</strong> of a matrix <span class="math inline">\(\mathbf{X}\)</span> in terms of the <strong>Frobenius norm</strong> is given by the <strong>truncated SVD</strong>. However, the <strong>uniqueness</strong> of this solution depends on the <strong>singular values</strong>.</p>
+<hr />
+<div id="key-condition-for-uniqueness" class="section level5 hasAnchor" number="5.1.2.3.1">
+<h5><span class="header-section-number">5.1.2.3.1</span> Key Condition for Uniqueness<a href="principal-component-analysis.html#key-condition-for-uniqueness" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>The best rank-<span class="math inline">\(k\)</span> approximation is <strong>unique</strong> if and only if the <span class="math inline">\(k\)</span>-th singular value <span class="math inline">\(\sigma_k\)</span> is <strong>strictly greater</strong> than the <span class="math inline">\((k+1)\)</span>-th singular value <span class="math inline">\(\sigma_{k+1}\)</span>.</li>
+<li>In other words:
+<span class="math display">\[
+\sigma_k &gt; \sigma_{k+1} \implies \text{Unique solution.}
+\]</span></li>
+</ul>
+<hr />
+</div>
+<div id="when-is-the-solution-not-unique" class="section level5 hasAnchor" number="5.1.2.3.2">
+<h5><span class="header-section-number">5.1.2.3.2</span> When is the Solution Not Unique?<a href="principal-component-analysis.html#when-is-the-solution-not-unique" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>If there is a <strong>tie</strong> or <strong>degeneracy</strong> in the singular values:
+<span class="math display">\[
+\sigma_k = \sigma_{k+1},
+\]</span>
+then the best rank-<span class="math inline">\(k\)</span> approximation is <strong>not unique</strong>.</li>
+<li>Multiple linear combinations of the corresponding singular vectors can yield the same Frobenius norm error, leading to multiple optimal solutions.</li>
+</ul>
+<hr />
+</div>
+<div id="intuition" class="section level5 hasAnchor" number="5.1.2.3.3">
+<h5><span class="header-section-number">5.1.2.3.3</span> Intuition<a href="principal-component-analysis.html#intuition" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Unique solution</strong>: Singular values decrease strictly, and each singular vector contributes distinctly to the approximation.</li>
+<li><strong>Non-unique solution</strong>: Equal singular values create a <strong>subspace</strong> of possible solutions, as any linear combination of singular vectors associated with the repeated singular value results in the same approximation quality.</li>
+</ul>
+<hr />
+</div>
+<div id="example-9" class="section level5 hasAnchor" number="5.1.2.3.4">
+<h5><span class="header-section-number">5.1.2.3.4</span> Example<a href="principal-component-analysis.html#example-9" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>If <span class="math inline">\(\mathbf{X}\)</span> has singular values <span class="math inline">\(\sigma_1 = 5, \sigma_2 = 4, \sigma_3 = 4, \sigma_4 = 2\)</span>, then:
+- The <strong>best rank-1 approximation</strong> is unique because <span class="math inline">\(\sigma_1 &gt; \sigma_2\)</span>.
+- The <strong>best rank-2 approximation</strong> is not unique because <span class="math inline">\(\sigma_2 = \sigma_3\)</span>.
+- The <strong>best rank-3 approximation</strong> is unique because <span class="math inline">\(\sigma_3 &gt; \sigma_4\)</span>.</p>
+<hr />
+</div>
+<div id="summary" class="section level5 hasAnchor" number="5.1.2.3.5">
+<h5><span class="header-section-number">5.1.2.3.5</span> Summary<a href="principal-component-analysis.html#summary" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>Unique solution</strong>: <span class="math inline">\(\sigma_k &gt; \sigma_{k+1}\)</span>.</li>
+<li><strong>Not unique solution</strong>: <span class="math inline">\(\sigma_k = \sigma_{k+1}\)</span>.</li>
+</ul>
+<p>Would you like me to show an example or provide more details? 😊</p>
+<hr />
+</div>
+</div>
 </div>
 <div id="eckartyoungmirsky-theorem-for-the-spectral-norm" class="section level3 hasAnchor" number="5.1.3">
 <h3><span class="header-section-number">5.1.3</span> Eckart–Young–Mirsky Theorem for the Spectral Norm<a href="principal-component-analysis.html#eckartyoungmirsky-theorem-for-the-spectral-norm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -686,8 +750,8 @@ subject to:
 where <span class="math inline">\(\mathbf{v}_2\)</span> is the <strong>eigenvector associated with the second largest eigenvalue</strong> <span class="math inline">\(\lambda_2\)</span> of <span class="math inline">\(\mathbf{S}\)</span>.</p>
 <hr />
 </div>
-<div id="intuition" class="section level4 hasAnchor" number="5.2.2.3">
-<h4><span class="header-section-number">5.2.2.3</span> Intuition<a href="principal-component-analysis.html#intuition" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="intuition-1" class="section level4 hasAnchor" number="5.2.2.3">
+<h4><span class="header-section-number">5.2.2.3</span> Intuition<a href="principal-component-analysis.html#intuition-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Since the first principal component <span class="math inline">\(\mathbf{v}_1\)</span> has already captured the maximum variance, the second principal component <span class="math inline">\(\mathbf{v}_2\)</span> captures the next largest amount of variance while being orthogonal to <span class="math inline">\(\mathbf{v}_1\)</span>. We can continue in this way to find the next Principal Components.</p>
 </div>
 </div>
@@ -976,8 +1040,272 @@ where <span class="math inline">\(\mathbf{u}_i\)</span> are the left singular ve
 <ul>
 <li>Repeats the PCA and timing comparison on a larger dataset with <span class="math inline">\(p = 2000\)</span> features to demonstrate the increasing efficiency of the <span class="math inline">\(X X&#39;\)</span>-based method as <span class="math inline">\(p\)</span> grows.</li>
 </ul>
-
+<hr />
 </div>
+</div>
+</div>
+<div id="randomized-pca" class="section level3 hasAnchor" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Randomized PCA<a href="principal-component-analysis.html#randomized-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The use of <strong>random matrices</strong> in the computation of <strong>PCA</strong> has gained significant attention due to its potential to make high-dimensional computations more efficient. This is particularly important when dealing with large datasets where traditional PCA methods become computationally expensive.</p>
+<hr />
+<div id="random-matrices-in-pca" class="section level4 hasAnchor" number="5.4.2.1">
+<h4><span class="header-section-number">5.4.2.1</span> Random matrices in PCA<a href="principal-component-analysis.html#random-matrices-in-pca" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When computing PCA, especially in high-dimensional settings, the major computational bottleneck is often the <strong>singular value decomposition (SVD)</strong> of large matrices. <strong>Random matrix methods</strong> offer an efficient approximation by projecting the original high-dimensional data into a lower-dimensional subspace, while preserving most of its structure.</p>
+<hr />
+</div>
+<div id="randomized-pca-rpca" class="section level4 hasAnchor" number="5.4.2.2">
+<h4><span class="header-section-number">5.4.2.2</span> Randomized PCA (RPCA)<a href="principal-component-analysis.html#randomized-pca-rpca" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Randomized PCA</strong> leverages random matrices to approximate the principal components. The key steps are:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Random Projection</strong>:
+<ul>
+<li>Instead of working directly with the full data matrix <span class="math inline">\(\mathbf{X}\)</span>, we multiply it by a random matrix <span class="math inline">\(\mathbf{\Omega}\)</span> to form a lower-dimensional matrix <span class="math inline">\(\mathbf{Y}\)</span>:
+<span class="math display">\[
+\mathbf{Y} = \mathbf{X} \mathbf{\Omega}
+\]</span></li>
+<li>Here, <span class="math inline">\(\mathbf{\Omega}\)</span> is typically a Gaussian random matrix, where each entry is drawn from a normal distribution <span class="math inline">\(N(0, 1)\)</span>.</li>
+</ul></li>
+<li><strong>Compute PCA in Lower Dimension</strong>:
+<ul>
+<li>Perform PCA (or SVD) on <span class="math inline">\(\mathbf{Y}\)</span> instead of <span class="math inline">\(\mathbf{X}\)</span>, which is much cheaper computationally.</li>
+<li>Since <span class="math inline">\(\mathbf{Y}\)</span> has fewer columns, the complexity is greatly reduced.</li>
+</ul></li>
+<li><strong>Recover Approximate Components</strong>:
+<ul>
+<li>The principal components of <span class="math inline">\(\mathbf{X}\)</span> are approximated using the computed components of <span class="math inline">\(\mathbf{Y}\)</span>.</li>
+</ul></li>
+</ol>
+<hr />
+</div>
+<div id="why-use-random-matrices" class="section level4 hasAnchor" number="5.4.2.3">
+<h4><span class="header-section-number">5.4.2.3</span> Why use random matrices?<a href="principal-component-analysis.html#why-use-random-matrices" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><strong>Efficiency</strong>: Reduces the dimensionality before performing SVD, thus significantly speeding up the computation.</li>
+<li><strong>Scalability</strong>: Ideal for large datasets where traditional PCA is computationally intensive.</li>
+<li><strong>Memory-friendly</strong>: Works well in environments with limited memory by avoiding operations on the full data matrix.</li>
+</ul>
+<hr />
+</div>
+<div id="theoretical-foundations-from-random-matrix-theory" class="section level4 hasAnchor" number="5.4.2.4">
+<h4><span class="header-section-number">5.4.2.4</span> Theoretical foundations from random matrix theory<a href="principal-component-analysis.html#theoretical-foundations-from-random-matrix-theory" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><strong>Random matrix theory</strong> provides tools to understand how well the random projections preserve the original structure of the data. Key results such as the <strong>Johnson-Lindenstrauss lemma</strong> ensure that the distances between points are approximately preserved under random projections. This is crucial because PCA relies on variance and distances within the dataset.</p>
+<hr />
+</div>
+<div id="when-to-use-random-matrix-methods-in-pca" class="section level4 hasAnchor" number="5.4.2.5">
+<h4><span class="header-section-number">5.4.2.5</span> When to use random matrix methods in PCA?<a href="principal-component-analysis.html#when-to-use-random-matrix-methods-in-pca" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>When the dataset is <strong>too large</strong> to store or process in full.</li>
+<li>When <strong>approximate principal components</strong> are acceptable.</li>
+<li>In <strong>streaming data</strong> scenarios where full PCA computations at each step are infeasible.</li>
+<li>For <strong>distributed computing</strong> environments where random projections can be easily parallelized.</li>
+</ul>
+<hr />
+</div>
+<div id="limitations" class="section level4 hasAnchor" number="5.4.2.6">
+<h4><span class="header-section-number">5.4.2.6</span> Limitations<a href="principal-component-analysis.html#limitations" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>Approximate results: Although close, they might not match exactly with the traditional PCA results.</li>
+<li>Hyperparameter tuning: The dimension of the random projection space must be chosen carefully to balance accuracy and computational cost.</li>
+</ul>
+<hr />
+</div>
+<div id="conclusion-2" class="section level4 hasAnchor" number="5.4.2.7">
+<h4><span class="header-section-number">5.4.2.7</span> Conclusion<a href="principal-component-analysis.html#conclusion-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The use of random matrices in PCA allows for:
+- Faster computations,
+- Lower memory usage,
+- Scalable algorithms for large datasets.</p>
+<p>This technique is particularly powerful in <strong>high-dimensional statistics</strong>, <strong>machine learning</strong>, and <strong>big data</strong> applications.</p>
+<p>Yes! Using <span class="math inline">\(\mathbf{Y} = \mathbf{\Omega} \mathbf{X}\)</span> is also a common approach in <strong>randomized PCA</strong> and can offer computational advantages depending on the dimensions of the data matrix.</p>
+<hr />
+<div id="when-to-use-mathbfy-mathbfomega-mathbfx" class="section level5 hasAnchor" number="5.4.2.7.1">
+<h5><span class="header-section-number">5.4.2.7.1</span> When to use <span class="math inline">\(\mathbf{Y} = \mathbf{\Omega} \mathbf{X}\)</span><a href="principal-component-analysis.html#when-to-use-mathbfy-mathbfomega-mathbfx" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Let <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{n \times p}\)</span> where:
+- <span class="math inline">\(n\)</span> is the number of samples,
+- <span class="math inline">\(p\)</span> is the number of features.</p>
+<p>If <span class="math inline">\(n \gg p\)</span> (many samples, few features), using:
+<span class="math display">\[
+\mathbf{Y} = \mathbf{X} \mathbf{\Omega}
+\]</span>
+is typically preferred because it reduces the number of features.</p>
+<p>However, if <span class="math inline">\(p \gg n\)</span> (many features, few samples), using:
+<span class="math display">\[
+\mathbf{Y} = \mathbf{\Omega} \mathbf{X}
+\]</span>
+is advantageous because:
+- It reduces the number of samples,
+- The random matrix <span class="math inline">\(\mathbf{\Omega}\)</span> is applied to the rows instead of the columns,
+- This reduces the size of the matrix on which the singular value decomposition (SVD) is performed.</p>
+<hr />
+</div>
+<div id="advantages-of-mathbfy-mathbfomega-mathbfx" class="section level5 hasAnchor" number="5.4.2.7.2">
+<h5><span class="header-section-number">5.4.2.7.2</span> Advantages of <span class="math inline">\(\mathbf{Y} = \mathbf{\Omega} \mathbf{X}\)</span><a href="principal-component-analysis.html#advantages-of-mathbfy-mathbfomega-mathbfx" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>More efficient when <span class="math inline">\(p \gg n\)</span></strong> because the random projection reduces the dimension from <span class="math inline">\(p\)</span> features to a smaller dimension.</li>
+<li><strong>Computational savings</strong>: Performing SVD on <span class="math inline">\(\mathbf{Y}\)</span> (which is smaller than <span class="math inline">\(\mathbf{X}\)</span>) is much faster.</li>
+<li><strong>Memory efficiency</strong>: Storing <span class="math inline">\(\mathbf{Y}\)</span> requires less memory than <span class="math inline">\(\mathbf{X}\)</span>.</li>
+</ul>
+<hr />
+</div>
+<div id="how-it-works" class="section level5 hasAnchor" number="5.4.2.7.3">
+<h5><span class="header-section-number">5.4.2.7.3</span> How it works<a href="principal-component-analysis.html#how-it-works" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ol style="list-style-type: decimal">
+<li><strong>Random matrix multiplication</strong>:
+<ul>
+<li><span class="math inline">\(\mathbf{\Omega} \in \mathbb{R}^{r \times n}\)</span> is a random Gaussian matrix (or any well-chosen random matrix) with <span class="math inline">\(r &lt; n\)</span>.</li>
+<li>Multiplying <span class="math inline">\(\mathbf{\Omega}\)</span> with <span class="math inline">\(\mathbf{X}\)</span> results in <span class="math inline">\(\mathbf{Y} \in \mathbb{R}^{r \times p}\)</span>.</li>
+</ul></li>
+<li><strong>Reduced dimensionality</strong>:
+<ul>
+<li>Now, <span class="math inline">\(\mathbf{Y}\)</span> has fewer rows, making it more efficient to compute the SVD.</li>
+</ul></li>
+<li><strong>Approximate PCA</strong>:
+<ul>
+<li>Perform SVD on <span class="math inline">\(\mathbf{Y}\)</span> instead of <span class="math inline">\(\mathbf{X}\)</span>, obtaining:
+<span class="math display">\[
+\mathbf{Y} = \mathbf{U}_Y \mathbf{\Sigma}_Y \mathbf{V}_Y&#39;
+\]</span></li>
+<li>The principal components of <span class="math inline">\(\mathbf{X}\)</span> are then approximated from <span class="math inline">\(\mathbf{U}_Y\)</span>, <span class="math inline">\(\mathbf{\Sigma}_Y\)</span>, and <span class="math inline">\(\mathbf{V}_Y\)</span>.</li>
+</ul></li>
+</ol>
+<hr />
+</div>
+<div id="choosing-mathbfy-mathbfomega-mathbfx-vs-mathbfy-mathbfx-mathbfomega" class="section level5 hasAnchor" number="5.4.2.7.4">
+<h5><span class="header-section-number">5.4.2.7.4</span> Choosing <span class="math inline">\(\mathbf{Y} = \mathbf{\Omega} \mathbf{X}\)</span> vs <span class="math inline">\(\mathbf{Y} = \mathbf{X} \mathbf{\Omega}\)</span><a href="principal-component-analysis.html#choosing-mathbfy-mathbfomega-mathbfx-vs-mathbfy-mathbfx-mathbfomega" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>Use <span class="math inline">\(\mathbf{X} \mathbf{\Omega}\)</span> if you want to reduce the <strong>feature dimension</strong> <span class="math inline">\(p\)</span>.</li>
+<li>Use <span class="math inline">\(\mathbf{\Omega} \mathbf{X}\)</span> if you want to reduce the <strong>sample dimension</strong> <span class="math inline">\(n\)</span>.</li>
+</ul>
+<hr />
+</div>
+<div id="applications-5" class="section level5 hasAnchor" number="5.4.2.7.5">
+<h5><span class="header-section-number">5.4.2.7.5</span> Applications<a href="principal-component-analysis.html#applications-5" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li><strong>High-dimensional biology data</strong> (e.g., genomics with <span class="math inline">\(p \gg n\)</span>),</li>
+<li><strong>Text data</strong> where the feature space (words) is huge compared to the number of documents,</li>
+<li><strong>Large image datasets</strong> where each image is represented as a high-dimensional vector.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="principal-components-regression" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Principal Components Regression<a href="principal-component-analysis.html#principal-components-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Principal components regression (PCR) is a regression technique that leverages <strong>principal component analysis (PCA)</strong> to handle high-dimensional data, especially when predictors are highly correlated.</p>
+<div id="what-is-principal-components-regression" class="section level3 hasAnchor" number="5.5.1">
+<h3><span class="header-section-number">5.5.1</span> What is Principal Components Regression?<a href="principal-component-analysis.html#what-is-principal-components-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>PCR combines PCA and linear regression:</p>
+<ol style="list-style-type: decimal">
+<li><strong>PCA Step</strong>: Reduce the dimensionality of the predictor matrix <span class="math inline">\(\mathbf{X}\)</span> by transforming it into its principal components.</li>
+<li><strong>Regression Step</strong>: Perform linear regression using the selected principal components as predictors instead of the original variables.</li>
+</ol>
+<hr />
+</div>
+<div id="why-use-pcr" class="section level3 hasAnchor" number="5.5.2">
+<h3><span class="header-section-number">5.5.2</span> Why Use PCR?<a href="principal-component-analysis.html#why-use-pcr" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Multicollinearity</strong>: PCR is particularly useful when predictors are highly correlated, as PCA removes collinearity.</li>
+<li><strong>Dimensionality Reduction</strong>: It reduces the number of predictors by selecting only the most important principal components.</li>
+<li><strong>Stability</strong>: Improves the stability of the regression coefficients by avoiding overfitting.</li>
+</ul>
+<hr />
+</div>
+<div id="mathematical-formulation" class="section level3 hasAnchor" number="5.5.3">
+<h3><span class="header-section-number">5.5.3</span> Mathematical Formulation<a href="principal-component-analysis.html#mathematical-formulation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Given:
+- <span class="math inline">\(\mathbf{X} \in \mathbb{R}^{n \times p}\)</span> (design matrix),
+- <span class="math inline">\(\mathbf{y} \in \mathbb{R}^n\)</span> (response vector),</p>
+<div id="step-1-perform-pca-on-mathbfx" class="section level4 hasAnchor" number="5.5.3.1">
+<h4><span class="header-section-number">5.5.3.1</span> Step 1: Perform PCA on <span class="math inline">\(\mathbf{X}\)</span><a href="principal-component-analysis.html#step-1-perform-pca-on-mathbfx" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The PCA decomposition is:
+<span class="math display">\[
+\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}&#39;
+\]</span>
+- <span class="math inline">\(\mathbf{V} \in \mathbb{R}^{p \times p}\)</span> contains the principal directions.
+- The principal components are given by <span class="math inline">\(\mathbf{Z} = \mathbf{X} \mathbf{V}\)</span>.</p>
+</div>
+<div id="step-2-select-k-principal-components" class="section level4 hasAnchor" number="5.5.3.2">
+<h4><span class="header-section-number">5.5.3.2</span> Step 2: Select <span class="math inline">\(k\)</span> Principal Components<a href="principal-component-analysis.html#step-2-select-k-principal-components" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Choose the top <span class="math inline">\(k\)</span> principal components <span class="math inline">\(\mathbf{Z}_k\)</span> that explain most of the variance in <span class="math inline">\(\mathbf{X}\)</span>.</p>
+</div>
+<div id="step-3-perform-linear-regression" class="section level4 hasAnchor" number="5.5.3.3">
+<h4><span class="header-section-number">5.5.3.3</span> Step 3: Perform Linear Regression<a href="principal-component-analysis.html#step-3-perform-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Fit a linear regression model:
+<span class="math display">\[
+\mathbf{y} = \mathbf{Z}_k \mathbf{\beta}_k + \mathbf{e},
+\]</span>
+where <span class="math inline">\(\mathbf{\beta}_k\)</span> are the regression coefficients and <span class="math inline">\(\mathbf{e}\)</span> is the error term.</p>
+</div>
+<div id="step-4-transform-coefficients-back" class="section level4 hasAnchor" number="5.5.3.4">
+<h4><span class="header-section-number">5.5.3.4</span> Step 4: Transform Coefficients Back<a href="principal-component-analysis.html#step-4-transform-coefficients-back" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The original regression coefficients <span class="math inline">\(\mathbf{\hat{\beta}}\)</span> are obtained by:
+<span class="math display">\[
+\mathbf{\hat{\beta}} = \mathbf{V}_k \mathbf{\hat{\beta}}_k.
+\]</span></p>
+<hr />
+</div>
+</div>
+<div id="choosing-the-number-of-components" class="section level3 hasAnchor" number="5.5.4">
+<h3><span class="header-section-number">5.5.4</span> Choosing the Number of Components<a href="principal-component-analysis.html#choosing-the-number-of-components" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The number of principal components <span class="math inline">\(k\)</span> is often chosen using:
+- <strong>Cross-validation</strong>: Minimizing the prediction error,
+- <strong>Explained variance</strong>: Selecting enough components to capture a large proportion of the variance.</p>
+<hr />
+</div>
+<div id="advantages-of-pcr" class="section level3 hasAnchor" number="5.5.5">
+<h3><span class="header-section-number">5.5.5</span> Advantages of PCR<a href="principal-component-analysis.html#advantages-of-pcr" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Handles <strong>multicollinearity</strong> well.</li>
+<li>Reduces <strong>overfitting</strong> by eliminating noise and less important predictors.</li>
+<li>Works well in <strong>high-dimensional settings</strong> where <span class="math inline">\(p &gt; n\)</span>.</li>
+</ul>
+</div>
+<div id="disadvantages" class="section level3 hasAnchor" number="5.5.6">
+<h3><span class="header-section-number">5.5.6</span> Disadvantages<a href="principal-component-analysis.html#disadvantages" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>PCA is <strong>unsupervised</strong>: It does not consider the response variable when selecting components, potentially excluding important predictors.</li>
+<li>Interpretation of principal components can be challenging compared to original features.</li>
+</ul>
+<hr />
+</div>
+<div id="randomized-pca-and-pcr" class="section level3 hasAnchor" number="5.5.7">
+<h3><span class="header-section-number">5.5.7</span> Randomized PCA and PCR<a href="principal-component-analysis.html#randomized-pca-and-pcr" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Randomized PCA offers several advantages when used in the context of <strong>Principal Components Regression (PCR)</strong>, particularly for <strong>high-dimensional data</strong> and <strong>large datasets</strong>.</p>
+<div id="advantages-of-randomized-pca-in-pcr" class="section level4 hasAnchor" number="5.5.7.1">
+<h4><span class="header-section-number">5.5.7.1</span> Advantages of Randomized PCA in PCR<a href="principal-component-analysis.html#advantages-of-randomized-pca-in-pcr" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><p><strong>Computational Efficiency</strong>:
+In PCR, PCA is performed on the design matrix <span class="math inline">\(\mathbf{X}\)</span> to obtain principal components. For large datasets, especially when <span class="math inline">\(p \gg n\)</span>, the cost of computing the full SVD is high.</p>
+<ul>
+<li><strong>Randomized PCA</strong> approximates the principal components by projecting <span class="math inline">\(\mathbf{X}\)</span> onto a lower-dimensional subspace using a random matrix, significantly reducing computation time without a major loss in accuracy.</li>
+</ul></li>
+<li><p><strong>Scalability</strong>:
+Randomized PCA scales well with extremely large datasets, making it feasible to perform PCR on modern, high-dimensional data without running into memory or time constraints.</p></li>
+<li><p><strong>Memory Efficiency</strong>:
+Traditional PCA requires storing and manipulating large matrices. Randomized PCA reduces the effective dimension early, requiring less memory, which is especially beneficial for PCR when <span class="math inline">\(p\)</span> is very large.</p></li>
+<li><p><strong>Handling High-Dimensional Data</strong>:
+PCR is often used when there are many predictors (features). Randomized PCA efficiently reduces the dimension while preserving the structure, making it an ideal preprocessing step before regression.</p></li>
+<li><p><strong>Fast Approximate Solutions</strong>:
+In many practical applications of PCR, an <strong>approximate solution</strong> is often sufficient. Randomized PCA provides a close approximation to the leading principal components with much less computational effort, which is particularly useful when iterative model fitting is required.</p></li>
+<li><p><strong>Random Projections Preserve Distances</strong>:
+Results from <strong>random matrix theory</strong> (like the Johnson-Lindenstrauss lemma) ensure that random projections approximately preserve the geometric structure of the data. This means that the key relationships between variables are retained even after dimensionality reduction, ensuring that the regression model does not lose critical information.</p></li>
+</ul>
+</div>
+<div id="why-is-this-important-in-pcr" class="section level4 hasAnchor" number="5.5.7.2">
+<h4><span class="header-section-number">5.5.7.2</span> Why is this Important in PCR?<a href="principal-component-analysis.html#why-is-this-important-in-pcr" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>PCR involves <strong>two expensive operations</strong>: PCA and then regression on the principal components.</li>
+<li><strong>Randomized PCA accelerates the first step</strong>, allowing rapid extraction of the most important components.</li>
+<li>The resulting principal components are then used in the regression step, maintaining good predictive performance while reducing computational cost.</li>
+</ul>
+</div>
+<div id="example-use-case" class="section level4 hasAnchor" number="5.5.7.3">
+<h4><span class="header-section-number">5.5.7.3</span> Example Use Case<a href="principal-component-analysis.html#example-use-case" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>If you’re working with a dataset where:
+- <span class="math inline">\(p = 100,000\)</span> features,
+- <span class="math inline">\(n = 1,000\)</span> samples,
+performing standard PCA can be unfeasible. Randomized PCA quickly approximates the top <span class="math inline">\(k\)</span> components, enabling the PCR model to be trained efficiently without losing significant predictive power.</p>
+
 </div>
 </div>
 </div>

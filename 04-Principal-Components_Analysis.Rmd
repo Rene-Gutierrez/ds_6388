@@ -329,6 +329,58 @@ which confirms the **Eckart–Young–Mirsky theorem**.
 
 ---
 
+#### Uniqueness of the Solution
+
+The **Eckart–Young–Mirsky theorem** guarantees that the **best rank-\(k\) approximation** of a matrix \( \mathbf{X} \) in terms of the **Frobenius norm** is given by the **truncated SVD**. However, the **uniqueness** of this solution depends on the **singular values**.
+
+---
+
+##### Key Condition for Uniqueness
+
+- The best rank-\(k\) approximation is **unique** if and only if the \(k\)-th singular value \( \sigma_k \) is **strictly greater** than the \((k+1)\)-th singular value \( \sigma_{k+1} \).
+- In other words:
+  \[
+  \sigma_k > \sigma_{k+1} \implies \text{Unique solution.}
+  \]
+
+---
+
+##### When is the Solution Not Unique?
+
+- If there is a **tie** or **degeneracy** in the singular values:
+  \[
+  \sigma_k = \sigma_{k+1},
+  \]
+  then the best rank-\(k\) approximation is **not unique**.
+- Multiple linear combinations of the corresponding singular vectors can yield the same Frobenius norm error, leading to multiple optimal solutions.
+
+---
+
+##### Intuition
+
+- **Unique solution**: Singular values decrease strictly, and each singular vector contributes distinctly to the approximation.
+- **Non-unique solution**: Equal singular values create a **subspace** of possible solutions, as any linear combination of singular vectors associated with the repeated singular value results in the same approximation quality.
+
+---
+
+##### Example
+
+If \( \mathbf{X} \) has singular values \( \sigma_1 = 5, \sigma_2 = 4, \sigma_3 = 4, \sigma_4 = 2 \), then:
+- The **best rank-1 approximation** is unique because \( \sigma_1 > \sigma_2 \).
+- The **best rank-2 approximation** is not unique because \( \sigma_2 = \sigma_3 \).
+- The **best rank-3 approximation** is unique because \( \sigma_3 > \sigma_4 \).
+
+---
+
+##### Summary
+
+- **Unique solution**: \( \sigma_k > \sigma_{k+1} \).
+- **Not unique solution**: \( \sigma_k = \sigma_{k+1} \).
+
+Would you like me to show an example or provide more details? 😊
+
+---
+
 ### Eckart–Young–Mirsky Theorem for the Spectral Norm
 
 The **Eckart–Young–Mirsky theorem** is a fundamental result in matrix approximation, stating that the **best rank-k approximation** of a matrix in terms of the **spectral norm** is obtained through its **singular value decomposition (SVD)**. However, unlike in the Frobenius norm case, the solution is not always unique in the spectral norm.
@@ -823,3 +875,258 @@ print(benchmark_results)
 *Explanation*:
 
 - Repeats the PCA and timing comparison on a larger dataset with \( p = 2000 \) features to demonstrate the increasing efficiency of the \( X X' \)-based method as \( p \) grows.
+
+---
+
+### Randomized PCA
+
+The use of **random matrices** in the computation of **PCA** has gained significant attention due to its potential to make high-dimensional computations more efficient. This is particularly important when dealing with large datasets where traditional PCA methods become computationally expensive.
+
+---
+
+#### Random matrices in PCA
+
+When computing PCA, especially in high-dimensional settings, the major computational bottleneck is often the **singular value decomposition (SVD)** of large matrices. **Random matrix methods** offer an efficient approximation by projecting the original high-dimensional data into a lower-dimensional subspace, while preserving most of its structure.
+
+---
+
+#### Randomized PCA (RPCA)
+
+**Randomized PCA** leverages random matrices to approximate the principal components. The key steps are:
+
+1. **Random Projection**:
+   - Instead of working directly with the full data matrix \( \mathbf{X} \), we multiply it by a random matrix \( \mathbf{\Omega} \) to form a lower-dimensional matrix \( \mathbf{Y} \):
+     \[
+     \mathbf{Y} = \mathbf{X} \mathbf{\Omega}
+     \]
+   - Here, \( \mathbf{\Omega} \) is typically a Gaussian random matrix, where each entry is drawn from a normal distribution \( N(0, 1) \).
+
+2. **Compute PCA in Lower Dimension**:
+   - Perform PCA (or SVD) on \( \mathbf{Y} \) instead of \( \mathbf{X} \), which is much cheaper computationally.
+   - Since \( \mathbf{Y} \) has fewer columns, the complexity is greatly reduced.
+
+3. **Recover Approximate Components**:
+   - The principal components of \( \mathbf{X} \) are approximated using the computed components of \( \mathbf{Y} \).
+
+---
+
+#### Why use random matrices?
+
+- **Efficiency**: Reduces the dimensionality before performing SVD, thus significantly speeding up the computation.
+- **Scalability**: Ideal for large datasets where traditional PCA is computationally intensive.
+- **Memory-friendly**: Works well in environments with limited memory by avoiding operations on the full data matrix.
+
+---
+
+#### Theoretical foundations from random matrix theory
+
+**Random matrix theory** provides tools to understand how well the random projections preserve the original structure of the data. Key results such as the **Johnson-Lindenstrauss lemma** ensure that the distances between points are approximately preserved under random projections. This is crucial because PCA relies on variance and distances within the dataset.
+
+---
+
+#### When to use random matrix methods in PCA?
+
+- When the dataset is **too large** to store or process in full.
+- When **approximate principal components** are acceptable.
+- In **streaming data** scenarios where full PCA computations at each step are infeasible.
+- For **distributed computing** environments where random projections can be easily parallelized.
+
+---
+
+#### Limitations
+
+- Approximate results: Although close, they might not match exactly with the traditional PCA results.
+- Hyperparameter tuning: The dimension of the random projection space must be chosen carefully to balance accuracy and computational cost.
+
+---
+
+#### Conclusion
+
+The use of random matrices in PCA allows for:
+- Faster computations,
+- Lower memory usage,
+- Scalable algorithms for large datasets.
+
+This technique is particularly powerful in **high-dimensional statistics**, **machine learning**, and **big data** applications.
+
+Yes! Using \( \mathbf{Y} = \mathbf{\Omega} \mathbf{X} \) is also a common approach in **randomized PCA** and can offer computational advantages depending on the dimensions of the data matrix.
+
+---
+
+##### When to use \( \mathbf{Y} = \mathbf{\Omega} \mathbf{X} \)
+
+Let \( \mathbf{X} \in \mathbb{R}^{n \times p} \) where:
+- \( n \) is the number of samples,
+- \( p \) is the number of features.
+
+If \( n \gg p \) (many samples, few features), using:
+\[
+\mathbf{Y} = \mathbf{X} \mathbf{\Omega}
+\]
+is typically preferred because it reduces the number of features.
+
+However, if \( p \gg n \) (many features, few samples), using:
+\[
+\mathbf{Y} = \mathbf{\Omega} \mathbf{X}
+\]
+is advantageous because:
+- It reduces the number of samples,
+- The random matrix \( \mathbf{\Omega} \) is applied to the rows instead of the columns,
+- This reduces the size of the matrix on which the singular value decomposition (SVD) is performed.
+
+---
+
+##### Advantages of \( \mathbf{Y} = \mathbf{\Omega} \mathbf{X} \)
+
+- **More efficient when \( p \gg n \)** because the random projection reduces the dimension from \( p \) features to a smaller dimension.
+- **Computational savings**: Performing SVD on \( \mathbf{Y} \) (which is smaller than \( \mathbf{X} \)) is much faster.
+- **Memory efficiency**: Storing \( \mathbf{Y} \) requires less memory than \( \mathbf{X} \).
+
+---
+
+##### How it works
+
+1. **Random matrix multiplication**:
+   - \( \mathbf{\Omega} \in \mathbb{R}^{r \times n} \) is a random Gaussian matrix (or any well-chosen random matrix) with \( r < n \).
+   - Multiplying \( \mathbf{\Omega} \) with \( \mathbf{X} \) results in \( \mathbf{Y} \in \mathbb{R}^{r \times p} \).
+
+2. **Reduced dimensionality**:
+   - Now, \( \mathbf{Y} \) has fewer rows, making it more efficient to compute the SVD.
+
+3. **Approximate PCA**:
+   - Perform SVD on \( \mathbf{Y} \) instead of \( \mathbf{X} \), obtaining:
+     \[
+     \mathbf{Y} = \mathbf{U}_Y \mathbf{\Sigma}_Y \mathbf{V}_Y'
+     \]
+   - The principal components of \( \mathbf{X} \) are then approximated from \( \mathbf{U}_Y \), \( \mathbf{\Sigma}_Y \), and \( \mathbf{V}_Y \).
+
+---
+
+##### Choosing \( \mathbf{Y} = \mathbf{\Omega} \mathbf{X} \) vs \( \mathbf{Y} = \mathbf{X} \mathbf{\Omega} \)
+
+- Use \( \mathbf{X} \mathbf{\Omega} \) if you want to reduce the **feature dimension** \( p \).
+- Use \( \mathbf{\Omega} \mathbf{X} \) if you want to reduce the **sample dimension** \( n \).
+
+---
+
+##### Applications
+
+- **High-dimensional biology data** (e.g., genomics with \( p \gg n \)),
+- **Text data** where the feature space (words) is huge compared to the number of documents,
+- **Large image datasets** where each image is represented as a high-dimensional vector.
+
+## Principal Components Regression
+
+Principal components regression (PCR) is a regression technique that leverages **principal component analysis (PCA)** to handle high-dimensional data, especially when predictors are highly correlated.
+
+### What is Principal Components Regression?
+PCR combines PCA and linear regression:
+
+1. **PCA Step**: Reduce the dimensionality of the predictor matrix \( \mathbf{X} \) by transforming it into its principal components.
+2. **Regression Step**: Perform linear regression using the selected principal components as predictors instead of the original variables.
+
+---
+
+### Why Use PCR?
+
+- **Multicollinearity**: PCR is particularly useful when predictors are highly correlated, as PCA removes collinearity.
+- **Dimensionality Reduction**: It reduces the number of predictors by selecting only the most important principal components.
+- **Stability**: Improves the stability of the regression coefficients by avoiding overfitting.
+
+---
+
+### Mathematical Formulation
+
+Given:
+- \( \mathbf{X} \in \mathbb{R}^{n \times p} \) (design matrix),
+- \( \mathbf{y} \in \mathbb{R}^n \) (response vector),
+
+#### Step 1: Perform PCA on \( \mathbf{X} \)
+
+The PCA decomposition is:
+\[
+\mathbf{X} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}'
+\]
+- \( \mathbf{V} \in \mathbb{R}^{p \times p} \) contains the principal directions.
+- The principal components are given by \( \mathbf{Z} = \mathbf{X} \mathbf{V} \).
+
+#### Step 2: Select \( k \) Principal Components
+
+Choose the top \( k \) principal components \( \mathbf{Z}_k \) that explain most of the variance in \( \mathbf{X} \).
+
+#### Step 3: Perform Linear Regression
+
+Fit a linear regression model:
+\[
+\mathbf{y} = \mathbf{Z}_k \mathbf{\beta}_k + \mathbf{e},
+\]
+where \( \mathbf{\beta}_k \) are the regression coefficients and \( \mathbf{e} \) is the error term.
+
+#### Step 4: Transform Coefficients Back
+
+The original regression coefficients \( \mathbf{\hat{\beta}} \) are obtained by:
+\[
+\mathbf{\hat{\beta}} = \mathbf{V}_k \mathbf{\hat{\beta}}_k.
+\]
+
+---
+
+### Choosing the Number of Components
+
+The number of principal components \( k \) is often chosen using:
+- **Cross-validation**: Minimizing the prediction error,
+- **Explained variance**: Selecting enough components to capture a large proportion of the variance.
+
+---
+
+### Advantages of PCR
+
+- Handles **multicollinearity** well.
+- Reduces **overfitting** by eliminating noise and less important predictors.
+- Works well in **high-dimensional settings** where \( p > n \).
+
+### Disadvantages
+
+- PCA is **unsupervised**: It does not consider the response variable when selecting components, potentially excluding important predictors.
+- Interpretation of principal components can be challenging compared to original features.
+
+---
+
+### Randomized PCA and PCR
+
+Randomized PCA offers several advantages when used in the context of **Principal Components Regression (PCR)**, particularly for **high-dimensional data** and **large datasets**.
+
+#### Advantages of Randomized PCA in PCR
+
+- **Computational Efficiency**: 
+  In PCR, PCA is performed on the design matrix \( \mathbf{X} \) to obtain principal components. For large datasets, especially when \( p \gg n \), the cost of computing the full SVD is high. 
+  - **Randomized PCA** approximates the principal components by projecting \( \mathbf{X} \) onto a lower-dimensional subspace using a random matrix, significantly reducing computation time without a major loss in accuracy.
+
+- **Scalability**:
+  Randomized PCA scales well with extremely large datasets, making it feasible to perform PCR on modern, high-dimensional data without running into memory or time constraints.
+
+- **Memory Efficiency**:
+  Traditional PCA requires storing and manipulating large matrices. Randomized PCA reduces the effective dimension early, requiring less memory, which is especially beneficial for PCR when \( p \) is very large.
+
+- **Handling High-Dimensional Data**:
+  PCR is often used when there are many predictors (features). Randomized PCA efficiently reduces the dimension while preserving the structure, making it an ideal preprocessing step before regression.
+
+- **Fast Approximate Solutions**:
+  In many practical applications of PCR, an **approximate solution** is often sufficient. Randomized PCA provides a close approximation to the leading principal components with much less computational effort, which is particularly useful when iterative model fitting is required.
+
+- **Random Projections Preserve Distances**:
+  Results from **random matrix theory** (like the Johnson-Lindenstrauss lemma) ensure that random projections approximately preserve the geometric structure of the data. This means that the key relationships between variables are retained even after dimensionality reduction, ensuring that the regression model does not lose critical information.
+
+#### Why is this Important in PCR?
+
+- PCR involves **two expensive operations**: PCA and then regression on the principal components.
+- **Randomized PCA accelerates the first step**, allowing rapid extraction of the most important components.
+- The resulting principal components are then used in the regression step, maintaining good predictive performance while reducing computational cost.
+
+#### Example Use Case
+
+If you're working with a dataset where:
+- \( p = 100,000 \) features,
+- \( n = 1,000 \) samples,
+performing standard PCA can be unfeasible. Randomized PCA quickly approximates the top \( k \) components, enabling the PCR model to be trained efficiently without losing significant predictive power.
+
