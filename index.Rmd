@@ -1,6 +1,6 @@
 ---
 title: "DS 6388 Spring 2025"
-author: "Rene Gutierrez"
+author: "Rene Gutierrez University of Texas at El Paso"
 site: bookdown::bookdown_site
 documentclass: book
 output:

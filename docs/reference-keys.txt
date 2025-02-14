@@ -188,3 +188,9 @@ motivation-why-generalize-pca-to-tensors
 parafac-decomposition-definition
 how-is-parafac-related-to-pca
 key-properties-of-parafac-decomposition
+high-dimensional-pca
+high-dimensional-pca-p-gg-n
+key-idea
+steps-for-efficient-computation
+why-does-this-work
+efficient-computation-1

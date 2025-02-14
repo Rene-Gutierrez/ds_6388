@@ -608,3 +608,181 @@ where:
 - **Uniqueness**: Unlike PCA (where different rotations of principal components can yield the same solution), the PARAFAC decomposition is unique under mild conditions. This uniqueness makes PARAFAC particularly useful for interpretability.
 - **Low-rank Approximation**: PARAFAC provides a low-rank approximation of tensors, analogous to PCA for matrices.
 - **Interpretability**: Each component can be interpreted as a factor along each mode, making it valuable in fields like chemometrics and neuroscience.
+
+## High-Dimensional PCA
+
+When the number of features or variables is $p$, computing the eigenvalue decomposition or SVD can be prohebitely expensive. We can have some alternatives depending on the
+
+### High-Dimensional PCA ($p \gg n$)
+
+When the number of features \( p \) is much larger than the number of samples \( n \) (a common scenario in high-dimensional data analysis), directly computing the PCA decomposition from the \( p \times p \) covariance matrix \( \mathbf{X}' \mathbf{X} \) is computationally expensive.
+
+To address this, we can use the matrix \( \mathbf{X} \mathbf{X}' \) instead, which is an \( n \times n \) matrix, making the computation much more efficient.
+
+---
+
+#### Key Idea
+
+Instead of directly solving the eigenvalue problem:
+\[
+\mathbf{X}' \mathbf{X} \mathbf{v}_i = \lambda_i \mathbf{v}_i,
+\]
+we solve the equivalent problem:
+\[
+\mathbf{X} \mathbf{X}' \mathbf{u}_i = \lambda_i \mathbf{u}_i,
+\]
+where \( \mathbf{u}_i \) are the left singular vectors of \( \mathbf{X} \).
+
+---
+
+#### Steps for Efficient Computation
+
+1. **Form the \( n \times n \) matrix** \( \mathbf{X} \mathbf{X}' \) instead of \( \mathbf{X}' \mathbf{X} \).
+2. **Compute the eigenvalues and eigenvectors** of \( \mathbf{X} \mathbf{X}' \):
+   - \( \mathbf{X} \mathbf{X}' \mathbf{u}_i = \sigma_i^2 \mathbf{u}_i. \)
+3. **Obtain singular values** \( \sigma_i \) as the square roots of the eigenvalues.
+4. **Compute the principal directions** \( \mathbf{v}_i \) from the \( \mathbf{u}_i \) vectors:
+   \[
+   \mathbf{v}_i = \frac{\mathbf{X}' \mathbf{u}_i}{\sigma_i}.
+   \]
+5. **Compute the PCA scores** directly as:
+   \[
+   \mathbf{X} \mathbf{v}_i = \sigma_i \mathbf{u}_i.
+   \]
+
+---
+
+#### Why Does This Work?
+
+- The matrix \( \mathbf{X} \mathbf{X}' \) is much smaller when \( n \ll p \), making eigen-decomposition computationally cheaper.
+- Once we have the left singular vectors \( \mathbf{u}_i \) from \( \mathbf{X} \mathbf{X}' \), we can easily find the right singular vectors \( \mathbf{v}_i \) without ever forming the large \( p \times p \) matrix.
+
+This approach is crucial for handling high-dimensional data efficiently, ensuring that PCA remains computationally feasible even when \( p \gg n \).
+
+#### Efficient Computation
+
+Create the two methods two perform PCA
+
+```{r pca-methods}
+# PCA using X'X (traditional method)
+pca_traditional <- function(X) {
+  n      <- nrow(X)
+  S      <- crossprod(X)                 # X'X
+  eig    <- eigen(S, symmetric = TRUE)   # Eigen decomposition
+  priCom <- eig$vectors                  # PC
+  varExp <- eig$values / sum(eig$values) # Explain Variance by PC
+  pcaSco <- X %*% eig$vectors            # PCA scores
+  return(list(priCom = priCom,
+              pcaSco = pcaSco,
+              varExp = varExp))
+}
+
+# PCA using X X' (efficient method)
+pca_efficient <- function(X) {
+  S               <- tcrossprod(X)                                # X X'
+  eig             <- eigen(S, symmetric = TRUE)                   # Eigen decomposition
+  singular_values <- sqrt(eig$values)
+  priCom          <- t(t(t(X) %*% eig$vectors) / singular_values) # Compute V = X'U / Sigma
+  pcaSco          <- t(t(eig$vectors) * singular_values)          # PCA scores
+  varExp          <- eig$values / sum(eig$values)                 # Explain Variance by PC
+  return(list(priCom = priCom,
+              pcaSco = pcaSco,
+              varExp = varExp))
+}
+```
+
+Simulate a Data Set
+
+```{r pca-small-dataset, cache=TRUE}
+# Simulate high-dimensional data
+set.seed(123)
+n <- 100    # Number of samples
+p <- 1000   # Number of features
+
+# Design Matrix
+X <- matrix(data = NA,
+            nrow = n,
+            ncol = 0)
+
+# Block-Correlation Matrix in Blocks
+sizBlo <- 10
+disCor <- 0.5
+C <- exp(- disCor * abs(rep(1, sizBlo) %*% t(1:sizBlo) - (1:sizBlo) %*% t(rep(1, sizBlo))))
+
+# Simulates the Design Matrix
+for(i in 1:(p / sizBlo)){
+  X <-  cbind(X, mvtnorm::rmvnorm(n = n, sigma = C))
+}
+```
+
+Compare the results to check they are the same
+
+```{r pca-results-comparison, cache=TRUE}
+# Performs PCA by Both Methods
+outTra <- pca_traditional(X = X)
+outEff <- pca_efficient(X = X)
+
+# Compare First Two Principal Components
+cbind(outTra$priCom[1:10, 1:2], outEff$priCom[1:10, 1:2])
+
+# Compares the First Two Principal Component Scores
+cbind(outTra$pcaSco[1:10, 1:2], outEff$pcaSco[1:10, 1:2])
+
+# Plots the Variance Explained
+par(mar   = c(2,2,0,0))
+par(mfrow = c(2, 1))
+plot(outTra$varExp[1:50], xaxt = "n")
+par(mar   = c(2,2,0,0))
+plot(outTra$varExp[1:50])
+```
+
+Compare the results in terms of computational efficiency
+
+```{r pca-computational-efficiency-small}
+# Load necessary library
+library(microbenchmark)
+
+# Benchmark both methods
+benchmark_results <- microbenchmark(
+  Traditional = pca_traditional(X),
+  Efficient   = pca_efficient(X),
+  times       = 5
+)
+
+# Print the results
+print(benchmark_results)
+```
+
+Now, we try a bigger example
+
+```{r pca-big-dataset, cache=TRUE}
+# Simulate high-dimensional data
+set.seed(123)
+n <- 100    # Number of samples
+p <- 2000   # Number of features
+
+# Design Matrix
+X <- matrix(data = NA,
+            nrow = n,
+            ncol = 0)
+
+# Block-Correlation Matrix in Blocks
+sizBlo <- 10
+disCor <- 0.5
+C <- exp(- disCor * abs(rep(1, sizBlo) %*% t(1:sizBlo) - (1:sizBlo) %*% t(rep(1, sizBlo))))
+
+# Simulates the Design Matrix
+for(i in 1:(p / sizBlo)){
+  X <-  cbind(X, mvtnorm::rmvnorm(n = n, sigma = C))
+}
+
+# Benchmark both methods
+benchmark_results <- microbenchmark(
+  Traditional = pca_traditional(X),
+  Efficient   = pca_efficient(X),
+  times       = 5
+)
+
+# Print the results
+print(benchmark_results)
+```
