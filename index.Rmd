@@ -25,3 +25,7 @@ and lecture notes.
 * Class 2: HD Linear Regression: Machine Learning
 * Class 3: HD Linear Regression: Bayesian Methods
 * Class 4: Computational Implementation of HD Linear Regression
+* Class 5: Efficient Computation of HD Linear Regression
+* Class 6: Bonus Linear Algebra Test
+* Class 7: Introduction to PCA
+* Class 8: HD PCA

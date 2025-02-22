@@ -233,3 +233,11 @@ randomized-pca-and-pcr
 advantages-of-randomized-pca-in-pcr
 why-is-this-important-in-pcr
 example-use-case
+factor-analysis
+introduction-2
+motivation-for-factor-analysis
+factor-analysis-model
+assumptions-of-factor-analysis
+steps-in-factor-analysis
+factor-analysis-vs.-pca
+applications-of-factor-analysis

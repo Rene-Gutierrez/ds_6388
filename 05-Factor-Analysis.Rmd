@@ -1,0 +1,97 @@
+# Factor Analysis
+
+Factor analysis is a **statistical method** used to explain the relationships among observed variables by identifying a smaller number of **latent factors** that account for the observed patterns.
+
+## Introduction
+
+---
+
+### Motivation for Factor Analysis
+
+When working with many observed variables, we often suspect that they are influenced by a smaller number of **unobserved latent variables** (factors). For example, in psychology, responses to different test questions might reflect underlying traits like intelligence or anxiety. Factor analysis helps to uncover these latent factors.
+
+---
+
+### Factor Analysis Model
+
+Let:
+- \( \mathbf{X} \in \mathbb{R}^p \) be a vector of observed variables.
+- \( \mathbf{f} \in \mathbb{R}^k \) be a vector of latent factors (with \( k < p \)).
+- \( \mathbf{\Lambda} \in \mathbb{R}^{p \times k} \) be the **factor loadings matrix** showing how each observed variable depends on the factors.
+- \( \mathbf{\epsilon} \in \mathbb{R}^p \) be the unique error terms for each observed variable.
+
+The **factor analysis model** is:
+\[
+\mathbf{X} = \mathbf{\Lambda} \mathbf{f} + \mathbf{\epsilon}
+\]
+
+Where:
+- \( \mathbf{\Lambda} \mathbf{f} \) represents the common variance explained by the latent factors,
+- \( \mathbf{\epsilon} \) represents the unique variance of each observed variable not explained by the factors.
+
+---
+
+### Assumptions of Factor Analysis
+
+1. **Latent factors are uncorrelated** and follow a standard normal distribution:
+   \[
+   \mathbb{E}[\mathbf{f}] = 0, \quad \mathbb{C}[\mathbf{f}] = \mathbf{I}.
+   \]
+
+2. **Error terms are uncorrelated** with each other and with the factors:
+   \[
+   \mathbb{E}[\mathbf{\epsilon}] = 0, \quad \mathbb{C}[\mathbf{\epsilon}] = \mathbf{\Psi},
+   \]
+   where \( \mathbf{\Psi} \) is a diagonal matrix of unique variances.
+
+3. The **observed variables** are related through the covariance structure:
+   \[
+   \mathbb{C}[\mathbf{X}] = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi}.
+   \]
+
+---
+
+### Steps in Factor Analysis
+
+1. **Estimate the covariance matrix** of observed variables.
+2. **Determine the number of factors** to retain (using criteria like eigenvalues or scree plot).
+3. **Estimate the factor loadings matrix** \( \mathbf{\Lambda} \) using methods like maximum likelihood estimation.
+4. **Rotate the factors** (if needed) for better interpretability (e.g., Varimax rotation).
+5. **Interpret the factors** by examining the loadings (high loadings suggest a strong relationship between a variable and a factor).
+
+---
+
+### Factor Analysis vs. PCA
+
+PCA:
+
+- **Goal**: Reduce the dimensionality of the data by finding **principal components** that capture the maximum variance.
+- **What it does**: Finds new orthogonal axes (linear combinations of original variables) that explain the most variance.
+- **Assumptions**: PCA does not assume any underlying data model.
+- **Components**: Derived from the data itself, not influenced by any latent structure.
+- **Interpretation**: Principal components are linear combinations of all observed variables.
+- **Variance**: Focuses on maximizing variance in the observed data.
+
+Factor Analysis:
+
+- **Goal**: Identify **latent factors** (unobserved variables) that explain the observed correlations among variables.
+- **What it does**: Assumes that observed variables are influenced by fewer unobserved latent factors and some noise.
+- **Assumptions**: Based on a statistical model where each observed variable is a linear combination of latent factors plus unique error terms.
+- **Factors**: Represent underlying constructs causing the observed data patterns.
+- **Interpretation**: Observed variables are explained by latent factors.
+- **Variance**: Focuses on modeling covariance among observed variables through latent factors.
+
+Key Difference:
+
+- **PCA** is a **descriptive method** aimed at variance maximization, while **Factor Analysis** is a **model-based method** aimed at explaining correlations through latent factors.
+
+---
+
+### Applications of Factor Analysis
+
+- **Psychology**: Uncover latent traits like intelligence, anxiety, or personality dimensions.
+- **Marketing**: Identify underlying consumer preferences or brand perceptions.
+- **Finance**: Detect latent market factors affecting stock returns.
+- **Biology**: Explore latent biological mechanisms influencing observed traits.
+
+Would you like me to show an example of Factor Analysis in R? 😊
