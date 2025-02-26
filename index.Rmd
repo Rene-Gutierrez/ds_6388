@@ -18,14 +18,18 @@ and lecture notes.
 ### Importatnt Dates
 
 * February 10: Linear Algebra Extra Credit Test
+* March 2: First Project Submission Deadline
 
 ### Class Schedule
 
-* Class 1: Introduction to Multivariate High-Dimensional Methods
-* Class 2: HD Linear Regression: Machine Learning
-* Class 3: HD Linear Regression: Bayesian Methods
-* Class 4: Computational Implementation of HD Linear Regression
-* Class 5: Efficient Computation of HD Linear Regression
-* Class 6: Bonus Linear Algebra Test
-* Class 7: Introduction to PCA
-* Class 8: HD PCA
+* Class 1:  Introduction to Multivariate High-Dimensional Methods
+* Class 2:  HD Linear Regression: Machine Learning
+* Class 3:  HD Linear Regression: Bayesian Methods
+* Class 4:  Computational Implementation of HD Linear Regression
+* Class 5:  Efficient Computation of HD Linear Regression
+* Class 6:  Bonus Linear Algebra Test
+* Class 7:  Introduction to PCA
+* Class 8:  HD PCA
+* Class 9:  Principal Components Regression
+* Class 10: Factor Analysis 1
+* Class 11: Factor Analysis 2

@@ -2,96 +2,615 @@
 
 Factor analysis is a **statistical method** used to explain the relationships among observed variables by identifying a smaller number of **latent factors** that account for the observed patterns.
 
+---
+
 ## Introduction
 
+Imagine you are a psychologist studying **personality traits**. You conduct a survey where people rate themselves on multiple characteristics like:  
+
+- **Talkative**  
+- **Outgoing**  
+- **Shy**  
+- **Prefers being alone**  
+
+At first glance, these seem like **four separate traits**, but you might suspect that they all relate to an **underlying factor**—something like **"Extroversion"**.  
+
+Factor Analysis (FA) helps us uncover these **hidden patterns** in data. Instead of treating every survey question as completely independent, FA looks for **common factors** that explain the relationships between them.  
+
 ---
 
-### Motivation for Factor Analysis
+### How Factor Analysis Works  
 
-When working with many observed variables, we often suspect that they are influenced by a smaller number of **unobserved latent variables** (factors). For example, in psychology, responses to different test questions might reflect underlying traits like intelligence or anxiety. Factor analysis helps to uncover these latent factors.
+1. **You Start with a Big Dataset**  
+   - Let’s say you have **survey responses from 500 people** on 20 personality traits.  
+   - The goal is to simplify this by identifying a **few core personality factors** that drive the responses.  
+
+2. **FA Looks for Hidden Patterns**  
+   - Instead of analyzing 20 separate traits, FA groups them into a smaller set of **factors**.  
+   - For example, traits like "Talkative" and "Outgoing" might load onto a factor called **"Extraversion"**.  
+
+3. **Each Trait Has a "Loading"**  
+   - FA calculates how strongly each trait relates to a factor.  
+   - "Talkative" might have a **high loading** on Extraversion, while "Prefers being alone" has a **negative loading**.  
+
+4. **You End Up with Fewer Factors**  
+   - Instead of working with 20 different traits, FA might show that **only 3 or 4 key personality factors** explain most of the variation in responses.  
 
 ---
 
-### Factor Analysis Model
+### Why is Factor Analysis Useful?
 
-Let:
-- \( \mathbf{X} \in \mathbb{R}^p \) be a vector of observed variables.
-- \( \mathbf{f} \in \mathbb{R}^k \) be a vector of latent factors (with \( k < p \)).
-- \( \mathbf{\Lambda} \in \mathbb{R}^{p \times k} \) be the **factor loadings matrix** showing how each observed variable depends on the factors.
-- \( \mathbf{\epsilon} \in \mathbb{R}^p \) be the unique error terms for each observed variable.
+- **Psychology**: Identifying core personality traits (e.g., the "Big Five" personality factors).  
+- **Marketing**: Understanding customer preferences (e.g., grouping product features into themes).  
+- **Finance**: Analyzing stock market trends (e.g., finding common trends among different stocks).  
 
-The **factor analysis model** is:
+Factor Analysis is a **powerful tool** for simplifying complex datasets and uncovering **hidden relationships** between variables.
+
+---
+
+## Factor Analysis Model
+
+### Model Specification  
+
+We assume that each observed variable \( \mathbf{x} \) follows a **Factor Analysis (FA) model**:  
+
 \[
-\mathbf{X} = \mathbf{\Lambda} \mathbf{f} + \mathbf{\epsilon}
+\mathbf{x} = \boldsymbol{\mu} + \mathbf{\Lambda} \mathbf{f} + \mathbf{e}
 \]
 
-Where:
-- \( \mathbf{\Lambda} \mathbf{f} \) represents the common variance explained by the latent factors,
-- \( \mathbf{\epsilon} \) represents the unique variance of each observed variable not explained by the factors.
+where:  
+- \( \mathbf{x} \in \mathbb{R}^{p} \) is the **observed variable** (with mean \( \boldsymbol{\mu} \)).  
+- \( \boldsymbol{\mu} \in \mathbb{R}^{p} \) is the **mean vector** of the observed variables.  
+- \( \mathbf{\Lambda} \in \mathbb{R}^{p \times k} \) is the **factor loadings matrix**, mapping \( k \) latent factors to \( p \) observed variables.  
+- \( \mathbf{f} \in \mathbb{R}^{k} \) is the **latent factor vector**, capturing the shared variation among the observed variables.  
+- \( \mathbf{e} \in \mathbb{R}^{p} \) is the **unique error term**, representing variation in \( \mathbf{x} \) that is not explained by the factors.  
 
 ---
 
-### Assumptions of Factor Analysis
+### Assumptions  
 
-1. **Latent factors are uncorrelated** and follow a standard normal distribution:
-   \[
-   \mathbb{E}[\mathbf{f}] = 0, \quad \mathbb{C}[\mathbf{f}] = \mathbf{I}.
-   \]
+1. **Latent Factors**  
+   - \( \mathbb{E}[\mathbf{f}] = 0 \) (factors have zero mean).  
+   - \( \mathbb{C}[\mathbf{f}] = \mathbf{I}_k \) (factors are uncorrelated and have unit variance).  
 
-2. **Error terms are uncorrelated** with each other and with the factors:
-   \[
-   \mathbb{E}[\mathbf{\epsilon}] = 0, \quad \mathbb{C}[\mathbf{\epsilon}] = \mathbf{\Psi},
-   \]
-   where \( \mathbf{\Psi} \) is a diagonal matrix of unique variances.
+2. **Error Terms**  
+   - \( \mathbb{E}[\mathbf{e}] = 0 \) (errors have zero mean).  
+   - \( \mathbb{C}[\mathbf{e}] = \mathbf{\Psi} \), where \( \mathbf{\Psi} \) is a **diagonal matrix** (each error term has its own variance, and errors are uncorrelated across variables).  
 
-3. The **observed variables** are related through the covariance structure:
-   \[
-   \mathbb{C}[\mathbf{X}] = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi}.
-   \]
+3. **Independence**  
+   - The latent factors and errors are **independent**:  
+     \[
+     \mathbb{C}[\mathbf{f}, \mathbf{e}] = 0.
+     \]  
 
 ---
 
-### Steps in Factor Analysis
+### Variance-Covariance Matrix  
 
-1. **Estimate the covariance matrix** of observed variables.
-2. **Determine the number of factors** to retain (using criteria like eigenvalues or scree plot).
-3. **Estimate the factor loadings matrix** \( \mathbf{\Lambda} \) using methods like maximum likelihood estimation.
-4. **Rotate the factors** (if needed) for better interpretability (e.g., Varimax rotation).
-5. **Interpret the factors** by examining the loadings (high loadings suggest a strong relationship between a variable and a factor).
+Taking expectations, we get:  
+
+\[
+\mathbb{E}[\mathbf{x}] = \boldsymbol{\mu}.
+\]
+
+The **variance-covariance matrix** of \( \mathbf{x} \) is:
+
+\[
+\mathbb{C}[\mathbf{x}] = \mathbb{C}[\mathbf{\Lambda} \mathbf{f} + \mathbf{e}].
+\]
+
+Expanding using linearity of covariance:
+
+\[
+\mathbb{C}[\mathbf{x}] = \mathbb{C}[\mathbf{\Lambda} \mathbf{f}] + \mathbb{C}[\mathbf{e}].
+\]
+
+Since \( \mathbf{f} \) has covariance \( \mathbf{I}_k \), we get:
+
+\[
+\mathbb{C}[\mathbf{x}] = \mathbf{\Lambda} \mathbb{C}[\mathbf{f}] \mathbf{\Lambda}' + \mathbf{\Psi}.
+\]
+
+Substituting \( \mathbb{C}[\mathbf{f}] = \mathbf{I}_k \):
+
+\[
+\mathbb{C}[\mathbf{x}] = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi}.
+\]
+
+This means:
+- \( \mathbf{\Lambda} \mathbf{\Lambda}' \) represents the **shared variance** explained by the factors.
+- \( \mathbf{\Psi} \) represents the **unique variance** that is specific to each observed variable.
 
 ---
 
-### Factor Analysis vs. PCA
+### Implications  
 
-PCA:
+1. **Factor Analysis models the covariance, not the data itself**  
+   - Unlike PCA, which focuses on total variance, FA explicitly separates **shared variance** (factors) from **unique variance** (errors).  
 
-- **Goal**: Reduce the dimensionality of the data by finding **principal components** that capture the maximum variance.
-- **What it does**: Finds new orthogonal axes (linear combinations of original variables) that explain the most variance.
-- **Assumptions**: PCA does not assume any underlying data model.
-- **Components**: Derived from the data itself, not influenced by any latent structure.
-- **Interpretation**: Principal components are linear combinations of all observed variables.
-- **Variance**: Focuses on maximizing variance in the observed data.
+2. **Unique variances appear on the diagonal of \( \mathbb{C}[\mathbf{x}] \)**  
+   - This explains why FA is useful when trying to **model relationships** between variables rather than just reducing dimensions.
 
-Factor Analysis:
+3. **The presence of \( \boldsymbol{\mu} \)**  
+   - If the data is **not mean-centered**, the first step in estimation is usually to subtract \( \boldsymbol{\mu} \), so that the analysis focuses only on variance structure.
+   
+## Estimation in Factor Analysis
 
-- **Goal**: Identify **latent factors** (unobserved variables) that explain the observed correlations among variables.
-- **What it does**: Assumes that observed variables are influenced by fewer unobserved latent factors and some noise.
-- **Assumptions**: Based on a statistical model where each observed variable is a linear combination of latent factors plus unique error terms.
-- **Factors**: Represent underlying constructs causing the observed data patterns.
-- **Interpretation**: Observed variables are explained by latent factors.
-- **Variance**: Focuses on modeling covariance among observed variables through latent factors.
+The **Factor Analysis (FA) model** is given by:
 
-Key Difference:
+\[
+\mathbf{x} = \boldsymbol{\mu} + \mathbf{\Lambda} \mathbf{f} + \mathbf{e}
+\]
 
-- **PCA** is a **descriptive method** aimed at variance maximization, while **Factor Analysis** is a **model-based method** aimed at explaining correlations through latent factors.
+with the **variance-covariance structure**:
+
+\[
+\mathbb{C}[\mathbf{x}] = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi}.
+\]
+
+Our goal is to **estimate \( \mathbf{\Lambda} \) (factor loadings) and \( \mathbf{\Psi} \) (unique variances)**.
 
 ---
 
-### Applications of Factor Analysis
+### Principal Components Method
 
-- **Psychology**: Uncover latent traits like intelligence, anxiety, or personality dimensions.
-- **Marketing**: Identify underlying consumer preferences or brand perceptions.
-- **Finance**: Detect latent market factors affecting stock returns.
-- **Biology**: Explore latent biological mechanisms influencing observed traits.
+This method estimates \( \mathbf{\Lambda} \) by performing **Principal Component Analysis (PCA)** on the sample covariance matrix and approximating the factors using the leading components.  
 
-Would you like me to show an example of Factor Analysis in R? 😊
+#### Step 1: Compute the Sample Covariance Matrix
+Given \( n \) observations of \( p \) variables in the dataset \( \mathbf{X} \), first compute the **sample covariance matrix**:
+
+\[
+\hat{\mathbb{C}}[\mathbf{x}] = \frac{1}{n-1} (\mathbf{X} - \bar{\mathbf{x}} \bones) (\mathbf{X} - \bar{\mathbf{x}}\bones)'.
+\]
+
+#### Step 2: Perform Eigen-Decomposition 
+Since the **Factor Analysis (FA) model** assumes:
+
+\[
+\mathbb{C}[\mathbf{x}] = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi},
+\]
+
+we initially approximate \( \mathbf{\Psi} \approx 0 \), so that:
+
+\[
+\mathbb{C}[\mathbf{x}] \approx \mathbf{\Lambda} \mathbf{\Lambda}'.
+\]
+
+Perform an **eigenvalue decomposition**:
+
+\[
+\hat{\mathbb{C}}[\mathbf{x}] = \mathbf{V} \mathbf{D} \mathbf{V}',
+\]
+
+where:
+- \( \mathbf{V} \) contains the **eigenvectors** (principal directions).
+- \( \mathbf{D} \) is a diagonal matrix of **eigenvalues**.
+
+#### Step 3: Select the First \( k \) Components
+
+Since we assume a **low-rank factor model** with \( k \) factors, we take only the **first \( k \) largest eigenvalues** and their corresponding eigenvectors:
+
+\[
+\mathbf{V}_k = [\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k].
+\]
+
+The corresponding **diagonal eigenvalue matrix**:
+
+\[
+\mathbf{D}_k = \text{diag}(\lambda_1, \lambda_2, \dots, \lambda_k).
+\]
+
+#### Step 4: Compute the Factor Loadings \( \mathbf{\Lambda} \)
+The estimated **factor loadings matrix** is:
+
+\[
+\hat{\mathbf{\Lambda}} = \mathbf{V}_k \mathbf{D}_k^{1/2}.
+\]
+
+#### Step 5: Estimate \( \mathbf{\Psi} \)
+
+To refine the model, we estimate \( \mathbf{\Psi} \) as the difference between the **diagonal of the sample covariance matrix** and the diagonal elements of \( \mathbf{\Lambda} \mathbf{\Lambda}' \):
+
+\[
+\hat{\mathbf{\Psi}} = \text{diag}(\hat{\mathbb{C}}[\mathbf{x}]) - \text{diag}(\hat{\mathbf{\Lambda}} \hat{\mathbf{\Lambda}}').
+\]
+
+---
+
+### Principal Factor Method  
+
+This method improves upon the **Principal Components Method** by explicitly estimating \( \mathbf{\Psi} \) before extracting factors.
+
+#### Step 1: Compute the Sample Covariance Matrix
+
+As before, compute:
+
+\[
+\hat{\mathbb{C}}[\mathbf{x}] = \frac{1}{n-1} (\mathbf{X} - \bar{\mathbf{X}})' (\mathbf{X} - \bar{\mathbf{X}}).
+\]
+
+#### Step 2: Estimate \( \mathbf{\Psi} \) First
+
+Instead of assuming \( \mathbf{\Psi} \approx 0 \), we estimate it by taking only the diagonal elements of \( \hat{\mathbb{C}}[\mathbf{x}] \):
+
+\[
+\hat{\mathbf{\Psi}} = \text{diag}(\hat{\mathbb{C}}[\mathbf{x}]).
+\]
+
+Then, compute the **reduced correlation matrix**:
+
+\[
+\mathbf{R} = \hat{\mathbb{C}}[\mathbf{x}] - \hat{\mathbf{\Psi}}.
+\]
+
+#### Step 3: Perform Eigen Decomposition
+
+We now compute the **eigenvalue decomposition** of \( \mathbf{R} \):
+
+\[
+\mathbf{R} = \mathbf{V} \mathbf{D} \mathbf{V}'.
+\]
+
+The first \( k \) **eigenvectors** of \( \mathbf{V} \) correspond to the estimated **factor loadings**:
+
+\[
+\hat{\mathbf{\Lambda}} = \mathbf{V}_k \mathbf{D}_k^{1/2}.
+\]
+
+#### Step 4: Refine \( \mathbf{\Psi} \)
+
+To refine the model, we estimate \( \mathbf{\Psi} \) as the difference between the **diagonal of the sample covariance matrix** and the diagonal elements of \( \mathbf{\Lambda} \mathbf{\Lambda}' \):
+
+\[
+\hat{\mathbf{\Psi}} = \text{diag}(\hat{\mathbb{C}}[\mathbf{x}]) - \text{diag}(\hat{\mathbf{\Lambda}} \hat{\mathbf{\Lambda}}').
+\]
+
+---
+
+### Maximum Likelihood Estimation (MLE)
+
+Instead of relying on the sample covariance, MLE finds \( \mathbf{\Lambda} \) and \( \mathbf{\Psi} \) by **maximizing the likelihood**:
+
+\[
+L(\mathbf{\Lambda}, \mathbf{\Psi}) = -\frac{n}{2} \left[ \log |\mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi}| + \text{tr}(\hat{\mathbb{C}}[\mathbf{x}] (\mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi})^{-1}) \right].
+\]
+
+The MLE approach:  
+- Iteratively updates \( \mathbf{\Lambda} \) and \( \mathbf{\Psi} \),  
+- Ensures **optimal factor separation**,  
+- Can be computed using **Expectation-Maximization (EM) algorithms**.
+
+---
+
+### Bayesian Estimation (Hierarchical Priors)
+
+In Bayesian Factor Analysis, we place **priors** on \( \mathbf{\Lambda} \) and \( \mathbf{\Psi} \):
+
+\[
+p(\mathbf{\Lambda}) \sim \mathcal{N}(0, \tau^2),
+\]
+
+\[
+p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
+\]
+
+Using **MCMC sampling**, we estimate posterior distributions for \( \mathbf{\Lambda} \) and \( \mathbf{\Psi} \), providing **better regularization** when data is noisy.
+
+---
+
+#### Summary
+
+1. **Principal Components Method:** A quick approximation using PCA.  
+2. **Principal Factor Method:** Improves upon PCA by **subtracting \( \mathbf{\Psi} \) before factor extraction**.  
+3. **Maximum Likelihood Estimation:** Statistically optimal, found via optimization.  
+4. **Bayesian Methods:** Regularized approach when priors are available. 
+
+---
+
+## Estimating Factor Scores in Factor Analysis
+
+Once we have estimated the **factor loadings** \( \mathbf{\Lambda} \) and the **unique variances** \( \mathbf{\Psi} \), we can compute the **factor scores**, which represent the estimated values of the latent factors for each observation.
+
+Since the factors \( \mathbf{f}_i \) are unobserved, we estimate them from the observed data \( \mathbf{x}_i \).
+
+The factors themselves can be estimated using different methods.
+
+### Ordinary Least Squares (OLS) Method
+
+The **OLS method** estimates factor scores by minimizing the sum of squared residuals between the observed variables and their representation through the factor model. The objective is:
+
+\[
+\min_{\mathbf{f}_i} \|\mathbf{x}_i - \boldsymbol{\mu} - \mathbf{\Lambda} \mathbf{f}_i \|^2.
+\]
+
+Solving for \( \mathbf{f}_i \), the **OLS estimator** for the factor scores is:
+
+\[
+\hat{\mathbf{f}}_i = (\mathbf{\Lambda}'\mathbf{\Lambda})^{-1} \mathbf{\Lambda}' (\mathbf{x}_i - \boldsymbol{\mu}).
+\]
+
+In practice, we use the estimated factor loadings \( \hat{\mathbf{\Lambda}} \) and the sample mean \( \bar{\mathbf{x}} \):
+
+\[
+\hat{\mathbf{f}}_i = (\hat{\mathbf{\Lambda}}' \hat{\mathbf{\Lambda}})^{-1} \hat{\mathbf{\Lambda}}' (\mathbf{x}_i - \bar{\mathbf{x}}).
+\]
+
+This method treats the estimation as a regression problem, solving for the factor scores that best reproduce the observed data.
+
+---
+
+### Weighted Least Squares (WLS) Method (Bartlett's Method)
+
+The **WLS method**, also known as **Bartlett's estimator**, adjusts the OLS approach by weighting the residuals by the inverse of their specific variances. This gives more weight to variables with **lower unique variances**, reflecting greater confidence in those measurements.
+
+The objective function is:
+
+\[
+\min_{\mathbf{f}_i} (\mathbf{x}_i - \boldsymbol{\mu} - \mathbf{\Lambda} \mathbf{f}_i)' \mathbf{\Psi}^{-1} (\mathbf{x}_i - \boldsymbol{\mu} - \mathbf{\Lambda} \mathbf{f}_i).
+\]
+
+Solving for \( \mathbf{f}_i \), the **WLS estimator** is:
+
+\[
+\hat{\mathbf{f}}_i = (\mathbf{\Lambda}' \mathbf{\Psi}^{-1} \mathbf{\Lambda})^{-1} \mathbf{\Lambda}' \mathbf{\Psi}^{-1} (\mathbf{x}_i - \boldsymbol{\mu}).
+\]
+
+Using the estimated parameters, we have:
+
+\[
+\hat{\mathbf{f}}_i = (\hat{\mathbf{\Lambda}}' \hat{\mathbf{\Psi}}^{-1} \hat{\mathbf{\Lambda}})^{-1} \hat{\mathbf{\Lambda}}' \hat{\mathbf{\Psi}}^{-1} (\mathbf{x}_i - \hat{\boldsymbol{\mu}}).
+\]
+
+This method emphasizes variables with **higher reliability** (lower unique variances) when estimating the factor scores.
+
+---
+
+### Regression Method (Thompson’s Estimator)
+
+The **Regression Method**, also known as **Thompson’s estimator**, derives factor scores by considering the **conditional expectation of the factors given the observed data**. To obtain this result, we first derive the **joint distribution of the observed variables \( \mathbf{x}_i \) and the factors \( \mathbf{f}_i \)**.
+
+---
+
+#### Joint Distribution of \( \mathbf{x}_i \) and \( \mathbf{f}_i \)  
+
+We assume that both the **observed data** \( \mathbf{x}_i \) and the **latent factors** \( \mathbf{f}_i \) follow a **multivariate normal distribution**:
+
+\[
+\begin{bmatrix}
+\mathbf{x}_i \\
+\mathbf{f}_i
+\end{bmatrix}
+\sim \mathcal{N} \left(
+\begin{bmatrix}
+\boldsymbol{\mu} \\
+\mathbf{0}
+\end{bmatrix},
+\begin{bmatrix}
+\mathbf{\Sigma}_{xx} & \mathbf{\Sigma}_{xf} \\
+\mathbf{\Sigma}_{fx} & \mathbf{\Sigma}_{ff}
+\end{bmatrix}
+\right),
+\]
+
+where:
+- \( \mathbf{\Sigma}_{xx} = \mathbb{C}[\mathbf{x}] = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi} \) (covariance of observed variables).
+- \( \mathbf{\Sigma}_{ff} = \mathbb{C}[\mathbf{f}] = \mathbf{I}_k \) (factors are standardized to have identity covariance).
+- \( \mathbf{\Sigma}_{xf} = \mathbb{C}[\mathbf{x}, \mathbf{f}] = \mathbf{\Lambda} \) (cross-covariance between observed variables and factors).
+
+Thus, the **joint distribution** is:
+
+\[
+\begin{bmatrix}
+\mathbf{x}_i \\
+\mathbf{f}_i
+\end{bmatrix}
+\sim \mathcal{N} \left(
+\begin{bmatrix}
+\boldsymbol{\mu} \\
+\mathbf{0}
+\end{bmatrix},
+\begin{bmatrix}
+\mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi} & \mathbf{\Lambda} \\
+\mathbf{\Lambda}' & \mathbf{I}_k
+\end{bmatrix}
+\right).
+\]
+
+---
+
+#### Conditional Distribution of \( \mathbf{f}_i \) Given \( \mathbf{x}_i \)
+
+Using the standard formula for the conditional expectation of a multivariate normal distribution:
+
+\[
+\mathbb{E}[\mathbf{f}_i | \mathbf{x}_i] = \mathbf{\Sigma}_{fx} \mathbf{\Sigma}_{xx}^{-1} (\mathbf{x}_i - \boldsymbol{\mu}).
+\]
+
+Substituting \( \mathbf{\Sigma}_{fx} = \mathbf{\Lambda}' \) and \( \mathbf{\Sigma}_{xx} = \mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi} \):
+
+\[
+\hat{\mathbf{f}}_i = \mathbb{E}[\mathbf{f}_i | \mathbf{x}_i] = \mathbf{\Lambda}' (\mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi})^{-1} (\mathbf{x}_i - \boldsymbol{\mu}).
+\]
+
+Thus, the **Thompson factor score estimator** is:
+
+\[
+\hat{\mathbf{f}}_i = \mathbf{\Lambda}' (\mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi})^{-1} (\mathbf{x}_i - \boldsymbol{\mu}).
+\]
+
+---
+
+#### Interpretation of Thompson’s Estimator
+
+- This estimator **balances the influence of observed variables** based on both **common variance (factor loadings)** and **unique variances (specific errors)**.
+- Unlike OLS and Bartlett’s estimator, this method **considers the full covariance structure of the observed variables**.
+- Since it is derived from the **multivariate normal assumption**, it provides the **minimum mean squared error (MMSE) estimate** of the factor scores.
+
+---
+
+### Summary of Factor Score Estimators
+
+| **Method**       | **Formula for Factor Scores** | **Key Feature** |
+|------------------|-----------------------------|----------------|
+| **OLS Estimator** | \( (\mathbf{\Lambda}' \mathbf{\Lambda})^{-1} \mathbf{\Lambda}' (\mathbf{x}_i - \boldsymbol{\mu}) \) | Best fit using least squares |
+| **WLS (Bartlett) Estimator** | \( (\mathbf{\Lambda}' \mathbf{\Psi}^{-1} \mathbf{\Lambda})^{-1} \mathbf{\Lambda}' \mathbf{\Psi}^{-1} (\mathbf{x}_i - \boldsymbol{\mu}) \) | Ensures factor scores are uncorrelated |
+| **Regression (Thompson) Estimator** | \( \mathbf{\Lambda}' (\mathbf{\Lambda} \mathbf{\Lambda}' + \mathbf{\Psi})^{-1} (\mathbf{x}_i - \boldsymbol{\mu}) \) | Uses full covariance structure |
+
+---
+
+### Key Takeaways
+
+- **Factor scores estimate the latent variables** based on the observed data.
+- **Different estimation methods** lead to different interpretations of factor scores.
+- The **choice of estimator depends on the application**—some prioritize minimizing error, while others ensure uncorrelated factors.
+
+---
+
+## Factor Analysis Example
+
+Here’s a **full implementation of Factor Analysis** in R, covering:  
+
+1. **Estimating the factor loadings \( \mathbf{\Lambda} \) and unique variances \( \mathbf{\Psi} \)**  
+   - **Principal Components Method**  
+   - **Maximum Likelihood Estimation (MLE)**  
+
+2. **Estimating the factor scores** using three methods:  
+   - **Ordinary Least Squares (OLS)**  
+   - **Weighted Least Squares (Bartlett’s method)**  
+   - **Regression (Thompson’s estimator)**  
+   
+---
+
+### Load Required Libraries
+```{r libraries-fa}
+# Load necessary libraries
+library(psych)  # For factor analysis functions
+library(MASS)   # For matrix operations
+```
+
+---
+
+### Generate Sample Data
+
+We generate **synthetic data** with a predefined factor structure.
+
+```{r fa-data-simulation}
+# Set seed for reproducibility
+set.seed(123)
+
+# Define parameters
+n <- 500  # Number of observations
+p <- 6    # Number of observed variables
+k <- 2    # Number of factors
+
+# True factor loadings (simulated)
+Lambda_true <- matrix(c(0.9, 0.8, 0.7,  0.0, 0.0, 0.0, 
+                        0.0, 0.0, 0.0,  0.9, 0.8, 0.7), nrow = p, ncol = k)
+
+# Unique variances (diagonal matrix)
+Psi_true <- diag(c(0.2, 0.3, 0.2, 0.2, 0.3, 0.2))
+
+# Generate factor scores (standard normal)
+F_scores <- matrix(rnorm(n * k), nrow = n, ncol = k)
+
+# Generate observed data
+E_noise <- mvrnorm(n, mu = rep(0, p), Sigma = Psi_true)  # Unique variances
+X <- F_scores %*% t(Lambda_true) + E_noise  # Factor model
+
+# Standardize data
+X <- scale(X)
+```
+
+---
+
+### Estimation of Factor Loadings and Unique Variances
+
+#### Principal Components Method
+
+```{r fa-principal-components-estimation}
+# Compute covariance matrix
+S <- cov(X)
+
+# Perform eigen decomposition
+eig <- eigen(S)
+
+# Extract first k eigenvectors and eigenvalues
+Lambda_pc <- eig$vectors[, 1:k] %*% diag(sqrt(eig$values[1:k]))
+
+# Estimate unique variances Psi
+Psi_pc <- diag(S) - diag(Lambda_pc %*% t(Lambda_pc))
+
+# Display results
+print("Factor Loadings (Principal Components Method):")
+print(round(Lambda_pc, 3))
+print("Unique Variances (Principal Components Method):")
+print(round(Psi_pc, 3))
+```
+
+---
+
+#### Maximum Likelihood Estimation (MLE)
+
+```{r fa-ml-estimation}
+# Perform MLE Factor Analysis
+fa_mle <- factanal(X, factors = k, rotation = "none")
+
+# Extract factor loadings
+Lambda_mle <- fa_mle$loadings[, 1:k]
+
+# Estimate unique variances Psi
+Psi_mle <- diag(S) - diag(Lambda_mle %*% t(Lambda_mle))
+
+# Display results
+print("Factor Loadings (MLE Method):")
+print(round(Lambda_mle, 3))
+print("Unique Variances (MLE Method):")
+print(round(Psi_mle, 3))
+```
+
+---
+
+### Estimate Factor Scores
+
+#### Ordinary Least Squares (OLS) Factor Scores
+
+```{r fa-factor-estimation-ols}
+# Compute OLS factor scores
+F_ols <- solve(t(Lambda_mle) %*% Lambda_mle) %*% t(Lambda_mle) %*% t(X)
+F_ols <- t(F_ols)  # Transpose to match dimensions
+
+# Display first few factor scores
+print("Factor Scores (OLS Method):")
+print(round(F_ols[1:5, ], 3))
+```
+
+---
+
+#### Weighted Least Squares (Bartlett’s Method)
+
+```{r fa-factor-estimation-wls}
+# Compute WLS factor scores
+F_wls <- solve(t(Lambda_mle) %*% (Lambda_mle / Psi_mle)) %*% 
+          t(Lambda_mle) %*% t(X) / Psi_mle
+F_wls <- t(F_wls)
+
+# Display first few factor scores
+print("Factor Scores (Bartlett’s Method):")
+print(round(F_wls[1:5, ], 3))
+```
+
+---
+
+#### Regression (Thompson’s Estimator)
+
+```{r fa-factor-estimation-thompsons}
+# Compute Regression factor scores
+F_reg <- t(Lambda_mle) %*% solve(Lambda_mle %*% t(Lambda_mle) + diag(Psi_mle), t(X))
+F_reg <- t(F_reg)
+
+# Display first few factor scores
+print("Factor Scores (Regression Method - Thompson’s Estimator):")
+print(round(F_reg[1:5, ], 3))
+```
+
+
