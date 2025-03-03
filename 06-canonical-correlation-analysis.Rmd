@@ -1,0 +1,368 @@
+# Canonical Correlation Analysis (CCA)
+
+Canonical Correlation Analysis (**CCA**) is a **multivariate statistical method** used to study the relationships between two sets of variables. It generalizes correlation by finding **pairs of linear combinations** (called **canonical variables**) that maximize the correlation between the two datasets.
+
+---
+
+## Motivation  
+
+Imagine you have **two sets of related variables**:  
+- **Set 1 (e.g., Psychological traits)** → \( \mathbf{X} \) (e.g., intelligence, memory, reasoning)  
+- **Set 2 (e.g., Academic performance)** → \( \mathbf{Y} \) (e.g., math scores, reading scores, writing scores)  
+
+Standard correlation measures relationships **between individual variables** (e.g., intelligence vs. math score).  
+CCA, however, finds **pairs of linear combinations** that **maximize the correlation** between the two sets.
+
+---
+
+## Mathematical Formulation  
+
+Given:
+- \( \mathbf{X} \) (a matrix of size \( n \times p \)) representing **\( p \) variables**.
+- \( \mathbf{Y} \) (a matrix of size \( n \times q \)) representing **\( q \) variables**.
+
+CCA finds weight vectors \( \mathbf{a} \) and \( \mathbf{b} \) such that the linear combinations:
+
+\[
+U = \mathbf{X} \mathbf{a}, \quad V = \mathbf{Y} \mathbf{b}
+\]
+
+maximize the correlation:
+
+\[
+\rho = \frac{\mathbb{C}[U, V]}{\sqrt{\mathbb{V}[U] \mathbb{V}[V]}}.
+\]
+
+where:
+- \( U \) and \( V \) are called **canonical variables**.
+- \( \rho \) is the **canonical correlation**.
+
+---
+
+### Key Properties
+
+* *Finds relationships between two sets of variables**, beyond individual correlations.  
+* *Can extract multiple pairs** of canonical variables, each pair capturing a different aspect of the relationship.  
+* *Works even when the number of variables in \( \mathbf{X} \) and \( \mathbf{Y} \) are different**.
+
+---
+
+### Implementation in R
+
+We can perform **Canonical Correlation Analysis (CCA)** in R using the `cancor()` function.
+
+```{r cca-intro-example}
+# Load dataset
+data("iris")
+
+# Define two variable sets
+X <- as.matrix(iris[, 1:2])  # Sepal Length and Sepal Width
+Y <- as.matrix(iris[, 3:4])  # Petal Length and Petal Width
+
+# Perform CCA
+cca_result <- cancor(X, Y)
+
+# Print canonical correlations
+print(cca_result$cor)
+
+# Print canonical weight vectors
+print("Canonical Weights for X:")
+print(cca_result$xcoef)
+
+print("Canonical Weights for Y:")
+print(cca_result$ycoef)
+```
+
+---
+
+#### Interpreting the Results
+
+1. **Canonical Correlations (`cca_result$cor`)**  
+   - These are the highest correlations between **linear combinations** of \( X \) and \( Y \).  
+   - If high (close to 1), the datasets are strongly related.  
+
+2. **Canonical Coefficients (`cca_result$xcoef` and `cca_result$ycoef`)**  
+   - These tell us **how each original variable contributes** to the **canonical variables**.  
+   - Larger absolute values indicate **stronger contributions**.  
+
+---
+
+#### Visualizing Canonical Correlation Analysis (CCA) Results 
+
+To better understand **Canonical Correlation Analysis (CCA)**, we can use **scatter plots** and **biplots** to visualize the relationships between canonical variables.
+
+---
+
+##### Scatter Plot of Canonical Variables
+
+This plot shows the **first pair of canonical variables** \( U_1 \) and \( V_1 \), allowing us to see how well they are correlated.
+
+```{r cca-intro-example-vizualization}
+# Load required libraries
+library(ggplot2)
+
+# Compute canonical variables
+U <- as.matrix(X) %*% cca_result$xcoef[,1]  # First canonical variable for X
+V <- as.matrix(Y) %*% cca_result$ycoef[,1]  # First canonical variable for Y
+
+# Create data frame for plotting
+cca_df <- data.frame(U1 = U, V1 = V)
+
+# Scatter plot of canonical variables
+ggplot(cca_df, aes(x = U1, y = V1)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  geom_smooth(method = "lm", color = "red", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Scatter Plot of First Canonical Variables",
+       x = "Canonical Variable 1 (U1 from X)", 
+       y = "Canonical Variable 1 (V1 from Y)")
+```
+
+**Interpretation:**  
+
+- If the correlation is strong, the points will align **closely along a line**.  
+- A weak correlation will show **a dispersed cloud of points**.
+
+---
+
+##### Biplot of Canonical Coefficients
+
+A **biplot** shows how the original variables contribute to the **canonical variables**.
+
+```{r cca-intro-example-vizualization-biplot}
+# Extract canonical coefficients for X and Y
+cca_x <- cca_result$xcoef[, 1:2]  # First two canonical coefficients for X
+cca_y <- cca_result$ycoef[, 1:2]  # First two canonical coefficients for Y
+
+# Create a data frame for the arrows
+cca_biplot_arrows <- data.frame(
+  Variable = c(rownames(cca_x), rownames(cca_y)),
+  Canonical1 = c(cca_x[,1], cca_y[,1]),
+  Canonical2 = c(cca_x[,2], cca_y[,2]),
+  Set = rep(c("X Variables", "Y Variables"), c(nrow(cca_x), nrow(cca_y)))
+)
+
+# Create the biplot with arrows
+ggplot(cca_biplot_arrows, aes(x = 0, y = 0, xend = Canonical1, yend = Canonical2, color = Set)) +
+  geom_segment(arrow = arrow(length = unit(0.2, "inches")), size = 1) +  # Draw arrows
+  geom_text(aes(x = Canonical1, y = Canonical2, label = Variable), vjust = 1.5, hjust = 1.5) +  # Add labels
+  geom_hline(yintercept = 0, linetype = "dashed") +  # Add horizontal line
+  geom_vline(xintercept = 0, linetype = "dashed") +  # Add vertical line
+  theme_minimal() +
+  labs(title = "Biplot of Canonical Coefficients", 
+       x = "First Canonical Variable", 
+       y = "Second Canonical Variable") +
+  theme(legend.position = "bottom")
+```
+
+**Interpretation:**
+
+- **Arrows represent original variables** and their influence on canonical variables.  
+- **Longer arrows** indicate variables that contribute more to the canonical correlation.  
+- Variables **pointing in the same direction** are **highly correlated**.
+
+---
+
+##### Canonical Correlation Bar Plot 
+A simple **bar plot** can be used to visualize the strength of each canonical correlation.
+
+```{r cca-intro-example-vizualization-barplot}
+# Create bar plot of canonical correlations
+barplot(cca_result$cor, 
+        names.arg = paste("Canonical Pair", 1:length(cca_result$cor)), 
+        col = "steelblue", 
+        main = "Canonical Correlations",
+        ylab = "Correlation",
+        ylim = c(0,1))
+```
+
+**Interpretation:**  
+
+- High correlation values suggest a **strong relationship** between the two datasets.  
+- If **only the first few pairs** have high correlations, then only those are meaningful.  
+
+---
+
+##### **Summary of Visualizations**
+
+* **Scatter plot** → Shows correlation between the first pair of canonical variables.  
+* **Biplot** → Shows how the original variables influence the canonical variables.  
+* **Bar plot** → Displays the strength of canonical correlations.  
+
+## Canonical Directions Estimation  
+
+### Problem Definition with Random Variables  
+
+Let \( \mathbf{x} \in \mathbb{R}^{p} \) and \( \mathbf{y} \in \mathbb{R}^{q} \) be two sets of **random variables** with **zero mean** and the following covariance matrices:
+
+\[
+\mathbf{\Sigma}_{XX} = \mathbb{E}[\mathbf{x} \mathbf{x}'] \quad \text{(Covariance of \( \mathbf{x} \))}
+\]
+
+\[
+\mathbf{\Sigma}_{YY} = \mathbb{E}[\mathbf{y} \mathbf{y}'] \quad \text{(Covariance of \( \mathbf{y} \))}
+\]
+
+\[
+\mathbf{\Sigma}_{XY} = \mathbb{C}[\mathbf{x},  \mathbf{y}] \quad \text{(Cross-covariance between \( \mathbf{x} \) and \( \mathbf{y} \))}
+\]
+
+We seek **canonical directions** \( \mathbf{a} \in \mathbb{R}^{p} \) and \( \mathbf{b} \in \mathbb{R}^{q} \) such that the transformed random variables:
+
+\[
+U = \mathbf{a}' \mathbf{x}, \quad V = \mathbf{b}' \mathbf{y}
+\]
+
+are maximally correlated.
+
+---
+
+### Canonical Correlation Maximization Problem  
+
+Mathematically, we solve:
+
+\[
+\max_{\mathbf{a}, \mathbf{b}} \quad \frac{\mathbb{C}[U, V]}{\sqrt{\mathbb{V}[U] \mathbb{V}[V]}}.
+\]
+
+Expanding in terms of covariances:
+
+\[
+\max_{\mathbf{a}, \mathbf{b}} \quad \frac{\mathbf{a}' \mathbf{\Sigma}_{XY} \mathbf{b}}{\sqrt{\mathbf{a}' \mathbf{\Sigma}_{XX} \mathbf{a} \cdot \mathbf{b}' \mathbf{\Sigma}_{YY} \mathbf{b}}}.
+\]
+
+To ensure identifiability, we impose the normalization constraints:
+
+\[
+\mathbf{a}' \mathbf{\Sigma}_{XX} \mathbf{a} = 1, \quad \mathbf{b}' \mathbf{\Sigma}_{YY} \mathbf{b} = 1.
+\]
+
+This normalization ensures that the denominator is fixed at 1, so the objective function measures a valid correlation.
+
+---
+
+### Solving for the Canonical Directions Using Lagrange Multipliers  
+
+We introduce **Lagrange multipliers** \( \lambda \) and \( \mu \) and define the **Lagrangian function**:
+
+\[
+\mathcal{L}(\mathbf{a}, \mathbf{b}, \lambda, \mu) = \mathbf{a}' \mathbf{\Sigma}_{XY} \mathbf{b} - \frac{\lambda}{2} (\mathbf{a}' \mathbf{\Sigma}_{XX} \mathbf{a} - 1) - \frac{\mu}{2} (\mathbf{b}' \mathbf{\Sigma}_{YY} \mathbf{b} - 1).
+\]
+
+#### First-order conditions  
+
+Taking the derivative with respect to \( \mathbf{a} \) and setting it to zero:
+
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{a}} = \mathbf{\Sigma}_{XY} \mathbf{b} - \lambda \mathbf{\Sigma}_{XX} \mathbf{a} = 0.
+\]
+
+\[
+\mathbf{\Sigma}_{XY} \mathbf{b} = \lambda \mathbf{\Sigma}_{XX} \mathbf{a}.
+\]
+
+Similarly, differentiating with respect to \( \mathbf{b} \) and setting it to zero:
+
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{b}} = \mathbf{\Sigma}_{YX} \mathbf{a} - \mu \mathbf{\Sigma}_{YY} \mathbf{b} = 0.
+\]
+
+\[
+\mathbf{\Sigma}_{YX} \mathbf{a} = \mu \mathbf{\Sigma}_{YY} \mathbf{b}.
+\]
+
+#### Reformulation as a Generalized Eigenvalue Problem  
+
+Multiplying the first equation on the left by \( \mathbf{\Sigma}_{YX} \) gives:
+
+\[
+\mathbf{\Sigma}_{YX} \mathbf{\Sigma}_{XY} \mathbf{b} = \lambda \mathbf{\Sigma}_{YX} \mathbf{\Sigma}_{XX} \mathbf{a}.
+\]
+
+Substituting \( \mathbf{\Sigma}_{YX} \mathbf{a} = \mu \mathbf{\Sigma}_{YY} \mathbf{b} \):
+
+\[
+\mathbf{\Sigma}_{YX} \mathbf{\Sigma}_{XY} \mathbf{b} = \lambda \mu \mathbf{\Sigma}_{YY} \mathbf{b}.
+\]
+
+Similarly, multiplying the second equation on the left by \( \mathbf{\Sigma}_{XY} \):
+
+\[
+\mathbf{\Sigma}_{XY} \mathbf{\Sigma}_{YX} \mathbf{a} = \lambda \mu \mathbf{\Sigma}_{XX} \mathbf{a}.
+\]
+
+Thus, the canonical directions are found by solving the **generalized eigenvalue problems**:
+
+\[
+\mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY} \mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX} \mathbf{a} = \lambda \mu \mathbf{a}.
+\]
+
+\[
+\mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX} \mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY} \mathbf{b} = \lambda \mu \mathbf{b}.
+\]
+
+---
+
+### Showing That the Matrices Have the Same Eigenvalues  
+
+Define:
+
+\[
+\mathbf{M} = \mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX}, \quad \mathbf{N} = \mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY}.
+\]
+
+Then we rewrite:
+
+\[
+\mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX} \mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY} = \mathbf{M} \mathbf{N},
+\]
+
+\[
+\mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY} \mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX} = \mathbf{N} \mathbf{M}.
+\]
+
+To show that \( \mathbf{M} \mathbf{N} \) and \( \mathbf{N} \mathbf{M} \) have the **same eigenvalues**, consider the eigenvalue equation:
+
+\[
+\mathbf{M} \mathbf{N} \mathbf{v} = \lambda \mathbf{v}.
+\]
+
+Multiplying both sides by \( \mathbf{N} \):
+
+\[
+\mathbf{N} \mathbf{M} \mathbf{N} \mathbf{v} = \lambda \mathbf{N} \mathbf{v}.
+\]
+
+Defining \( \mathbf{w} = \mathbf{N} \mathbf{v} \), we obtain:
+
+\[
+\mathbf{N} \mathbf{M} \mathbf{w} = \lambda \mathbf{w}.
+\]
+
+Thus, every eigenvalue of \( \mathbf{M} \mathbf{N} \) is also an eigenvalue of \( \mathbf{N} \mathbf{M} \), which proves that these two matrices have the **same eigenvalues**.
+
+---
+
+### Showing That the Largest Eigenvalue Maximizes the Objective Function  
+
+For the estimated canonical directions \( \mathbf{a}_1, \mathbf{b}_1 \), the **value of the objective function** is:
+
+\[
+\rho_1 = \frac{\mathbf{a}_1' \mathbf{\Sigma}_{XY} \mathbf{b}_1}{\sqrt{\mathbf{a}_1' \mathbf{\Sigma}_{XX} \mathbf{a}_1 \cdot \mathbf{b}_1' \mathbf{\Sigma}_{YY} \mathbf{b}_1}}.
+\]
+
+Since the eigenvectors of:
+
+\[
+\mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY} \mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX}
+\]
+
+are sorted in decreasing order of eigenvalues, the first eigenvalue corresponds to the maximum value of \( \rho \). This justifies why the **largest eigenvalue** gives the **first canonical correlation**, which achieves the **maximum correlation**.
+
+---
+
+### Conclusion  
+
+1. **CCA maximization leads to a generalized eigenvalue problem**.  
+2. **The two matrices involved have the same eigenvalues**, ensuring consistency.  
+3. **The largest eigenvalue corresponds to the maximum canonical correlation**, justifying why the eigenvalue problem provides the optimal canonical directions.
