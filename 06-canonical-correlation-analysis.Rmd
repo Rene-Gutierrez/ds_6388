@@ -366,3 +366,140 @@ are sorted in decreasing order of eigenvalues, the first eigenvalue corresponds 
 1. **CCA maximization leads to a generalized eigenvalue problem**.  
 2. **The two matrices involved have the same eigenvalues**, ensuring consistency.  
 3. **The largest eigenvalue corresponds to the maximum canonical correlation**, justifying why the eigenvalue problem provides the optimal canonical directions.
+
+---
+
+## HD CCA
+
+When \( p \gg n \) or \( q \gg n \), the covariance matrices \( \mathbf{\Sigma}_{XX} \) and \( \mathbf{\Sigma}_{YY} \) are **singular** (non-invertible). This makes standard **Canonical Correlation Analysis (CCA)** infeasible because it relies on inverting these matrices.  
+
+To address this issue, **high-dimensional CCA methods** have been developed. Below are the most effective alternatives:  
+
+---
+
+### Regularized Canonical Correlation Analysis (Ridge CCA)
+
+#### Idea
+Instead of solving the standard CCA problem:  
+
+\[
+\mathbf{\Sigma}_{XX}^{-1} \mathbf{\Sigma}_{XY} \mathbf{\Sigma}_{YY}^{-1} \mathbf{\Sigma}_{YX} \mathbf{a} = \lambda \mathbf{a},
+\]
+
+add a **ridge regularization** term:
+
+\[
+(\mathbf{\Sigma}_{XX} + \lambda \mathbf{I})^{-1} \mathbf{\Sigma}_{XY} (\mathbf{\Sigma}_{YY} + \lambda \mathbf{I})^{-1} \mathbf{\Sigma}_{YX} \mathbf{a} = \lambda \mathbf{a}.
+\]
+
+#### Advantages
+
+- Avoids singularity by **shrinking** the covariance matrices.
+- Works well when \( p, q \gg n \).
+- Can be solved efficiently using **Cholesky decomposition**.
+
+#### Computational Complexity
+
+- \( O(p^2 n) \) if using Woodbury identity for inversion.  
+- Faster than classical CCA for large \( p, q \).  
+
+---
+
+### Sparse Canonical Correlation Analysis (Sparse CCA)**  
+
+#### Idea
+Instead of using **all variables**, enforce sparsity in \( \mathbf{a} \) and \( \mathbf{b} \) by solving:
+
+\[
+\max_{\mathbf{a}, \mathbf{b}} \quad \mathbf{a}' \mathbf{\Sigma}_{XY} \mathbf{b} \quad \text{s.t.} \quad \|\mathbf{a}\|_1 \leq c_1, \quad \|\mathbf{b}\|_1 \leq c_2.
+\]
+
+where \( \|\cdot\|_1 \) is the **L1 norm** (sum of absolute values), enforcing sparsity.
+
+#### Advantages
+- Selects **only the most relevant variables**.
+- Reduces overfitting.
+- Works well when \( p, q \gg n \).
+
+#### Computational Complexity
+
+- Uses **LASSO-like optimization** (\( O(n p) \)), making it efficient for large \( p, q \).
+
+---
+
+### Low-Rank Approximation CCA (Randomized SVD Approach)
+
+#### Idea 
+Instead of computing full covariance matrices, **compress** the data via a low-rank approximation:
+
+1. Compute **randomized SVD** of \( \mathbf{X} \) and \( \mathbf{Y} \):
+
+   \[
+   \mathbf{X} \approx \mathbf{U}_X \mathbf{\Sigma}_X \mathbf{V}_X'
+   \]
+
+   \[
+   \mathbf{Y} \approx \mathbf{U}_Y \mathbf{\Sigma}_Y \mathbf{V}_Y'
+   \]
+
+2. Perform CCA on **reduced-dimension data** \( \mathbf{U}_X \) and \( \mathbf{U}_Y \).
+
+#### Advantages
+
+- Reduces dimensionality **before** computing canonical directions.
+- Works well when \( p, q \gg n \).
+- Computationally **efficient**.
+
+#### Computational Complexity
+
+- \( O(n^2 p) \) instead of \( O(p^3) \).
+
+---
+
+### Factor Model-Based CCA  
+
+#### Idea
+
+Instead of estimating full covariance matrices, assume that **data follows a factor model**:
+
+\[
+\mathbf{X} = \mathbf{\Lambda}_X \mathbf{F} + \mathbf{\epsilon}_X
+\]
+
+\[
+\mathbf{Y} = \mathbf{\Lambda}_Y \mathbf{F} + \mathbf{\epsilon}_Y
+\]
+
+where:
+- \( \mathbf{F} \) is a **low-dimensional latent factor**.
+- \( \mathbf{\Lambda}_X \) and \( \mathbf{\Lambda}_Y \) are **factor loadings**.
+
+Solve CCA on **factor scores** instead of raw data.
+
+#### Advantages
+
+- Works well when \( p, q \gg n \).
+- Reduces dimensionality by modeling **latent structure**.
+
+#### Computational Complexity
+- \( O(n k^2) \) if using PCA for factor estimation.
+
+---
+
+### Comparison of Methods for High-Dimensional CCA
+
+| **Method** | **Handles \( p, q \gg n \)?** | **Avoids Inversion?** | **Captures Nonlinearity?** | **Computational Cost** |
+|------------|-------------------|----------------|----------------|----------------|
+| **Ridge CCA** | ✅ Yes | ✅ Regularized | ❌ No | \( O(p^2 n) \) |
+| **Sparse CCA** | ✅ Yes | ✅ Sparse Estimation | ❌ No | \( O(n p) \) |
+| **Low-Rank SVD CCA** | ✅ Yes | ✅ Uses SVD | ❌ No | \( O(n^2 p) \) |
+| **Factor Model CCA** | ✅ Yes | ✅ Uses PCA/FA | ❌ No | \( O(n k^2) \) |
+
+---
+
+## **Conclusion: Which Method to Use?**  
+
+1. **If you want a direct fix for singularity** → Use **Ridge CCA**.  
+2. **If you suspect only a few variables matter** → Use **Sparse CCA**.  
+3. **If you want a computationally efficient approach** → Use **Low-Rank SVD CCA**.
+5. **If data follows latent structures** → Use **Factor Model CCA**.  

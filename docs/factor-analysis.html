@@ -313,6 +313,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.3.5" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#showing-that-the-largest-eigenvalue-maximizes-the-objective-function"><i class="fa fa-check"></i><b>7.3.5</b> Showing That the Largest Eigenvalue Maximizes the Objective Function</a></li>
 <li class="chapter" data-level="7.3.6" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#conclusion-3"><i class="fa fa-check"></i><b>7.3.6</b> Conclusion</a></li>
 </ul></li>
+<li class="chapter" data-level="7.4" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#hd-cca"><i class="fa fa-check"></i><b>7.4</b> HD CCA</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#regularized-canonical-correlation-analysis-ridge-cca"><i class="fa fa-check"></i><b>7.4.1</b> Regularized Canonical Correlation Analysis (Ridge CCA)</a></li>
+<li class="chapter" data-level="7.4.2" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#sparse-canonical-correlation-analysis-sparse-cca"><i class="fa fa-check"></i><b>7.4.2</b> Sparse Canonical Correlation Analysis (Sparse CCA)**</a></li>
+<li class="chapter" data-level="7.4.3" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#low-rank-approximation-cca-randomized-svd-approach"><i class="fa fa-check"></i><b>7.4.3</b> Low-Rank Approximation CCA (Randomized SVD Approach)</a></li>
+<li class="chapter" data-level="7.4.4" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#factor-model-based-cca"><i class="fa fa-check"></i><b>7.4.4</b> Factor Model-Based CCA</a></li>
+<li class="chapter" data-level="7.4.5" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#comparison-of-methods-for-high-dimensional-cca"><i class="fa fa-check"></i><b>7.4.5</b> Comparison of Methods for High-Dimensional CCA</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="canonical-correlation-analysis-cca.html"><a href="canonical-correlation-analysis-cca.html#conclusion-which-method-to-use"><i class="fa fa-check"></i><b>7.5</b> <strong>Conclusion: Which Method to Use?</strong></a></li>
 </ul></li>
 </ul>
 
@@ -803,59 +812,64 @@ p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
 <div id="load-required-libraries" class="section level3 hasAnchor" number="6.5.1">
 <h3><span class="header-section-number">6.5.1</span> Load Required Libraries<a href="factor-analysis.html#load-required-libraries" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="factor-analysis.html#cb97-1" tabindex="-1"></a><span class="co"># Load necessary libraries</span></span>
-<span id="cb97-2"><a href="factor-analysis.html#cb97-2" tabindex="-1"></a><span class="fu">library</span>(psych)  <span class="co"># For factor analysis functions</span></span>
-<span id="cb97-3"><a href="factor-analysis.html#cb97-3" tabindex="-1"></a><span class="fu">library</span>(MASS)   <span class="co"># For matrix operations</span></span></code></pre></div>
+<span id="cb97-2"><a href="factor-analysis.html#cb97-2" tabindex="-1"></a><span class="fu">library</span>(psych)  <span class="co"># For factor analysis functions</span></span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;psych&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lars&#39;:
+## 
+##     error.bars</code></pre>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="factor-analysis.html#cb100-1" tabindex="-1"></a><span class="fu">library</span>(MASS)   <span class="co"># For matrix operations</span></span></code></pre></div>
 <hr />
 </div>
 <div id="generate-sample-data" class="section level3 hasAnchor" number="6.5.2">
 <h3><span class="header-section-number">6.5.2</span> Generate Sample Data<a href="factor-analysis.html#generate-sample-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We generate <strong>synthetic data</strong> with a predefined factor structure.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="factor-analysis.html#cb98-1" tabindex="-1"></a><span class="co"># Set seed for reproducibility</span></span>
-<span id="cb98-2"><a href="factor-analysis.html#cb98-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb98-3"><a href="factor-analysis.html#cb98-3" tabindex="-1"></a></span>
-<span id="cb98-4"><a href="factor-analysis.html#cb98-4" tabindex="-1"></a><span class="co"># Define parameters</span></span>
-<span id="cb98-5"><a href="factor-analysis.html#cb98-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span>  <span class="co"># Number of observations</span></span>
-<span id="cb98-6"><a href="factor-analysis.html#cb98-6" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">6</span>    <span class="co"># Number of observed variables</span></span>
-<span id="cb98-7"><a href="factor-analysis.html#cb98-7" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">2</span>    <span class="co"># Number of factors</span></span>
-<span id="cb98-8"><a href="factor-analysis.html#cb98-8" tabindex="-1"></a></span>
-<span id="cb98-9"><a href="factor-analysis.html#cb98-9" tabindex="-1"></a><span class="co"># True factor loadings (simulated)</span></span>
-<span id="cb98-10"><a href="factor-analysis.html#cb98-10" tabindex="-1"></a>Lambda_true <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>,  <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, </span>
-<span id="cb98-11"><a href="factor-analysis.html#cb98-11" tabindex="-1"></a>                        <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>,  <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>), <span class="at">nrow =</span> p, <span class="at">ncol =</span> k)</span>
-<span id="cb98-12"><a href="factor-analysis.html#cb98-12" tabindex="-1"></a></span>
-<span id="cb98-13"><a href="factor-analysis.html#cb98-13" tabindex="-1"></a><span class="co"># Unique variances (diagonal matrix)</span></span>
-<span id="cb98-14"><a href="factor-analysis.html#cb98-14" tabindex="-1"></a>Psi_true <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>))</span>
-<span id="cb98-15"><a href="factor-analysis.html#cb98-15" tabindex="-1"></a></span>
-<span id="cb98-16"><a href="factor-analysis.html#cb98-16" tabindex="-1"></a><span class="co"># Generate factor scores (standard normal)</span></span>
-<span id="cb98-17"><a href="factor-analysis.html#cb98-17" tabindex="-1"></a>F_scores <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> k), <span class="at">nrow =</span> n, <span class="at">ncol =</span> k)</span>
-<span id="cb98-18"><a href="factor-analysis.html#cb98-18" tabindex="-1"></a></span>
-<span id="cb98-19"><a href="factor-analysis.html#cb98-19" tabindex="-1"></a><span class="co"># Generate observed data</span></span>
-<span id="cb98-20"><a href="factor-analysis.html#cb98-20" tabindex="-1"></a>E_noise <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n, <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, p), <span class="at">Sigma =</span> Psi_true)  <span class="co"># Unique variances</span></span>
-<span id="cb98-21"><a href="factor-analysis.html#cb98-21" tabindex="-1"></a>X <span class="ot">&lt;-</span> F_scores <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_true) <span class="sc">+</span> E_noise  <span class="co"># Factor model</span></span>
-<span id="cb98-22"><a href="factor-analysis.html#cb98-22" tabindex="-1"></a></span>
-<span id="cb98-23"><a href="factor-analysis.html#cb98-23" tabindex="-1"></a><span class="co"># Standardize data</span></span>
-<span id="cb98-24"><a href="factor-analysis.html#cb98-24" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">scale</span>(X)</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="factor-analysis.html#cb101-1" tabindex="-1"></a><span class="co"># Set seed for reproducibility</span></span>
+<span id="cb101-2"><a href="factor-analysis.html#cb101-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb101-3"><a href="factor-analysis.html#cb101-3" tabindex="-1"></a></span>
+<span id="cb101-4"><a href="factor-analysis.html#cb101-4" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb101-5"><a href="factor-analysis.html#cb101-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">500</span>  <span class="co"># Number of observations</span></span>
+<span id="cb101-6"><a href="factor-analysis.html#cb101-6" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">6</span>    <span class="co"># Number of observed variables</span></span>
+<span id="cb101-7"><a href="factor-analysis.html#cb101-7" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">2</span>    <span class="co"># Number of factors</span></span>
+<span id="cb101-8"><a href="factor-analysis.html#cb101-8" tabindex="-1"></a></span>
+<span id="cb101-9"><a href="factor-analysis.html#cb101-9" tabindex="-1"></a><span class="co"># True factor loadings (simulated)</span></span>
+<span id="cb101-10"><a href="factor-analysis.html#cb101-10" tabindex="-1"></a>Lambda_true <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>,  <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, </span>
+<span id="cb101-11"><a href="factor-analysis.html#cb101-11" tabindex="-1"></a>                        <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>,  <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.7</span>), <span class="at">nrow =</span> p, <span class="at">ncol =</span> k)</span>
+<span id="cb101-12"><a href="factor-analysis.html#cb101-12" tabindex="-1"></a></span>
+<span id="cb101-13"><a href="factor-analysis.html#cb101-13" tabindex="-1"></a><span class="co"># Unique variances (diagonal matrix)</span></span>
+<span id="cb101-14"><a href="factor-analysis.html#cb101-14" tabindex="-1"></a>Psi_true <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>))</span>
+<span id="cb101-15"><a href="factor-analysis.html#cb101-15" tabindex="-1"></a></span>
+<span id="cb101-16"><a href="factor-analysis.html#cb101-16" tabindex="-1"></a><span class="co"># Generate factor scores (standard normal)</span></span>
+<span id="cb101-17"><a href="factor-analysis.html#cb101-17" tabindex="-1"></a>F_scores <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> k), <span class="at">nrow =</span> n, <span class="at">ncol =</span> k)</span>
+<span id="cb101-18"><a href="factor-analysis.html#cb101-18" tabindex="-1"></a></span>
+<span id="cb101-19"><a href="factor-analysis.html#cb101-19" tabindex="-1"></a><span class="co"># Generate observed data</span></span>
+<span id="cb101-20"><a href="factor-analysis.html#cb101-20" tabindex="-1"></a>E_noise <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(n, <span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>, p), <span class="at">Sigma =</span> Psi_true)  <span class="co"># Unique variances</span></span>
+<span id="cb101-21"><a href="factor-analysis.html#cb101-21" tabindex="-1"></a>X <span class="ot">&lt;-</span> F_scores <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_true) <span class="sc">+</span> E_noise  <span class="co"># Factor model</span></span>
+<span id="cb101-22"><a href="factor-analysis.html#cb101-22" tabindex="-1"></a></span>
+<span id="cb101-23"><a href="factor-analysis.html#cb101-23" tabindex="-1"></a><span class="co"># Standardize data</span></span>
+<span id="cb101-24"><a href="factor-analysis.html#cb101-24" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">scale</span>(X)</span></code></pre></div>
 <hr />
 </div>
 <div id="estimation-of-factor-loadings-and-unique-variances" class="section level3 hasAnchor" number="6.5.3">
 <h3><span class="header-section-number">6.5.3</span> Estimation of Factor Loadings and Unique Variances<a href="factor-analysis.html#estimation-of-factor-loadings-and-unique-variances" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="principal-components-method-1" class="section level4 hasAnchor" number="6.5.3.1">
 <h4><span class="header-section-number">6.5.3.1</span> Principal Components Method<a href="factor-analysis.html#principal-components-method-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="factor-analysis.html#cb99-1" tabindex="-1"></a><span class="co"># Compute covariance matrix</span></span>
-<span id="cb99-2"><a href="factor-analysis.html#cb99-2" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
-<span id="cb99-3"><a href="factor-analysis.html#cb99-3" tabindex="-1"></a></span>
-<span id="cb99-4"><a href="factor-analysis.html#cb99-4" tabindex="-1"></a><span class="co"># Perform eigen decomposition</span></span>
-<span id="cb99-5"><a href="factor-analysis.html#cb99-5" tabindex="-1"></a>eig <span class="ot">&lt;-</span> <span class="fu">eigen</span>(S)</span>
-<span id="cb99-6"><a href="factor-analysis.html#cb99-6" tabindex="-1"></a></span>
-<span id="cb99-7"><a href="factor-analysis.html#cb99-7" tabindex="-1"></a><span class="co"># Extract first k eigenvectors and eigenvalues</span></span>
-<span id="cb99-8"><a href="factor-analysis.html#cb99-8" tabindex="-1"></a>Lambda_pc <span class="ot">&lt;-</span> eig<span class="sc">$</span>vectors[, <span class="dv">1</span><span class="sc">:</span>k] <span class="sc">%*%</span> <span class="fu">diag</span>(<span class="fu">sqrt</span>(eig<span class="sc">$</span>values[<span class="dv">1</span><span class="sc">:</span>k]))</span>
-<span id="cb99-9"><a href="factor-analysis.html#cb99-9" tabindex="-1"></a></span>
-<span id="cb99-10"><a href="factor-analysis.html#cb99-10" tabindex="-1"></a><span class="co"># Estimate unique variances Psi</span></span>
-<span id="cb99-11"><a href="factor-analysis.html#cb99-11" tabindex="-1"></a>Psi_pc <span class="ot">&lt;-</span> <span class="fu">diag</span>(S) <span class="sc">-</span> <span class="fu">diag</span>(Lambda_pc <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_pc))</span>
-<span id="cb99-12"><a href="factor-analysis.html#cb99-12" tabindex="-1"></a></span>
-<span id="cb99-13"><a href="factor-analysis.html#cb99-13" tabindex="-1"></a><span class="co"># Display results</span></span>
-<span id="cb99-14"><a href="factor-analysis.html#cb99-14" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Loadings (Principal Components Method):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="factor-analysis.html#cb102-1" tabindex="-1"></a><span class="co"># Compute covariance matrix</span></span>
+<span id="cb102-2"><a href="factor-analysis.html#cb102-2" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cov</span>(X)</span>
+<span id="cb102-3"><a href="factor-analysis.html#cb102-3" tabindex="-1"></a></span>
+<span id="cb102-4"><a href="factor-analysis.html#cb102-4" tabindex="-1"></a><span class="co"># Perform eigen decomposition</span></span>
+<span id="cb102-5"><a href="factor-analysis.html#cb102-5" tabindex="-1"></a>eig <span class="ot">&lt;-</span> <span class="fu">eigen</span>(S)</span>
+<span id="cb102-6"><a href="factor-analysis.html#cb102-6" tabindex="-1"></a></span>
+<span id="cb102-7"><a href="factor-analysis.html#cb102-7" tabindex="-1"></a><span class="co"># Extract first k eigenvectors and eigenvalues</span></span>
+<span id="cb102-8"><a href="factor-analysis.html#cb102-8" tabindex="-1"></a>Lambda_pc <span class="ot">&lt;-</span> eig<span class="sc">$</span>vectors[, <span class="dv">1</span><span class="sc">:</span>k] <span class="sc">%*%</span> <span class="fu">diag</span>(<span class="fu">sqrt</span>(eig<span class="sc">$</span>values[<span class="dv">1</span><span class="sc">:</span>k]))</span>
+<span id="cb102-9"><a href="factor-analysis.html#cb102-9" tabindex="-1"></a></span>
+<span id="cb102-10"><a href="factor-analysis.html#cb102-10" tabindex="-1"></a><span class="co"># Estimate unique variances Psi</span></span>
+<span id="cb102-11"><a href="factor-analysis.html#cb102-11" tabindex="-1"></a>Psi_pc <span class="ot">&lt;-</span> <span class="fu">diag</span>(S) <span class="sc">-</span> <span class="fu">diag</span>(Lambda_pc <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_pc))</span>
+<span id="cb102-12"><a href="factor-analysis.html#cb102-12" tabindex="-1"></a></span>
+<span id="cb102-13"><a href="factor-analysis.html#cb102-13" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb102-14"><a href="factor-analysis.html#cb102-14" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Loadings (Principal Components Method):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Factor Loadings (Principal Components Method):&quot;</code></pre>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="factor-analysis.html#cb101-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Lambda_pc, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="factor-analysis.html#cb104-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Lambda_pc, <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>##        [,1]   [,2]
 ## [1,]  0.659 -0.641
 ## [2,]  0.612 -0.651
@@ -863,27 +877,27 @@ p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
 ## [4,] -0.689 -0.611
 ## [5,] -0.705 -0.572
 ## [6,] -0.677 -0.596</code></pre>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="factor-analysis.html#cb103-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Unique Variances (Principal Components Method):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="factor-analysis.html#cb106-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Unique Variances (Principal Components Method):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Unique Variances (Principal Components Method):&quot;</code></pre>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="factor-analysis.html#cb105-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Psi_pc, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="factor-analysis.html#cb108-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Psi_pc, <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>## [1] 0.156 0.203 0.184 0.152 0.175 0.186</code></pre>
 <hr />
 </div>
 <div id="maximum-likelihood-estimation-mle-1" class="section level4 hasAnchor" number="6.5.3.2">
 <h4><span class="header-section-number">6.5.3.2</span> Maximum Likelihood Estimation (MLE)<a href="factor-analysis.html#maximum-likelihood-estimation-mle-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="factor-analysis.html#cb107-1" tabindex="-1"></a><span class="co"># Perform MLE Factor Analysis</span></span>
-<span id="cb107-2"><a href="factor-analysis.html#cb107-2" tabindex="-1"></a>fa_mle <span class="ot">&lt;-</span> <span class="fu">factanal</span>(X, <span class="at">factors =</span> k, <span class="at">rotation =</span> <span class="st">&quot;none&quot;</span>)</span>
-<span id="cb107-3"><a href="factor-analysis.html#cb107-3" tabindex="-1"></a></span>
-<span id="cb107-4"><a href="factor-analysis.html#cb107-4" tabindex="-1"></a><span class="co"># Extract factor loadings</span></span>
-<span id="cb107-5"><a href="factor-analysis.html#cb107-5" tabindex="-1"></a>Lambda_mle <span class="ot">&lt;-</span> fa_mle<span class="sc">$</span>loadings[, <span class="dv">1</span><span class="sc">:</span>k]</span>
-<span id="cb107-6"><a href="factor-analysis.html#cb107-6" tabindex="-1"></a></span>
-<span id="cb107-7"><a href="factor-analysis.html#cb107-7" tabindex="-1"></a><span class="co"># Estimate unique variances Psi</span></span>
-<span id="cb107-8"><a href="factor-analysis.html#cb107-8" tabindex="-1"></a>Psi_mle <span class="ot">&lt;-</span> <span class="fu">diag</span>(S) <span class="sc">-</span> <span class="fu">diag</span>(Lambda_mle <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_mle))</span>
-<span id="cb107-9"><a href="factor-analysis.html#cb107-9" tabindex="-1"></a></span>
-<span id="cb107-10"><a href="factor-analysis.html#cb107-10" tabindex="-1"></a><span class="co"># Display results</span></span>
-<span id="cb107-11"><a href="factor-analysis.html#cb107-11" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Loadings (MLE Method):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="factor-analysis.html#cb110-1" tabindex="-1"></a><span class="co"># Perform MLE Factor Analysis</span></span>
+<span id="cb110-2"><a href="factor-analysis.html#cb110-2" tabindex="-1"></a>fa_mle <span class="ot">&lt;-</span> <span class="fu">factanal</span>(X, <span class="at">factors =</span> k, <span class="at">rotation =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb110-3"><a href="factor-analysis.html#cb110-3" tabindex="-1"></a></span>
+<span id="cb110-4"><a href="factor-analysis.html#cb110-4" tabindex="-1"></a><span class="co"># Extract factor loadings</span></span>
+<span id="cb110-5"><a href="factor-analysis.html#cb110-5" tabindex="-1"></a>Lambda_mle <span class="ot">&lt;-</span> fa_mle<span class="sc">$</span>loadings[, <span class="dv">1</span><span class="sc">:</span>k]</span>
+<span id="cb110-6"><a href="factor-analysis.html#cb110-6" tabindex="-1"></a></span>
+<span id="cb110-7"><a href="factor-analysis.html#cb110-7" tabindex="-1"></a><span class="co"># Estimate unique variances Psi</span></span>
+<span id="cb110-8"><a href="factor-analysis.html#cb110-8" tabindex="-1"></a>Psi_mle <span class="ot">&lt;-</span> <span class="fu">diag</span>(S) <span class="sc">-</span> <span class="fu">diag</span>(Lambda_mle <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_mle))</span>
+<span id="cb110-9"><a href="factor-analysis.html#cb110-9" tabindex="-1"></a></span>
+<span id="cb110-10"><a href="factor-analysis.html#cb110-10" tabindex="-1"></a><span class="co"># Display results</span></span>
+<span id="cb110-11"><a href="factor-analysis.html#cb110-11" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Loadings (MLE Method):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Factor Loadings (MLE Method):&quot;</code></pre>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="factor-analysis.html#cb109-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Lambda_mle, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="factor-analysis.html#cb112-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Lambda_mle, <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>##      Factor1 Factor2
 ## [1,]  -0.575   0.685
 ## [2,]  -0.500   0.649
@@ -891,9 +905,9 @@ p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
 ## [4,]   0.726   0.518
 ## [5,]   0.716   0.469
 ## [6,]   0.686   0.481</code></pre>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="factor-analysis.html#cb111-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Unique Variances (MLE Method):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="factor-analysis.html#cb114-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Unique Variances (MLE Method):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Unique Variances (MLE Method):&quot;</code></pre>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="factor-analysis.html#cb113-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Psi_mle, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="factor-analysis.html#cb116-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(Psi_mle, <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>## [1] 0.200 0.328 0.281 0.204 0.268 0.298</code></pre>
 <hr />
 </div>
@@ -902,14 +916,14 @@ p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
 <h3><span class="header-section-number">6.5.4</span> Estimate Factor Scores<a href="factor-analysis.html#estimate-factor-scores" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div id="ordinary-least-squares-ols-factor-scores" class="section level4 hasAnchor" number="6.5.4.1">
 <h4><span class="header-section-number">6.5.4.1</span> Ordinary Least Squares (OLS) Factor Scores<a href="factor-analysis.html#ordinary-least-squares-ols-factor-scores" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="factor-analysis.html#cb115-1" tabindex="-1"></a><span class="co"># Compute OLS factor scores</span></span>
-<span id="cb115-2"><a href="factor-analysis.html#cb115-2" tabindex="-1"></a>F_ols <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> Lambda_mle) <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> <span class="fu">t</span>(X)</span>
-<span id="cb115-3"><a href="factor-analysis.html#cb115-3" tabindex="-1"></a>F_ols <span class="ot">&lt;-</span> <span class="fu">t</span>(F_ols)  <span class="co"># Transpose to match dimensions</span></span>
-<span id="cb115-4"><a href="factor-analysis.html#cb115-4" tabindex="-1"></a></span>
-<span id="cb115-5"><a href="factor-analysis.html#cb115-5" tabindex="-1"></a><span class="co"># Display first few factor scores</span></span>
-<span id="cb115-6"><a href="factor-analysis.html#cb115-6" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Scores (OLS Method):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="factor-analysis.html#cb118-1" tabindex="-1"></a><span class="co"># Compute OLS factor scores</span></span>
+<span id="cb118-2"><a href="factor-analysis.html#cb118-2" tabindex="-1"></a>F_ols <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> Lambda_mle) <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> <span class="fu">t</span>(X)</span>
+<span id="cb118-3"><a href="factor-analysis.html#cb118-3" tabindex="-1"></a>F_ols <span class="ot">&lt;-</span> <span class="fu">t</span>(F_ols)  <span class="co"># Transpose to match dimensions</span></span>
+<span id="cb118-4"><a href="factor-analysis.html#cb118-4" tabindex="-1"></a></span>
+<span id="cb118-5"><a href="factor-analysis.html#cb118-5" tabindex="-1"></a><span class="co"># Display first few factor scores</span></span>
+<span id="cb118-6"><a href="factor-analysis.html#cb118-6" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Scores (OLS Method):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Factor Scores (OLS Method):&quot;</code></pre>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="factor-analysis.html#cb117-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(F_ols[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="factor-analysis.html#cb120-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(F_ols[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>##      Factor1 Factor2
 ## [1,]  -0.454  -1.093
 ## [2,]  -0.230  -1.224
@@ -920,16 +934,17 @@ p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
 </div>
 <div id="weighted-least-squares-bartletts-method" class="section level4 hasAnchor" number="6.5.4.2">
 <h4><span class="header-section-number">6.5.4.2</span> Weighted Least Squares (Bartlett’s Method)<a href="factor-analysis.html#weighted-least-squares-bartletts-method" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="factor-analysis.html#cb119-1" tabindex="-1"></a><span class="co"># Compute WLS factor scores</span></span>
-<span id="cb119-2"><a href="factor-analysis.html#cb119-2" tabindex="-1"></a>F_wls <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> (Lambda_mle <span class="sc">/</span> Psi_mle)) <span class="sc">%*%</span> </span>
-<span id="cb119-3"><a href="factor-analysis.html#cb119-3" tabindex="-1"></a>          <span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">/</span> Psi_mle</span></code></pre></div>
-<pre><code>## Warning in solve(t(Lambda_mle) %*% (Lambda_mle/Psi_mle)) %*% t(Lambda_mle) %*% : longer object length is not a multiple of shorter object length</code></pre>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="factor-analysis.html#cb121-1" tabindex="-1"></a>F_wls <span class="ot">&lt;-</span> <span class="fu">t</span>(F_wls)</span>
-<span id="cb121-2"><a href="factor-analysis.html#cb121-2" tabindex="-1"></a></span>
-<span id="cb121-3"><a href="factor-analysis.html#cb121-3" tabindex="-1"></a><span class="co"># Display first few factor scores</span></span>
-<span id="cb121-4"><a href="factor-analysis.html#cb121-4" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Scores (Bartlett’s Method):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="factor-analysis.html#cb122-1" tabindex="-1"></a><span class="co"># Compute WLS factor scores</span></span>
+<span id="cb122-2"><a href="factor-analysis.html#cb122-2" tabindex="-1"></a>F_wls <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> (Lambda_mle <span class="sc">/</span> Psi_mle)) <span class="sc">%*%</span> </span>
+<span id="cb122-3"><a href="factor-analysis.html#cb122-3" tabindex="-1"></a>          <span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> <span class="fu">t</span>(X) <span class="sc">/</span> Psi_mle</span></code></pre></div>
+<pre><code>## Warning in solve(t(Lambda_mle) %*% (Lambda_mle/Psi_mle)) %*% t(Lambda_mle) %*% : longer object length is not a multiple of shorter object
+## length</code></pre>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="factor-analysis.html#cb124-1" tabindex="-1"></a>F_wls <span class="ot">&lt;-</span> <span class="fu">t</span>(F_wls)</span>
+<span id="cb124-2"><a href="factor-analysis.html#cb124-2" tabindex="-1"></a></span>
+<span id="cb124-3"><a href="factor-analysis.html#cb124-3" tabindex="-1"></a><span class="co"># Display first few factor scores</span></span>
+<span id="cb124-4"><a href="factor-analysis.html#cb124-4" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Scores (Bartlett’s Method):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Factor Scores (Bartlett’s Method):&quot;</code></pre>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="factor-analysis.html#cb123-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(F_wls[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="factor-analysis.html#cb126-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(F_wls[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>##      Factor1 Factor2
 ## [1,]  -0.551  -0.838
 ## [2,]  -0.192  -1.512
@@ -940,14 +955,14 @@ p(\mathbf{\Psi}) \sim \text{Inverse-Gamma}(\alpha, \beta).
 </div>
 <div id="regression-thompsons-estimator" class="section level4 hasAnchor" number="6.5.4.3">
 <h4><span class="header-section-number">6.5.4.3</span> Regression (Thompson’s Estimator)<a href="factor-analysis.html#regression-thompsons-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="factor-analysis.html#cb125-1" tabindex="-1"></a><span class="co"># Compute Regression factor scores</span></span>
-<span id="cb125-2"><a href="factor-analysis.html#cb125-2" tabindex="-1"></a>F_reg <span class="ot">&lt;-</span> <span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> <span class="fu">solve</span>(Lambda_mle <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_mle) <span class="sc">+</span> <span class="fu">diag</span>(Psi_mle), <span class="fu">t</span>(X))</span>
-<span id="cb125-3"><a href="factor-analysis.html#cb125-3" tabindex="-1"></a>F_reg <span class="ot">&lt;-</span> <span class="fu">t</span>(F_reg)</span>
-<span id="cb125-4"><a href="factor-analysis.html#cb125-4" tabindex="-1"></a></span>
-<span id="cb125-5"><a href="factor-analysis.html#cb125-5" tabindex="-1"></a><span class="co"># Display first few factor scores</span></span>
-<span id="cb125-6"><a href="factor-analysis.html#cb125-6" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Scores (Regression Method - Thompson’s Estimator):&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="factor-analysis.html#cb128-1" tabindex="-1"></a><span class="co"># Compute Regression factor scores</span></span>
+<span id="cb128-2"><a href="factor-analysis.html#cb128-2" tabindex="-1"></a>F_reg <span class="ot">&lt;-</span> <span class="fu">t</span>(Lambda_mle) <span class="sc">%*%</span> <span class="fu">solve</span>(Lambda_mle <span class="sc">%*%</span> <span class="fu">t</span>(Lambda_mle) <span class="sc">+</span> <span class="fu">diag</span>(Psi_mle), <span class="fu">t</span>(X))</span>
+<span id="cb128-3"><a href="factor-analysis.html#cb128-3" tabindex="-1"></a>F_reg <span class="ot">&lt;-</span> <span class="fu">t</span>(F_reg)</span>
+<span id="cb128-4"><a href="factor-analysis.html#cb128-4" tabindex="-1"></a></span>
+<span id="cb128-5"><a href="factor-analysis.html#cb128-5" tabindex="-1"></a><span class="co"># Display first few factor scores</span></span>
+<span id="cb128-6"><a href="factor-analysis.html#cb128-6" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Factor Scores (Regression Method - Thompson’s Estimator):&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Factor Scores (Regression Method - Thompson’s Estimator):&quot;</code></pre>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="factor-analysis.html#cb127-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(F_reg[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="factor-analysis.html#cb130-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(F_reg[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ], <span class="dv">3</span>))</span></code></pre></div>
 <pre><code>##      Factor1 Factor2
 ## [1,]  -0.470  -0.883
 ## [2,]  -0.187  -1.093

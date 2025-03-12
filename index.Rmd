@@ -33,3 +33,5 @@ and lecture notes.
 * Class 9:  Principal Components Regression
 * Class 10: Factor Analysis 1
 * Class 11: Factor Analysis 2
+* Class 12: Canonical Correlation Analysis
+* Class 13: HD Canonical Correlation Analysis
