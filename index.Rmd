@@ -19,6 +19,7 @@ and lecture notes.
 
 * February 10: Linear Algebra Extra Credit Test
 * March 2:     First Project Submission Deadline
+* March 25:    Second Project Submission Deadline
 
 ### Class Schedule
 

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DS 6388 Spring 2025</title>
-  <meta name="description" content="DS 6388 Spring 2025" />
+  <title>8 k-Means Clustering | DS 6388 Spring 2025</title>
+  <meta name="description" content="8 k-Means Clustering | DS 6388 Spring 2025" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="DS 6388 Spring 2025" />
+  <meta property="og:title" content="8 k-Means Clustering | DS 6388 Spring 2025" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="DS 6388 Spring 2025" />
+  <meta name="twitter:title" content="8 k-Means Clustering | DS 6388 Spring 2025" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="canonical-correlation-analysis-cca.html"/>
 
-<link rel="next" href="prerequisites.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -368,49 +368,303 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">DS 6388 Spring 2025</h1>
-<p class="author"><em>Rene Gutierrez University of Texas at El Paso</em></p>
+<div id="k-means-clustering" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> k-Means Clustering<a href="k-means-clustering.html#k-means-clustering" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-3" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Introduction<a href="k-means-clustering.html#introduction-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>k-Means clustering</strong> is one of the most widely used unsupervised learning algorithms for <strong>partitioning data</strong> into distinct groups based on similarity. It is a simple yet powerful method that minimizes the <strong>within-cluster variation</strong>.</p>
+<hr />
+<div id="intuition-behind-k-means" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Intuition Behind k-Means<a href="k-means-clustering.html#intuition-behind-k-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Imagine you are tasked with grouping points on a map. k-Means aims to achieve this by:</p>
+<p>✅ Placing <span class="math inline">\(k\)</span> “centers” (called <strong>centroids</strong>) on the map.<br />
+✅ Assigning each point to the <strong>closest centroid</strong>.<br />
+✅ Adjusting the centroid positions to minimize the <strong>distance between points and their assigned centroid</strong>.<br />
+✅ Repeating this process until the clusters are stable.</p>
+<p>The algorithm tries to minimize the <strong>within-cluster sum of squares (WCSS)</strong> — essentially grouping points that are <strong>closer to each other</strong> than to points in other clusters.</p>
+<hr />
 </div>
-<div id="ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> DS 6388: Multivariate Statistical Methods for High-dimensional Data<a href="index.html#ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is the website for DS 6388. It contains relevant information for the course
-and lecture notes.</p>
-<div id="calendar" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Calendar<a href="index.html#calendar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="importatnt-dates" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Importatnt Dates<a href="index.html#importatnt-dates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="applications-of-k-means" class="section level3 hasAnchor" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> Applications of k-Means<a href="k-means-clustering.html#applications-of-k-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>k-Means is highly versatile and used in various domains:</p>
 <ul>
-<li>February 10: Linear Algebra Extra Credit Test</li>
-<li>March 2: First Project Submission Deadline</li>
-<li>March 25: Second Project Submission Deadline</li>
+<li><strong>Business and Marketing</strong>
+<ul>
+<li><strong>Customer Segmentation:</strong> Group customers based on purchasing behavior.<br />
+</li>
+<li><strong>Market Segmentation:</strong> Identify distinct user profiles for targeted marketing.<br />
+</li>
+</ul></li>
+<li><strong>Image and Video Processing</strong>
+<ul>
+<li><strong>Color Quantization:</strong> Compress images by reducing the number of colors.<br />
+</li>
+<li><strong>Object Detection:</strong> Cluster pixel intensities for image segmentation.<br />
+</li>
+</ul></li>
+<li><strong>Anomaly Detection</strong>
+<ul>
+<li>Identify outliers by clustering data points and flagging those farthest from the centroids.<br />
+</li>
+</ul></li>
+<li><strong>Bioinformatics</strong>
+<ul>
+<li>Cluster gene expression data for identifying gene functions.</li>
+</ul></li>
 </ul>
+<hr />
 </div>
-<div id="class-schedule" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Class Schedule<a href="index.html#class-schedule" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="choosing-the-number-of-clusters-k" class="section level3 hasAnchor" number="8.1.3">
+<h3><span class="header-section-number">8.1.3</span> Choosing the Number of Clusters <span class="math inline">\(k\)</span><a href="k-means-clustering.html#choosing-the-number-of-clusters-k" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Choosing <span class="math inline">\(k\)</span> is critical for performance. Common techniques include:</p>
+<p>✅ <strong>Elbow Method:</strong> Plot WCSS against <span class="math inline">\(k\)</span> and identify the point where the reduction in WCSS slows down (the “elbow”).<br />
+✅ <strong>Silhouette Score:</strong> Measures how well each point fits into its cluster (higher is better).<br />
+✅ <strong>Gap Statistic:</strong> Compares WCSS to that expected under random data.</p>
+<hr />
+</div>
+<div id="r-implementation-of-k-means" class="section level3 hasAnchor" number="8.1.4">
+<h3><span class="header-section-number">8.1.4</span> R Implementation of k-Means<a href="k-means-clustering.html#r-implementation-of-k-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="step-1-load-libraries-and-simulate-data" class="section level4 hasAnchor" number="8.1.4.1">
+<h4><span class="header-section-number">8.1.4.1</span> Step 1: Load Libraries and Simulate Data<a href="k-means-clustering.html#step-1-load-libraries-and-simulate-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="k-means-clustering.html#cb150-1" tabindex="-1"></a><span class="co"># Load necessary library</span></span>
+<span id="cb150-2"><a href="k-means-clustering.html#cb150-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb150-3"><a href="k-means-clustering.html#cb150-3" tabindex="-1"></a></span>
+<span id="cb150-4"><a href="k-means-clustering.html#cb150-4" tabindex="-1"></a><span class="co"># Simulate example data</span></span>
+<span id="cb150-5"><a href="k-means-clustering.html#cb150-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb150-6"><a href="k-means-clustering.html#cb150-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span>  <span class="co"># Number of points</span></span>
+<span id="cb150-7"><a href="k-means-clustering.html#cb150-7" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb150-8"><a href="k-means-clustering.html#cb150-8" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(n<span class="sc">/</span><span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(n<span class="sc">/</span><span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(n<span class="sc">/</span><span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">1</span>)),</span>
+<span id="cb150-9"><a href="k-means-clustering.html#cb150-9" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(n<span class="sc">/</span><span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(n<span class="sc">/</span><span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="fu">rnorm</span>(n<span class="sc">/</span><span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">1</span>))</span>
+<span id="cb150-10"><a href="k-means-clustering.html#cb150-10" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="step-2-perform-k-means-clustering" class="section level4 hasAnchor" number="8.1.4.2">
+<h4><span class="header-section-number">8.1.4.2</span> Step 2: Perform k-Means Clustering<a href="k-means-clustering.html#step-2-perform-k-means-clustering" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="k-means-clustering.html#cb151-1" tabindex="-1"></a><span class="co"># Perform k-Means clustering</span></span>
+<span id="cb151-2"><a href="k-means-clustering.html#cb151-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Ensures reproducibility</span></span>
+<span id="cb151-3"><a href="k-means-clustering.html#cb151-3" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">3</span>          <span class="co"># Number of clusters</span></span>
+<span id="cb151-4"><a href="k-means-clustering.html#cb151-4" tabindex="-1"></a>kmeans_result <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(X, <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">25</span>)</span>
+<span id="cb151-5"><a href="k-means-clustering.html#cb151-5" tabindex="-1"></a></span>
+<span id="cb151-6"><a href="k-means-clustering.html#cb151-6" tabindex="-1"></a><span class="co"># Add cluster labels to the dataset</span></span>
+<span id="cb151-7"><a href="k-means-clustering.html#cb151-7" tabindex="-1"></a>X<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(kmeans_result<span class="sc">$</span>cluster)</span></code></pre></div>
+</div>
+<div id="step-3-visualize-the-results" class="section level4 hasAnchor" number="8.1.4.3">
+<h4><span class="header-section-number">8.1.4.3</span> Step 3: Visualize the Results<a href="k-means-clustering.html#step-3-visualize-the-results" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="k-means-clustering.html#cb152-1" tabindex="-1"></a><span class="co"># Visualize the result</span></span>
+<span id="cb152-2"><a href="k-means-clustering.html#cb152-2" tabindex="-1"></a><span class="fu">ggplot</span>(X, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> cluster)) <span class="sc">+</span></span>
+<span id="cb152-3"><a href="k-means-clustering.html#cb152-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb152-4"><a href="k-means-clustering.html#cb152-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">as.data.frame</span>(kmeans_result<span class="sc">$</span>centers), </span>
+<span id="cb152-5"><a href="k-means-clustering.html#cb152-5" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), </span>
+<span id="cb152-6"><a href="k-means-clustering.html#cb152-6" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">shape =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb152-7"><a href="k-means-clustering.html#cb152-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;k-Means Clustering&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;k = 3&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/k_means_visualization-1.png" width="672" /></p>
+</div>
+<div id="step-4-determine-the-optimal-number-of-clusters-using-the-elbow-method" class="section level4 hasAnchor" number="8.1.4.4">
+<h4><span class="header-section-number">8.1.4.4</span> Step 4: Determine the Optimal Number of Clusters Using the Elbow Method<a href="k-means-clustering.html#step-4-determine-the-optimal-number-of-clusters-using-the-elbow-method" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="k-means-clustering.html#cb153-1" tabindex="-1"></a><span class="co"># Elbow method to find optimal k</span></span>
+<span id="cb153-2"><a href="k-means-clustering.html#cb153-2" tabindex="-1"></a>wcss <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">10</span>)</span>
+<span id="cb153-3"><a href="k-means-clustering.html#cb153-3" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb153-4"><a href="k-means-clustering.html#cb153-4" tabindex="-1"></a>  wcss[k] <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(X, <span class="at">centers =</span> k, <span class="at">nstart =</span> <span class="dv">25</span>)<span class="sc">$</span>tot.withinss</span>
+<span id="cb153-5"><a href="k-means-clustering.html#cb153-5" tabindex="-1"></a>}</span>
+<span id="cb153-6"><a href="k-means-clustering.html#cb153-6" tabindex="-1"></a></span>
+<span id="cb153-7"><a href="k-means-clustering.html#cb153-7" tabindex="-1"></a><span class="co"># Plot the WCSS to identify the &#39;elbow&#39;</span></span>
+<span id="cb153-8"><a href="k-means-clustering.html#cb153-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, wcss, <span class="at">type =</span> <span class="st">&quot;b&quot;</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb153-9"><a href="k-means-clustering.html#cb153-9" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Number of Clusters (k)&quot;</span>, </span>
+<span id="cb153-10"><a href="k-means-clustering.html#cb153-10" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;WCSS (Within-Cluster Sum of Squares)&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="section" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> <img src="_main_files/figure-html/k_means_optimal_cluster_elbow-1.png" width="672" /><a href="k-means-clustering.html#section" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="strengths-and-weaknesses-of-k-means" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Strengths and Weaknesses of k-Means<a href="k-means-clustering.html#strengths-and-weaknesses-of-k-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>✅ <strong>Strengths:</strong><br />
+- Efficient for large datasets.<br />
+- Simple and intuitive.<br />
+- Fast convergence with <span class="math inline">\(O(n k d i)\)</span> complexity.</p>
+<p>❗️<strong>Weaknesses:</strong><br />
+- Assumes <strong>spherical clusters</strong>.<br />
+- Sensitive to <strong>initialization</strong> (use <strong>k-Means++</strong> to improve).<br />
+- Struggles with <strong>non-convex shapes</strong> or <strong>clusters with varying densities</strong>.<br />
+- May converge to <strong>local minima</strong> — multiple runs improve stability.</p>
+<hr />
+</div>
+<div id="when-to-use-k-means" class="section level3 hasAnchor" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> When to Use k-Means<a href="k-means-clustering.html#when-to-use-k-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>✅ Use k-Means when:
+- The data has <strong>compact, well-separated clusters</strong>.<br />
+- The feature space is <strong>low to moderate-dimensional</strong>.<br />
+- Speed is a priority (k-Means is fast).</p>
+<p>❗️Avoid k-Means when:
+- Clusters are <strong>non-convex</strong> or <strong>overlapping</strong> (consider <strong>DBSCAN</strong> or <strong>Spectral Clustering</strong>).<br />
+- The data has <strong>significant outliers</strong>.</p>
+<hr />
+</div>
+<div id="conclusion-k-means" class="section level3 hasAnchor" number="8.2.3">
+<h3><span class="header-section-number">8.2.3</span> Conclusion k-means<a href="k-means-clustering.html#conclusion-k-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>k-Means is a powerful yet simple clustering algorithm that performs well in many practical applications. While its efficiency is attractive, thoughtful parameter tuning and multiple runs are essential for achieving optimal results.</p>
+</div>
+</div>
+<div id="problem-statement" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Problem Statement<a href="k-means-clustering.html#problem-statement" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Given a dataset with <span class="math inline">\(n\)</span> observations and <span class="math inline">\(d\)</span> features:</p>
+<p><span class="math display">\[
+\mathbf{X} = \{ \mathbf{x}_1, \mathbf{x}_2, \dots, \mathbf{x}_n \} \quad \text{where} \quad \mathbf{x}_i \in \mathbb{R}^d
+\]</span></p>
+<p>The goal is to partition the data into <span class="math inline">\(k\)</span> clusters <span class="math inline">\(\{ C_1, C_2, \dots, C_k \}\)</span> such that the total <strong>within-cluster sum of squares (WCSS)</strong> is minimized:</p>
+<p><span class="math display">\[
+\min_{C_1, \dots, C_k} \sum_{j=1}^{k} \sum_{\mathbf{x}_i \in C_j} \| \mathbf{x}_i - \boldsymbol{\mu}_j \|^2
+\]</span></p>
+<p>where:
+- <span class="math inline">\(\boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{\mathbf{x}_i \in C_j} \mathbf{x}_i\)</span> is the <strong>centroid</strong> of cluster <span class="math inline">\(C_j\)</span>.
+- The objective minimizes the sum of squared distances between points and their respective cluster centroids.</p>
+<hr />
+</div>
+<div id="naive-solution" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Naive Solution<a href="k-means-clustering.html#naive-solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>Why Can We Solve the Partition Problem by Evaluating Every Possible Partition?</strong> To understand why a “naive” method — where we evaluate <strong>all possible groupings of elements</strong> — can correctly compute the number of partitions, we need to analyze the combinatorial structure of partitions.</p>
+<hr />
+<div id="why-evaluating-all-possible-partitions-works" class="section level3 hasAnchor" number="8.4.1">
+<h3><span class="header-section-number">8.4.1</span> Why Evaluating All Possible Partitions Works?<a href="k-means-clustering.html#why-evaluating-all-possible-partitions-works" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To see why the naive approach is valid, we can build partitions in an <strong>incremental way</strong>:</p>
+<div id="step-1-start-with-an-empty-set" class="section level4 hasAnchor" number="8.4.1.1">
+<h4><span class="header-section-number">8.4.1.1</span> Step 1: Start with an Empty Set<a href="k-means-clustering.html#step-1-start-with-an-empty-set" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Suppose we have a set <span class="math inline">\(\{1, 2, \dots, n \}\)</span>.</p>
+</div>
+<div id="step-2-add-elements-one-by-one" class="section level4 hasAnchor" number="8.4.1.2">
+<h4><span class="header-section-number">8.4.1.2</span> Step 2: Add Elements One by One<a href="k-means-clustering.html#step-2-add-elements-one-by-one" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When adding the <span class="math inline">\(i\)</span>-th element to an existing partition:
+- It can join <strong>any existing subset</strong>.
+- Or it can form a <strong>new subset</strong>.</p>
+<p>Thus, at each step, there are <strong>two choices</strong>:
+- Place the element in one of the existing clusters.
+- Start a new cluster with the element alone.</p>
+<p>This combinatorial logic corresponds directly to the recurrence relation for Stirling numbers of the second kind:</p>
+<p><span class="math display">\[
+S(n, k) = k \cdot S(n-1, k) + S(n-1, k-1)
+\]</span></p>
 <ul>
-<li>Class 1: Introduction to Multivariate High-Dimensional Methods</li>
-<li>Class 2: HD Linear Regression: Machine Learning</li>
-<li>Class 3: HD Linear Regression: Bayesian Methods</li>
-<li>Class 4: Computational Implementation of HD Linear Regression</li>
-<li>Class 5: Efficient Computation of HD Linear Regression</li>
-<li>Class 6: Bonus Linear Algebra Test</li>
-<li>Class 7: Introduction to PCA</li>
-<li>Class 8: HD PCA</li>
-<li>Class 9: Principal Components Regression</li>
-<li>Class 10: Factor Analysis 1</li>
-<li>Class 11: Factor Analysis 2</li>
-<li>Class 12: Canonical Correlation Analysis</li>
-<li>Class 13: HD Canonical Correlation Analysis</li>
+<li>The first term represents placing the new element in one of the existing <span class="math inline">\(k\)</span> groups.<br />
+</li>
+<li>The second term represents starting a <strong>new</strong> group, increasing the cluster count from <span class="math inline">\(k-1\)</span> to <span class="math inline">\(k\)</span>.</li>
 </ul>
+<hr />
+</div>
+</div>
+<div id="why-does-this-work-for-all-possible-partitions" class="section level3 hasAnchor" number="8.4.2">
+<h3><span class="header-section-number">8.4.2</span> Why Does This Work for All Possible Partitions?<a href="k-means-clustering.html#why-does-this-work-for-all-possible-partitions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>By systematically generating all possible combinations:
+- Every valid partition is explored.<br />
+- Each combination adheres to the non-overlapping, non-empty subset condition.<br />
+- The method ensures no duplicates are counted by the incremental logic.</p>
+<hr />
+</div>
+<div id="efficiency-of-the-naive-approach" class="section level3 hasAnchor" number="8.4.3">
+<h3><span class="header-section-number">8.4.3</span> Efficiency of the Naive Approach<a href="k-means-clustering.html#efficiency-of-the-naive-approach" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>The naive method effectively explores the <strong>lattice of set partitions</strong>, where each state corresponds to a valid grouping.<br />
+</li>
+<li>While correct, this method has exponential complexity: <span class="math inline">\(O(n!)\)</span> for brute force generation.</li>
+</ul>
+<p>This is why the <strong>recursive Stirling number relation</strong> or <strong>dynamic programming</strong> is preferable for larger <span class="math inline">\(n\)</span>.</p>
+<hr />
+</div>
+<div id="key-intuition" class="section level3 hasAnchor" number="8.4.4">
+<h3><span class="header-section-number">8.4.4</span> Key Intuition<a href="k-means-clustering.html#key-intuition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>✅ Each element has multiple valid placements (existing subset or new subset).<br />
+✅ Exploring all combinations inherently builds all valid partitions.<br />
+✅ The recurrence relation mirrors this exact branching structure.</p>
+</div>
+</div>
+<div id="the-k-means-algorithm-lloyds-algorithm" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> The k-Means Algorithm (Lloyd’s algorithm)<a href="k-means-clustering.html#the-k-means-algorithm-lloyds-algorithm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The k-Means algorithm uses an <strong>iterative refinement</strong> approach. The steps are:</p>
+<p><strong>Step 1:</strong> <strong>Initialize <span class="math inline">\(k\)</span> cluster centroids.</strong><br />
+- Common methods include:
+- <strong>Random Initialization</strong>: Randomly select <span class="math inline">\(k\)</span> points as centroids.
+- <strong>k-Means++ Initialization</strong> (recommended): Selects initial centroids to maximize cluster separation.</p>
+<p><strong>Step 2:</strong> <strong>Assign points to the nearest centroid.</strong><br />
+- For each observation <span class="math inline">\(\mathbf{x}_i\)</span>, assign it to the cluster with the closest centroid:</p>
+<p><span class="math display">\[
+\text{Cluster}(\mathbf{x}_i) = \arg \min_{j} \|\mathbf{x}_i - \boldsymbol{\mu}_j\|^2
+\]</span></p>
+<p><strong>Step 3:</strong> <strong>Update the centroids.</strong><br />
+- Recalculate each centroid as the mean of its assigned points:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{\mathbf{x}_i \in C_j} \mathbf{x}_i
+\]</span></p>
+<p><strong>Step 4:</strong> <strong>Repeat Steps 2 and 3 until convergence.</strong><br />
+- Convergence occurs when cluster assignments no longer change or centroids stabilize.</p>
+<hr />
+<div id="why-does-k-means-works" class="section level3 hasAnchor" number="8.5.1">
+<h3><span class="header-section-number">8.5.1</span> Why does k-Means works?<a href="k-means-clustering.html#why-does-k-means-works" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We need to show that each iteration of the <strong>k-Means algorithm</strong> decreases the <strong>within-cluster sum of squares (WCSS)</strong>, ensuring convergence.</p>
+<p>The k-Means algorithm alternates between two steps:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Cluster Assignment Step:</strong> Assign each point to the closest centroid.<br />
+</li>
+<li><strong>Centroid Update Step:</strong> Recalculate the centroid as the mean of points in each cluster.</li>
+</ol>
+<p>We’ll prove that <strong>each of these steps decreases the WCSS</strong>.</p>
+<div id="cluster-assignment-step-decreases-wcss" class="section level4 hasAnchor" number="8.5.1.1">
+<h4><span class="header-section-number">8.5.1.1</span> Cluster Assignment Step Decreases WCSS<a href="k-means-clustering.html#cluster-assignment-step-decreases-wcss" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Suppose we are in the middle of the k-Means algorithm with centroids <span class="math inline">\(\{ \boldsymbol{\mu}_1, \dots, \boldsymbol{\mu}_k \}\)</span>.</p>
+<ul>
+<li>Each point <span class="math inline">\(\mathbf{x}_i\)</span> is assigned to the nearest centroid.<br />
+</li>
+<li>For a point originally assigned to cluster <span class="math inline">\(C_j\)</span>, assume it is reassigned to <span class="math inline">\(C_\ell\)</span>.</li>
+</ul>
+<p>Since the assignment rule is:</p>
+<p><span class="math display">\[
+\|\mathbf{x}_i - \boldsymbol{\mu}_\ell \|^2 \leq \|\mathbf{x}_i - \boldsymbol{\mu}_j \|^2
+\]</span></p>
+<p>the WCSS can only <strong>decrease or remain the same</strong>.</p>
+<p>✅ <strong>Conclusion:</strong> The assignment step <strong>never increases WCSS</strong>.</p>
+<hr />
+</div>
+<div id="centroid-update-step-decreases-wcss" class="section level4 hasAnchor" number="8.5.1.2">
+<h4><span class="header-section-number">8.5.1.2</span> Centroid Update Step Decreases WCSS<a href="k-means-clustering.html#centroid-update-step-decreases-wcss" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Next, consider the effect of updating the centroids.</p>
+<p>Suppose the updated centroid for cluster <span class="math inline">\(C_j\)</span> is:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_j = \frac{1}{|C_j|} \sum_{\mathbf{x}_i \in C_j} \mathbf{x}_i
+\]</span></p>
+<p>We want to show that this new centroid minimizes:</p>
+<p><span class="math display">\[
+\sum_{\mathbf{x}_i \in C_j} \|\mathbf{x}_i - \boldsymbol{\mu}_j\|^2
+\]</span></p>
+<p>From properties of the <strong>sample mean</strong>, the mean is the point that minimizes the sum of squared distances to all points in the cluster:</p>
+<p><span class="math display">\[
+\boldsymbol{\mu}_j = \arg\min_{\mathbf{y}} \sum_{\mathbf{x}_i \in C_j} \|\mathbf{x}_i - \mathbf{y} \|^2
+\]</span></p>
+<p>✅ <strong>Conclusion:</strong> The centroid update step <strong>strictly decreases</strong> WCSS unless the centroid is already optimal.</p>
+</div>
+<div id="combined-effect" class="section level4 hasAnchor" number="8.5.1.3">
+<h4><span class="header-section-number">8.5.1.3</span> Combined Effect<a href="k-means-clustering.html#combined-effect" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The <strong>Cluster Assignment Step</strong> decreases WCSS or leaves it unchanged.<br />
+</li>
+<li>The <strong>Centroid Update Step</strong> strictly decreases WCSS unless centroids are optimal.</li>
+</ul>
+<p>Since WCSS is <strong>lower-bounded by zero</strong>, the algorithm must eventually converge.</p>
+</div>
+<div id="why-does-k-means-converge" class="section level4 hasAnchor" number="8.5.1.4">
+<h4><span class="header-section-number">8.5.1.4</span> Why Does k-Means Converge?<a href="k-means-clustering.html#why-does-k-means-converge" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>Each iteration reduces WCSS.<br />
+</li>
+<li>WCSS is <strong>bounded</strong> and <strong>non-negative</strong>.<br />
+</li>
+<li>Therefore, by the monotone convergence theorem, the algorithm must eventually reach a local minimum.</li>
+</ul>
+<p>❗️ <strong>Important:</strong> k-Means may converge to a <strong>local minimum</strong>, not necessarily the <strong>global minimum</strong> — this is why multiple initializations (like <strong>k-Means++</strong>) are recommended.</p>
+</div>
+<div id="summary-2" class="section level4 hasAnchor" number="8.5.1.5">
+<h4><span class="header-section-number">8.5.1.5</span> Summary<a href="k-means-clustering.html#summary-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>✅ Each iteration of k-Means reduces the WCSS.<br />
+✅ Convergence is guaranteed, though the final solution may only be <strong>locally optimal</strong>.<br />
+✅ Using improved initialization techniques like <strong>k-Means++</strong> helps achieve better results.</p>
 
-<!-- Bold Letters -->
-<!-- Regular Greeks -->
-<!-- Variant Greeks -->
-<!-- Calligraphic Letters -->
-<!-- Double Letters -->
-<!-- Tilde Letters -->
-<!-- Bold Numbers -->
+</div>
 </div>
 </div>
 </div>
@@ -419,8 +673,8 @@ and lecture notes.</p>
           </div>
         </div>
       </div>
+<a href="canonical-correlation-analysis-cca.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="prerequisites.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
