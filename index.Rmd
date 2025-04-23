@@ -36,3 +36,14 @@ and lecture notes.
 * Class 11: Factor Analysis 2
 * Class 12: Canonical Correlation Analysis
 * Class 13: HD Canonical Correlation Analysis
+* Class 14: Project 2
+* Class 15: K-Means Part 1
+* Class 16: K-Means Part 2
+* Class 17: Expectation Maximization
+* Class 18: Gaussian Mixture Models (GMM)
+* Class 19: HD GMM
+* Class 20: Project 3
+* Class 21: Logistic Regression
+* Class 22: Support Vector Machines
+* Class 23: SVM Part 2
+* Class 24: Decision Tree Learning

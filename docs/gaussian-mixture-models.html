@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DS 6388 Spring 2025</title>
-  <meta name="description" content="DS 6388 Spring 2025" />
+  <title>10 Gaussian Mixture Models | DS 6388 Spring 2025</title>
+  <meta name="description" content="10 Gaussian Mixture Models | DS 6388 Spring 2025" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="DS 6388 Spring 2025" />
+  <meta property="og:title" content="10 Gaussian Mixture Models | DS 6388 Spring 2025" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="DS 6388 Spring 2025" />
+  <meta name="twitter:title" content="10 Gaussian Mixture Models | DS 6388 Spring 2025" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="expectation-maximization.html"/>
 
-<link rel="next" href="prerequisites.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -391,60 +391,228 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">DS 6388 Spring 2025</h1>
-<p class="author"><em>Rene Gutierrez University of Texas at El Paso</em></p>
-</div>
-<div id="ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> DS 6388: Multivariate Statistical Methods for High-dimensional Data<a href="index.html#ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is the website for DS 6388. It contains relevant information for the course
-and lecture notes.</p>
-<div id="calendar" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Calendar<a href="index.html#calendar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="importatnt-dates" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Importatnt Dates<a href="index.html#importatnt-dates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="gaussian-mixture-models" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">10</span> Gaussian Mixture Models<a href="gaussian-mixture-models.html#gaussian-mixture-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-5" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> Introduction<a href="gaussian-mixture-models.html#introduction-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Gaussian Mixture Models (GMMs) are <strong>probabilistic models</strong> used to represent data as a <strong>mixture of several Gaussian distributions</strong>. Each component of the mixture corresponds to a cluster or subpopulation within the overall data distribution.</p>
+<p>GMMs are widely used in <strong>clustering</strong>, <strong>density estimation</strong>, and as building blocks in more complex generative models.</p>
+<hr />
+<div id="model-definition" class="section level3 hasAnchor" number="10.1.1">
+<h3><span class="header-section-number">10.1.1</span> Model Definition<a href="gaussian-mixture-models.html#model-definition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose <span class="math inline">\(\mathbf{x}_1, \dots, \mathbf{x}_n \in \mathbb{R}^p\)</span> are observed data points. A GMM models the distribution of each <span class="math inline">\(\mathbf{x}_i\)</span> as arising from one of <span class="math inline">\(K\)</span> components:</p>
+<p><span class="math display">\[
+    p(\mathbf{x}) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}(\mathbf{x} \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+    \]</span></p>
+<p>where:</p>
 <ul>
-<li>February 10: Linear Algebra Extra Credit Test</li>
-<li>March 2: First Project Submission Deadline</li>
-<li>March 25: Second Project Submission Deadline</li>
+<li><p><span class="math inline">\(\pi_k \in (0, 1)\)</span> are the <strong>mixing proportions</strong>, with <span class="math inline">\(\sum_{k=1}^{K} \pi_k = 1\)</span></p></li>
+<li><p><span class="math inline">\(\boldsymbol{\mu}_k \in \mathbb{R}^p\)</span> is the <strong>mean</strong> of the <span class="math inline">\(k\)</span>-th Gaussian</p></li>
+<li><p><span class="math inline">\(\boldsymbol{\Sigma}_k \in \mathbb{R}^{p \times p}\)</span> is the <strong>covariance matrix</strong> of the <span class="math inline">\(k\)</span>-th Gaussian</p></li>
+<li><p><span class="math inline">\(\mathcal{N}(\mathbf{x} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> denotes the <strong>multivariate Gaussian density</strong></p>
+<hr /></li>
 </ul>
 </div>
-<div id="class-schedule" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Class Schedule<a href="index.html#class-schedule" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="latent-variable-interpretation" class="section level3 hasAnchor" number="10.1.2">
+<h3><span class="header-section-number">10.1.2</span> Latent Variable Interpretation<a href="gaussian-mixture-models.html#latent-variable-interpretation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>GMMs introduce an <strong>unobserved categorical variable</strong> <span class="math inline">\(z_i \in \{1, \dots, K\}\)</span> indicating which component generated <span class="math inline">\(\mathbf{x}_i\)</span>. The full generative process is:</p>
+<ol style="list-style-type: decimal">
+<li><p>Sample component:<br />
+<span class="math display">\[
+    z_i \sim \text{Categorical}(\pi_1, \dots, \pi_K)
+    \]</span></p></li>
+<li><p>Given <span class="math inline">\(z_i = k\)</span>, sample data:<br />
+<span class="math display">\[
+\mathbf{x}_i \sim \mathcal{N}(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+\]</span></p></li>
+</ol>
+<p>The observed data likelihood becomes:</p>
+<p><span class="math display">\[
+    p(\mathbf{x}_i) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+    \]</span></p>
+<hr />
+</div>
+<div id="parameters-to-estimate" class="section level3 hasAnchor" number="10.1.3">
+<h3><span class="header-section-number">10.1.3</span> Parameters to Estimate<a href="gaussian-mixture-models.html#parameters-to-estimate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The unknown parameters are:</p>
 <ul>
-<li>Class 1: Introduction to Multivariate High-Dimensional Methods</li>
-<li>Class 2: HD Linear Regression: Machine Learning</li>
-<li>Class 3: HD Linear Regression: Bayesian Methods</li>
-<li>Class 4: Computational Implementation of HD Linear Regression</li>
-<li>Class 5: Efficient Computation of HD Linear Regression</li>
-<li>Class 6: Bonus Linear Algebra Test</li>
-<li>Class 7: Introduction to PCA</li>
-<li>Class 8: HD PCA</li>
-<li>Class 9: Principal Components Regression</li>
-<li>Class 10: Factor Analysis 1</li>
-<li>Class 11: Factor Analysis 2</li>
-<li>Class 12: Canonical Correlation Analysis</li>
-<li>Class 13: HD Canonical Correlation Analysis</li>
-<li>Class 14: Project 2</li>
-<li>Class 15: K-Means Part 1</li>
-<li>Class 16: K-Means Part 2</li>
-<li>Class 17: Expectation Maximization</li>
-<li>Class 18: Gaussian Mixture Models (GMM)</li>
-<li>Class 19: HD GMM</li>
-<li>Class 20: Project 3</li>
-<li>Class 21: Logistic Regression</li>
-<li>Class 22: Support Vector Machines</li>
-<li>Class 23: SVM Part 2</li>
-<li>Class 24: Decision Tree Learning</li>
+<li>Mixing weights: <span class="math inline">\(\pi_1, \dots, \pi_K\)</span></li>
+<li>Component means: <span class="math inline">\(\boldsymbol{\mu}_1, \dots, \boldsymbol{\mu}_K\)</span></li>
+<li>Covariances: <span class="math inline">\(\boldsymbol{\Sigma}_1, \dots, \boldsymbol{\Sigma}_K\)</span></li>
 </ul>
+<p>These are typically estimated via the <strong>Expectation-Maximization (EM)</strong> algorithm.</p>
+<hr />
+</div>
+<div id="summary-3" class="section level3 hasAnchor" number="10.1.4">
+<h3><span class="header-section-number">10.1.4</span> Summary<a href="gaussian-mixture-models.html#summary-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>GMMs generalize <strong>k-means</strong> by allowing soft assignments and modeling cluster shape.</li>
+<li>Each data point has a <strong>probabilistic association</strong> to each cluster.</li>
+<li>Inference is typically performed via <strong>EM</strong>, which alternates between computing responsibilities and updating parameters.</li>
+</ul>
+</div>
+</div>
+<div id="em-on-gmm" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> EM on GMM<a href="gaussian-mixture-models.html#em-on-gmm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="original-model" class="section level3 hasAnchor" number="10.2.1">
+<h3><span class="header-section-number">10.2.1</span> Original model<a href="gaussian-mixture-models.html#original-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[
+p(\mathbf{x}_i \mid \boldsymbol{\theta}) = \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k)
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\theta} = \{ \boldsymbol{\mu}_k, \mathbf{\Sigma}_k, \pi_k \}_{k=1}^K\)</span></p>
+<p>Then the likelihood is:</p>
+<p><span class="math display">\[
+p(\mathbf{X} \mid \boldsymbol{\theta}) = \prod_{i=1}^{n} \left( \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right)
+\]</span></p>
+<hr />
+</div>
+<div id="new-model" class="section level3 hasAnchor" number="10.2.2">
+<h3><span class="header-section-number">10.2.2</span> New model<a href="gaussian-mixture-models.html#new-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[
+\mathbf{x}_i \mid z_i = k \sim \mathcal{N}(\boldsymbol{\mu}_k, \mathbf{\Sigma}_k)
+\]</span></p>
+<p><span class="math display">\[
+z_i \mid \boldsymbol{\theta} \sim \text{Categorical}(\pi_1, \dots, \pi_K)
+\]</span></p>
+<p>Both, independent across observations.</p>
+<hr />
+</div>
+<div id="model-equivalency" class="section level3 hasAnchor" number="10.2.3">
+<h3><span class="header-section-number">10.2.3</span> Model Equivalency<a href="gaussian-mixture-models.html#model-equivalency" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now let us check that the marginal distribution of the new model is the same as the original model.</p>
+<p>Note that:</p>
+<p><span class="math display">\[\begin{align*}
+p(\mathbf{x}_i, z_i \mid \boldsymbol{\theta})
+  &amp;= p(\mathbf{x}_i, \mid z_i \boldsymbol{\theta}) \\
+  &amp;= \prod_{k=1}^{K} \left[ \pi_k  \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \\
+\end{align*}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[
+p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta}) = \prod_{i=1}^{n} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]}
+\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+p(\mathbf{X} \mid \boldsymbol{\theta})
+  &amp;= \sum_{ {\boldsymbol Z} } p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta}) \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_n} \prod_{i=1}^{n} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \sum_{z_{n}} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_n = k]} \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \left( \sum_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_n = k]} \right) \\
+  &amp;= \prod_{i=1}^{n} \left( \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right)
+\end{align*}\]</span></p>
+<p>So the marginal distribution of the new model is the same as the original model.</p>
+<hr />
+</div>
+<div id="expectation-computation" class="section level3 hasAnchor" number="10.2.4">
+<h3><span class="header-section-number">10.2.4</span> Expectation Computation<a href="gaussian-mixture-models.html#expectation-computation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>First we compute <span class="math inline">\(p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta})\)</span>, the distribution we use to compute the expectation.</p>
+<p><span class="math display">\[\begin{align*}
+p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta})
+  &amp;= \frac{p(\mathbf{Z}, \mathbf{X} \mid \boldsymbol{\theta})}{p(\mathbf{X} \mid  \boldsymbol{\theta})} \\
+  &amp;= \frac{p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}) p(\mathbf{Z} \mid \boldsymbol{\theta})}{p(\mathbf{X} \mid  \boldsymbol{\theta})} \\
+  &amp;= \frac{ \prod_{i=1}^n p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \prod_{i=1}^n p(z_i \mid \boldsymbol{\theta})}{\prod_{i=1}^n p( {\boldsymbol x} _i \mid  \boldsymbol{\theta})} \\
+  &amp;= \prod_{i=1}^n \frac{ p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) p(z_i \mid \boldsymbol{\theta})}{ p( {\boldsymbol x} _i \mid  \boldsymbol{\theta})} \\
+  &amp;= \prod_{i=1}^n p( {\boldsymbol x} _i \mid z_i, \boldsymbol{\theta})
+\end{align*}\]</span></p>
+<p>Now:</p>
+<p><span class="math display">\[\begin{align*}
+p(z_i = k \mid \mathbf{x}_i, \boldsymbol{\theta})
+  &amp;= \frac{p(\mathbf{x}_i, z_i = k \mid \boldsymbol{\theta})}{p(\mathbf{x}_i \mid \boldsymbol{\theta})} \\
+  &amp;= \frac{p(\mathbf{x}_i \mid z_i = k, \boldsymbol{\theta}) p(z_i = k \mid \boldsymbol{\theta})}{\sum_{l=1}^{K} \pi_l \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_l, \mathbf{\Sigma}_l)} \\
+  &amp;= \frac{\pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k)}{\sum_{l=1}^{K} \pi_l \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_l, \mathbf{\Sigma}_l)} \\
+  &amp;= \gamma_{ik}
+\end{align*}\]</span></p>
+<p>Finally, let us compute:</p>
+<p><span class="math display">\[
+\mathbb{E}_{\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}^{(t)}}[\log p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta})]
+\]</span></p>
+<p>First, note that:</p>
+<p><span class="math display">\[\begin{align*}
+\log p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta})
+  &amp;= \log \left( \prod_{i=1}^{n} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \right) \\
+  &amp;= \sum_{i=1}^{n} \sum_{k=1}^{K} \mathbb{I}[z_i = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \\
+  &amp;= w^{n}
+\end{align*}\]</span></p>
+<p>And note that <span class="math inline">\(w^n\)</span> can be decomposed as follows:</p>
+<p><span class="math display">\[
+w^n = w^{n-1} + \sum_{k=1}^{K} \mathbb{I}[z_n = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right)
+\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}_{\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}^{(t)}} &amp;[\log p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta})]
+  = \mathbb{E}_{\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}^{(t)}}[w^n] \\
+  &amp;= \sum_{ {\boldsymbol Z} } w^n p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}) \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_n} \left( w^{n-1} + \sum_{k=1}^{K} \mathbb{I}[z_n = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \right) \prod_{i=1}^n p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \\
+  &amp;\quad + \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \sum_{z_{n}} \sum_{k=1}^{K} \mathbb{I}[z_n = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) p(z_n \mid  {\boldsymbol x} _n, \boldsymbol{\theta}) \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \\
+  &amp;\quad + \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{n k} \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \\
+  &amp;\quad + \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{n k} \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) \\
+  &amp;= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid  {\boldsymbol x} _i, \boldsymbol{\theta}) + \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{n k} \\
+  &amp;= \sum_{i=1}^n \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{i k} \\
+\end{align*}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)})
+  &amp;= \sum_{i=1}^{n} \sum_{k=1}^{K} \gamma_{ik} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \\
+  &amp;= \sum_{i=1}^{n} \sum_{k=1}^{K} \gamma_{ik} \left[ \log \pi_k + \log \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]
+\end{align*}\]</span></p>
+<hr />
+</div>
+<div id="maximization-step" class="section level3 hasAnchor" number="10.2.5">
+<h3><span class="header-section-number">10.2.5</span> Maximization Step<a href="gaussian-mixture-models.html#maximization-step" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We need to maximize:</p>
+<p><span class="math display">\[
+\max_{ {\boldsymbol \pi} ,  {\boldsymbol \mu} ,  {\boldsymbol \Sigma} } Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) \\
+\text{s.t.}  \sum_{k=1}^{K} \pi_k = 1
+\]</span></p>
+<p>then, the Lagrange multiplier is:</p>
+<p><span class="math display">\[
+\mathcal{L} = \sum_{i=1}^{n} \sum_{k=1}^{K} \gamma_{ik} \left[ \log \pi_k + \log \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right] + \lambda \left( \sum_{k=1}^{K} \pi_k - 1 \right)
+\]</span></p>
+<div id="update-pi_k" class="section level4 hasAnchor" number="10.2.5.1">
+<h4><span class="header-section-number">10.2.5.1</span> Update <span class="math inline">\(\pi_k\)</span><a href="gaussian-mixture-models.html#update-pi_k" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[\begin{align*}
+&amp; \frac{\partial \mathcal{L}}{\partial \pi_k} = \sum_{i=1}^{n} \frac{\gamma_{ik}}{\pi_k} + \lambda = 0 \\
+\Rightarrow &amp; \pi_k = - \frac{1}{\lambda} \sum_{i=1}^{n} \gamma_{ik} \\
+\Rightarrow &amp; \sum_{k=1}^K \pi_k = - \frac{1}{\lambda} \sum_{k=1}^K \sum_{i=1}^{n} \gamma_{ik} \\
+\Rightarrow &amp; 1 = - \frac{1}{\lambda} n \\
+\Rightarrow &amp; \lambda = -n \\
+\end{align*}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[
+\pi_k = \frac{1}{n} \sum_{i=1}^{n} \gamma_{ik}
+\]</span></p>
+<hr />
+</div>
+<div id="update-boldsymbolmu_k" class="section level4 hasAnchor" number="10.2.5.2">
+<h4><span class="header-section-number">10.2.5.2</span> Update <span class="math inline">\(\boldsymbol{\mu}_k\)</span><a href="gaussian-mixture-models.html#update-boldsymbolmu_k" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \boldsymbol{\mu}_k} &amp;= -\sum_{i=1}^{n} \gamma_{ik} \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) = 0 \\
+  &amp;\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) = 0 \\
+  &amp;\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \mathbf{x}_i = \sum_{i=1}^{n} \gamma_{ik} \boldsymbol{\mu}_k \\
+  &amp;\Rightarrow \boldsymbol{\mu}_k = \frac{\sum_{i=1}^{n} \gamma_{ik} \mathbf{x}_i}{\sum_{i=1}^{n} \gamma_{ik}}
+\end{align*}\]</span></p>
+<hr />
+</div>
+<div id="update-mathbfsigma_k" class="section level4 hasAnchor" number="10.2.5.3">
+<h4><span class="header-section-number">10.2.5.3</span> Update <span class="math inline">\(\mathbf{\Sigma}_k\)</span><a href="gaussian-mixture-models.html#update-mathbfsigma_k" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma}_k}
+  &amp;= \frac{\partial}{\partial \mathbf{\Sigma}_k} \sum_{i=1}^{n} \gamma_{ik} \left( -\frac{1}{2} \log |\mathbf{\Sigma}_k| - \frac{1}{2} (\mathbf{x}_i - \boldsymbol{\mu}_k)^\top \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) \right) \\
+  &amp;= \sum_{i=1}^{n} \gamma_{ik} \left( -\frac{1}{2} \mathbf{\Sigma}_k^{-1} + \frac{1}{2} \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)&#39;  \mathbf{\Sigma}_k^{-1} \right) \\
+\end{align*}\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma}_k}
+  &amp;= 0 \\
+  &amp;\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \left( \Sigma_k - (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)&#39; \right) = 0 \\
+  &amp;\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \Sigma_k = \sum_{i=1}^{n} \gamma_{ik} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)&#39; \\
+  &amp;\Rightarrow \Sigma_k \sum_{i=1}^{n} \gamma_{ik} = \sum_{i=1}^{n} \gamma_{ik} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)&#39; \\
+  &amp;\Rightarrow \Sigma_k = \frac{\sum_{i=1}^{n} \gamma_{ik} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)&#39;}{\sum_{i=1}^{n} \gamma_{ik}} \\
+\end{align*}\]</span></p>
 
-<!-- Bold Letters -->
-<!-- Regular Greeks -->
-<!-- Variant Greeks -->
-<!-- Calligraphic Letters -->
-<!-- Double Letters -->
-<!-- Tilde Letters -->
-<!-- Bold Numbers -->
+</div>
 </div>
 </div>
 </div>
@@ -453,8 +621,8 @@ and lecture notes.</p>
           </div>
         </div>
       </div>
+<a href="expectation-maximization.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="prerequisites.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

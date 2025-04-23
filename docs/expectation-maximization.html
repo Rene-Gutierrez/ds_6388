@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>DS 6388 Spring 2025</title>
-  <meta name="description" content="DS 6388 Spring 2025" />
+  <title>9 Expectation Maximization | DS 6388 Spring 2025</title>
+  <meta name="description" content="9 Expectation Maximization | DS 6388 Spring 2025" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="DS 6388 Spring 2025" />
+  <meta property="og:title" content="9 Expectation Maximization | DS 6388 Spring 2025" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="DS 6388 Spring 2025" />
+  <meta name="twitter:title" content="9 Expectation Maximization | DS 6388 Spring 2025" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="prerequisites.html"/>
+<link rel="prev" href="k-means-clustering.html"/>
+<link rel="next" href="gaussian-mixture-models.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -391,61 +391,118 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">DS 6388 Spring 2025</h1>
-<p class="author"><em>Rene Gutierrez University of Texas at El Paso</em></p>
-</div>
-<div id="ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> DS 6388: Multivariate Statistical Methods for High-dimensional Data<a href="index.html#ds-6388-multivariate-statistical-methods-for-high-dimensional-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is the website for DS 6388. It contains relevant information for the course
-and lecture notes.</p>
-<div id="calendar" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Calendar<a href="index.html#calendar" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="importatnt-dates" class="section level3 hasAnchor" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> Importatnt Dates<a href="index.html#importatnt-dates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="expectation-maximization" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Expectation Maximization<a href="expectation-maximization.html#expectation-maximization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-4" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Introduction<a href="expectation-maximization.html#introduction-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <strong>Expectation-Maximization (EM)</strong> algorithm is a method for <strong>maximum likelihood estimation</strong> in models with <strong>latent variables</strong> or <strong>incomplete data</strong>. Rather than maximizing the log-likelihood directly, EM alternates between estimating the missing data and optimizing the parameters.</p>
+<p>Common applications include:</p>
 <ul>
-<li>February 10: Linear Algebra Extra Credit Test</li>
-<li>March 2: First Project Submission Deadline</li>
-<li>March 25: Second Project Submission Deadline</li>
+<li>Gaussian Mixture Models</li>
+<li>Hidden Markov Models</li>
+<li>Factor Analysis</li>
+<li>Handling missing values</li>
 </ul>
 </div>
-<div id="class-schedule" class="section level3 hasAnchor" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> Class Schedule<a href="index.html#class-schedule" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="model-framework" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Model Framework<a href="expectation-maximization.html#model-framework" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We have:</p>
 <ul>
-<li>Class 1: Introduction to Multivariate High-Dimensional Methods</li>
-<li>Class 2: HD Linear Regression: Machine Learning</li>
-<li>Class 3: HD Linear Regression: Bayesian Methods</li>
-<li>Class 4: Computational Implementation of HD Linear Regression</li>
-<li>Class 5: Efficient Computation of HD Linear Regression</li>
-<li>Class 6: Bonus Linear Algebra Test</li>
-<li>Class 7: Introduction to PCA</li>
-<li>Class 8: HD PCA</li>
-<li>Class 9: Principal Components Regression</li>
-<li>Class 10: Factor Analysis 1</li>
-<li>Class 11: Factor Analysis 2</li>
-<li>Class 12: Canonical Correlation Analysis</li>
-<li>Class 13: HD Canonical Correlation Analysis</li>
-<li>Class 14: Project 2</li>
-<li>Class 15: K-Means Part 1</li>
-<li>Class 16: K-Means Part 2</li>
-<li>Class 17: Expectation Maximization</li>
-<li>Class 18: Gaussian Mixture Models (GMM)</li>
-<li>Class 19: HD GMM</li>
-<li>Class 20: Project 3</li>
-<li>Class 21: Logistic Regression</li>
-<li>Class 22: Support Vector Machines</li>
-<li>Class 23: SVM Part 2</li>
-<li>Class 24: Decision Tree Learning</li>
+<li><span class="math inline">\( {\boldsymbol x} \)</span>: observed variables<br />
+</li>
+<li><span class="math inline">\( {\boldsymbol z} \)</span>: unobserved variables<br />
+</li>
+<li><span class="math inline">\( {\boldsymbol \theta} \)</span>: parameters to be estimated</li>
+</ul>
+<p>We want to:</p>
+<p><span class="math display">\[
+\max_ {\boldsymbol \theta} \log p( {\boldsymbol x} \mid  {\boldsymbol \theta} )
+\]</span></p>
+<p>Note that <span class="math inline">\(\log p( {\boldsymbol x} \mid  {\boldsymbol \theta} )\)</span> is a function of <span class="math inline">\( {\boldsymbol \theta} \)</span> given that data is observed.</p>
+<p>Sometimes we cannot maximize <span class="math inline">\(\log p(x \mid \theta)\)</span> directly. As a workaround, we proceed via EM.</p>
+<hr />
+</div>
+<div id="algorithm" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Algorithm<a href="expectation-maximization.html#algorithm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Initialize <span class="math inline">\(\boldsymbol{\theta}^{(0)}\)</span></p>
+<p>While EM alternates between <span class="math inline">\(\boldsymbol{\theta}^{(t)}\)</span> and <span class="math inline">\(\boldsymbol{\theta}^{(t+1)}\)</span>, do:</p>
+<ul>
+<li><p><strong>Expectation Step (E-step):</strong> Compute<br />
+<span class="math display">\[
+Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) = \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})} [ \log p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta}) ]
+\]</span></p></li>
+<li><p><strong>Maximization Step:</strong> Maximize<br />
+<span class="math display">\[
+\boldsymbol{\theta}^{(t+1)} = \arg\max_{\boldsymbol{\theta}} Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)})
+\]</span></p></li>
+</ul>
+<p>This algorithm produces a sequence <span class="math inline">\(\boldsymbol{\theta}^{(0)}, \boldsymbol{\theta}^{(1)}, \dots\)</span>, which also produces a sequence:<br />
+<span class="math display">\[
+\log p(\mathbf{x} \mid \boldsymbol{\theta}^{(0)}), \log p(\mathbf{x} \mid \boldsymbol{\theta}^{(1)}), \dots
+\]</span></p>
+<p>Let us call:<br />
+<span class="math display">\[
+\mathcal{L}^{(t)} = \log p(\mathbf{x} \mid \boldsymbol{\theta}^{(t)})
+\]</span></p>
+<p>We will now show the EM algorithm produces a non-decreasing sequence <span class="math inline">\(\mathcal{L}^{(t)}\)</span>.</p>
+<p>So we need to show that:<br />
+<span class="math display">\[
+\mathcal{L}^{(t+1)} \geq \mathcal{L}^{(t)} \quad \text{at every iteration of the algorithm}
+\]</span></p>
+<hr />
+</div>
+<div id="proof-of-em-convergence" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Proof of EM Convergence<a href="expectation-maximization.html#proof-of-em-convergence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now note that:</p>
+<p><span class="math display">\[\begin{align*}
+p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}) &amp;= \frac{p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})}{p(\mathbf{x} \mid \boldsymbol{\theta})} &amp; \text{by def. of conditional probability} \\
+\Rightarrow p(\mathbf{x} \mid \boldsymbol{\theta}) &amp;= \frac{p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})}{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})} \\
+\Rightarrow \log p(\mathbf{x} \mid \boldsymbol{\theta}) &amp;= \log \left( \frac{p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})}{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})} \right) \\
+\Rightarrow  \mathcal{L}(\boldsymbol{\theta}) &amp;= \log p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta}) - \log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}) \tag{1}
+\end{align*}\]</span></p>
+<p>Now take <span class="math inline">\(\mathbb{E}_{\mathbf{z} \sim p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})}\)</span> of both sides:</p>
+<p><span class="math display">\[
+\mathcal{L}(\boldsymbol{\theta}) = \mathbb{E}_t[\log p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})] - \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})]
+= Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) + H_t(\boldsymbol{\theta}) \tag{2}
+\]</span></p>
+<p>Since, <span class="math inline">\(\mathcal{L}(\boldsymbol{\theta})\)</span> doesn’t depend on <span class="math inline">\( {\boldsymbol z} \)</span>, and we use <span class="math inline">\(t\)</span> the sub-index of the expectation to indicate that we are taking expectation with respect of <span class="math inline">\(p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})\)</span>, and <span class="math inline">\(H_t(\boldsymbol{\theta}) =  - \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})]\)</span>.</p>
+<p>Now, let us show that <span class="math inline">\(H_t(\boldsymbol{\theta}) \geq H_t(\boldsymbol{\theta}^{(t)})\)</span>, <span class="math inline">\(\forall \boldsymbol{\theta}\)</span></p>
+<p>Note that:</p>
+<p><span class="math display">\[\begin{align*}
+H_t(\boldsymbol{\theta}) - H_t(\boldsymbol{\theta}^{(t)}) &amp;= - \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})] + \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})] \\
+  &amp;= \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)}) - \log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})] \\
+  &amp;= \mathbb{E}_t \left[ \log \left( \frac{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})}{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})} \right) \right] \\
+  &amp;= D_{\text{KL}}(p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)}) \,\|\, p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})) \\
+  &amp;\geq 0
+\end{align*}\]</span></p>
+<p>So:
+<span class="math display">\[
+H_t(\boldsymbol{\theta}) \geq H_t(\boldsymbol{\theta}^{(t)}) \tag{4}
+\]</span></p>
+<p>Then:
+<span class="math display">\[\begin{align*}
+\mathcal{L}(\boldsymbol{\theta}^{(t)}) &amp;= Q(\boldsymbol{\theta^{(t)}} \mid \boldsymbol{\theta}^{(t)}) + H_t(\boldsymbol{\theta}) &amp; \text{from (1)} \\
+  &amp;\leq Q(\boldsymbol{\theta^{(t+1)}} \mid \boldsymbol{\theta}^{(t)}) + H_t(\boldsymbol{\theta}) &amp; \text{from the maximization step} \\
+  &amp;\leq Q(\boldsymbol{\theta^{(t+1)}} \mid \boldsymbol{\theta}^{(t+1)}) + H_t(\boldsymbol{\theta}) &amp; \text{from (4)} \\
+  &amp;=\mathcal{L}(\boldsymbol{\theta}^{(t+1)}) &amp; \text{from (2)} \\
+\end{align*}\]</span></p>
+<p>So:
+<span class="math display">\[
+\mathcal{L}(\boldsymbol{\theta}) \text{ is a non-decreasing function}
+\]</span></p>
+<p>Therefore, if <span class="math inline">\(\mathcal{L}(\boldsymbol{\theta})\)</span> has a maximum,<br />
+<span class="math inline">\(\mathcal{L}^{(t)}\)</span> converges by the Monotone Convergence Theorem.</p>
+<hr />
+</div>
+<div id="conclusion-4" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Conclusion<a href="expectation-maximization.html#conclusion-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>EM produces a sequence <span class="math inline">\(\mathcal{L}(\theta^{(t)})\)</span> that is <strong>non-decreasing</strong></li>
+<li>The proof uses the <strong>decomposition into <span class="math inline">\(Q\)</span>, entropy, and KL divergence</strong></li>
+<li>EM converges to a local maximum, but it is not guaranteed it will converge to a global maximum.</li>
+<li>Different starting points of EM have to be tried to compare performance.</li>
 </ul>
 
-<!-- Bold Letters -->
-<!-- Regular Greeks -->
-<!-- Variant Greeks -->
-<!-- Calligraphic Letters -->
-<!-- Double Letters -->
-<!-- Tilde Letters -->
-<!-- Bold Numbers -->
-</div>
 </div>
 </div>
             </section>
@@ -453,8 +510,8 @@ and lecture notes.</p>
           </div>
         </div>
       </div>
-
-<a href="prerequisites.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="k-means-clustering.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gaussian-mixture-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

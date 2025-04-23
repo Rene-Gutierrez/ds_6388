@@ -100,6 +100,8 @@ plot(1:10, wcss, type = "b", pch = 19, frame = FALSE,
      xlab = "Number of Clusters (k)", 
      ylab = "WCSS (Within-Cluster Sum of Squares)")
 ```
+
+
 ---
 
 ### Strengths and Weaknesses of k-Means

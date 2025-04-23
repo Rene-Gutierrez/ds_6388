@@ -1,0 +1,130 @@
+# Expectation Maximization
+
+
+## Introduction
+
+The **Expectation-Maximization (EM)** algorithm is a method for **maximum likelihood estimation** in models with **latent variables** or **incomplete data**. Rather than maximizing the log-likelihood directly, EM alternates between estimating the missing data and optimizing the parameters.
+
+Common applications include:
+
+- Gaussian Mixture Models
+- Hidden Markov Models
+- Factor Analysis
+- Handling missing values
+
+## Model Framework
+
+We have:
+
+- \( \bx \): observed variables  
+- \( \bz \): unobserved variables  
+- \( \bgth \): parameters to be estimated  
+
+We want to:
+
+\[
+\max_\bgth \log p(\bx \mid \bgth)
+\]
+
+Note that \( \log p(\bx \mid \bgth) \) is a function of \( \bgth \) given that data is observed.
+
+Sometimes we cannot maximize \( \log p(x \mid \theta) \) directly. As a workaround, we proceed via EM.
+
+---
+
+## Algorithm
+
+Initialize \( \boldsymbol{\theta}^{(0)} \)
+
+While EM alternates between \( \boldsymbol{\theta}^{(t)} \) and \( \boldsymbol{\theta}^{(t+1)} \), do:
+
+- **Expectation Step (E-step):** Compute  
+  \[
+  Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) = \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})} [ \log p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta}) ]
+  \]
+
+- **Maximization Step:** Maximize  
+  \[
+  \boldsymbol{\theta}^{(t+1)} = \arg\max_{\boldsymbol{\theta}} Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)})
+  \]
+
+This algorithm produces a sequence \( \boldsymbol{\theta}^{(0)}, \boldsymbol{\theta}^{(1)}, \dots \), which also produces a sequence:  
+\[
+\log p(\mathbf{x} \mid \boldsymbol{\theta}^{(0)}), \log p(\mathbf{x} \mid \boldsymbol{\theta}^{(1)}), \dots
+\]
+
+Let us call:  
+\[
+\mathcal{L}^{(t)} = \log p(\mathbf{x} \mid \boldsymbol{\theta}^{(t)})
+\]
+
+We will now show the EM algorithm produces a non-decreasing sequence \( \mathcal{L}^{(t)} \).
+
+So we need to show that:  
+\[
+\mathcal{L}^{(t+1)} \geq \mathcal{L}^{(t)} \quad \text{at every iteration of the algorithm}
+\]
+
+---
+
+## Proof of EM Convergence
+
+Now note that:  
+
+\begin{align*}
+p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}) &= \frac{p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})}{p(\mathbf{x} \mid \boldsymbol{\theta})} & \text{by def. of conditional probability} \\
+\Rightarrow p(\mathbf{x} \mid \boldsymbol{\theta}) &= \frac{p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})}{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})} \\
+\Rightarrow \log p(\mathbf{x} \mid \boldsymbol{\theta}) &= \log \left( \frac{p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})}{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})} \right) \\
+\Rightarrow  \mathcal{L}(\boldsymbol{\theta}) &= \log p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta}) - \log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}) \tag{1}
+\end{align*}
+
+Now take \( \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})} \) of both sides:
+
+\[
+\mathcal{L}(\boldsymbol{\theta}) = \mathbb{E}_t[\log p(\mathbf{x}, \mathbf{z} \mid \boldsymbol{\theta})] - \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})]
+= Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) + H_t(\boldsymbol{\theta}) \tag{2}
+\]
+
+Since, \( \mathcal{L}(\boldsymbol{\theta}) \) doesn't depend on \( \bz \), and we use \(t\) the sub-index of the expectation to indicate that we are taking expectation with respect of \( p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)}) \), and \( H_t(\boldsymbol{\theta}) =  - \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})] \).
+
+Now, let us show that \( H_t(\boldsymbol{\theta}) \geq H_t(\boldsymbol{\theta}^{(t)}) \), \( \forall \boldsymbol{\theta} \)
+
+Note that:
+
+\begin{align*}
+H_t(\boldsymbol{\theta}) - H_t(\boldsymbol{\theta}^{(t)}) &= - \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})] + \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})] \\
+  &= \mathbb{E}_t[\log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)}) - \log p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})] \\
+  &= \mathbb{E}_t \left[ \log \left( \frac{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)})}{p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})} \right) \right] \\
+  &= D_{\text{KL}}(p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta}^{(t)}) \,\|\, p(\mathbf{z} \mid \mathbf{x}, \boldsymbol{\theta})) \\
+  &\geq 0
+\end{align*}
+
+So:
+\[
+H_t(\boldsymbol{\theta}) \geq H_t(\boldsymbol{\theta}^{(t)}) \tag{4}
+\]
+
+Then:
+\begin{align*}
+\mathcal{L}(\boldsymbol{\theta}^{(t)}) &= Q(\boldsymbol{\theta^{(t)}} \mid \boldsymbol{\theta}^{(t)}) + H_t(\boldsymbol{\theta}) & \text{from (1)} \\
+  &\leq Q(\boldsymbol{\theta^{(t+1)}} \mid \boldsymbol{\theta}^{(t)}) + H_t(\boldsymbol{\theta}) & \text{from the maximization step} \\
+  &\leq Q(\boldsymbol{\theta^{(t+1)}} \mid \boldsymbol{\theta}^{(t+1)}) + H_t(\boldsymbol{\theta}) & \text{from (4)} \\
+  &=\mathcal{L}(\boldsymbol{\theta}^{(t+1)}) & \text{from (2)} \\ 
+\end{align*}
+
+So:
+\[
+\mathcal{L}(\boldsymbol{\theta}) \text{ is a non-decreasing function}
+\]
+
+Therefore, if \( \mathcal{L}(\boldsymbol{\theta}) \) has a maximum,  
+\( \mathcal{L}^{(t)} \) converges by the Monotone Convergence Theorem.
+
+---
+
+## Conclusion
+
+- EM produces a sequence \( \mathcal{L}(\theta^{(t)}) \) that is **non-decreasing**
+- The proof uses the **decomposition into \( Q \), entropy, and KL divergence**
+- EM converges to a local maximum, but it is not guaranteed it will converge to a global maximum.
+- Different starting points of EM have to be tried to compare performance.

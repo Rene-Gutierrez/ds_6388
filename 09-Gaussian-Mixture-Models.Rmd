@@ -1,0 +1,265 @@
+# Gaussian Mixture Models
+
+## Introduction
+  
+  Gaussian Mixture Models (GMMs) are **probabilistic models** used to represent data as a **mixture of several Gaussian distributions**. Each component of the mixture corresponds to a cluster or subpopulation within the overall data distribution.
+
+GMMs are widely used in **clustering**, **density estimation**, and as building blocks in more complex generative models.
+
+---
+  
+### Model Definition
+  
+  Suppose \( \mathbf{x}_1, \dots, \mathbf{x}_n \in \mathbb{R}^p \) are observed data points. A GMM models the distribution of each \( \mathbf{x}_i \) as arising from one of \( K \) components:
+  
+  \[
+    p(\mathbf{x}) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}(\mathbf{x} \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+    \]
+
+where:
+  
+  - \( \pi_k \in (0, 1) \) are the **mixing proportions**, with \( \sum_{k=1}^{K} \pi_k = 1 \)
+- \( \boldsymbol{\mu}_k \in \mathbb{R}^p \) is the **mean** of the \( k \)-th Gaussian
+- \( \boldsymbol{\Sigma}_k \in \mathbb{R}^{p \times p} \) is the **covariance matrix** of the \( k \)-th Gaussian
+- \( \mathcal{N}(\mathbf{x} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma}) \) denotes the **multivariate Gaussian density**
+  
+  ---
+  
+### Latent Variable Interpretation
+  
+  GMMs introduce an **unobserved categorical variable** \( z_i \in \{1, \dots, K\} \) indicating which component generated \( \mathbf{x}_i \). The full generative process is:
+  
+  1. Sample component:  
+  \[
+    z_i \sim \text{Categorical}(\pi_1, \dots, \pi_K)
+    \]
+
+2. Given \( z_i = k \), sample data:  
+  \[
+    \mathbf{x}_i \sim \mathcal{N}(\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+    \]
+
+The observed data likelihood becomes:
+  
+  \[
+    p(\mathbf{x}_i) = \sum_{k=1}^{K} \pi_k \cdot \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)
+    \]
+
+---
+  
+### Parameters to Estimate
+  
+  The unknown parameters are:
+  
+  - Mixing weights: \( \pi_1, \dots, \pi_K \)
+- Component means: \( \boldsymbol{\mu}_1, \dots, \boldsymbol{\mu}_K \)
+- Covariances: \( \boldsymbol{\Sigma}_1, \dots, \boldsymbol{\Sigma}_K \)
+
+These are typically estimated via the **Expectation-Maximization (EM)** algorithm.
+
+---
+  
+### Summary
+  
+  - GMMs generalize **k-means** by allowing soft assignments and modeling cluster shape.
+- Each data point has a **probabilistic association** to each cluster.
+- Inference is typically performed via **EM**, which alternates between computing responsibilities and updating parameters.
+
+## EM on GMM
+
+### Original model
+
+\[
+p(\mathbf{x}_i \mid \boldsymbol{\theta}) = \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k)
+\]
+
+where \( \boldsymbol{\theta} = \{ \boldsymbol{\mu}_k, \mathbf{\Sigma}_k, \pi_k \}_{k=1}^K \)
+
+Then the likelihood is:
+
+\[
+p(\mathbf{X} \mid \boldsymbol{\theta}) = \prod_{i=1}^{n} \left( \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right)
+\]
+
+---
+
+### New model
+
+\[
+\mathbf{x}_i \mid z_i = k \sim \mathcal{N}(\boldsymbol{\mu}_k, \mathbf{\Sigma}_k)
+\]
+
+\[
+z_i \mid \boldsymbol{\theta} \sim \text{Categorical}(\pi_1, \dots, \pi_K)
+\]
+
+Both, independent across observations.
+
+---
+
+### Model Equivalency
+
+Now let us check that the marginal distribution of the new model is the same as the original model.
+
+Note that:
+
+\begin{align*}
+p(\mathbf{x}_i, z_i \mid \boldsymbol{\theta}) 
+  &= p(\mathbf{x}_i, \mid z_i \boldsymbol{\theta}) \\
+  &= \prod_{k=1}^{K} \left[ \pi_k  \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \\
+\end{align*}
+
+Then:
+
+\[
+p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta}) = \prod_{i=1}^{n} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]}
+\]
+
+Then:
+
+\begin{align*}
+p(\mathbf{X} \mid \boldsymbol{\theta}) 
+  &= \sum_{\bZ} p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta}) \\
+  &= \sum_{z_1} \ldots \sum_{z_n} \prod_{i=1}^{n} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \\
+  &= \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \sum_{z_{n}} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_n = k]} \\
+  &= \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \left( \sum_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_n = k]} \right) \\
+  &= \prod_{i=1}^{n} \left( \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right)
+\end{align*}
+
+So the marginal distribution of the new model is the same as the original model.
+
+---
+
+### Expectation Computation
+
+First we compute \( p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}) \), the distribution we use to compute the expectation.
+
+\begin{align*}
+p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta})
+  &= \frac{p(\mathbf{Z}, \mathbf{X} \mid \boldsymbol{\theta})}{p(\mathbf{X} \mid  \boldsymbol{\theta})} \\
+  &= \frac{p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}) p(\mathbf{Z} \mid \boldsymbol{\theta})}{p(\mathbf{X} \mid  \boldsymbol{\theta})} \\
+  &= \frac{ \prod_{i=1}^n p(z_i \mid \bx_i, \boldsymbol{\theta}) \prod_{i=1}^n p(z_i \mid \boldsymbol{\theta})}{\prod_{i=1}^n p(\bx_i \mid  \boldsymbol{\theta})} \\
+  &= \prod_{i=1}^n \frac{ p(z_i \mid \bx_i, \boldsymbol{\theta}) p(z_i \mid \boldsymbol{\theta})}{ p(\bx_i \mid  \boldsymbol{\theta})} \\
+  &= \prod_{i=1}^n p(\bx_i \mid z_i, \boldsymbol{\theta})
+\end{align*}
+
+Now:
+
+\begin{align*}
+p(z_i = k \mid \mathbf{x}_i, \boldsymbol{\theta})
+  &= \frac{p(\mathbf{x}_i, z_i = k \mid \boldsymbol{\theta})}{p(\mathbf{x}_i \mid \boldsymbol{\theta})} \\
+  &= \frac{p(\mathbf{x}_i \mid z_i = k, \boldsymbol{\theta}) p(z_i = k \mid \boldsymbol{\theta})}{\sum_{l=1}^{K} \pi_l \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_l, \mathbf{\Sigma}_l)} \\
+  &= \frac{\pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k)}{\sum_{l=1}^{K} \pi_l \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_l, \mathbf{\Sigma}_l)} \\
+  &= \gamma_{ik}
+\end{align*}
+
+Finally, let us compute:
+
+\[
+\mathbb{E}_{\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}^{(t)}}[\log p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta})]
+\]
+
+First, note that:
+
+\begin{align*}
+\log p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta})
+  &= \log \left( \prod_{i=1}^{n} \prod_{k=1}^{K} \left[ \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]^{\mathbb{I}[z_i = k]} \right) \\
+  &= \sum_{i=1}^{n} \sum_{k=1}^{K} \mathbb{I}[z_i = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \\
+  &= w^{n}
+\end{align*}
+
+And note that \(w^n \) can be decomposed as follows:
+
+\[
+w^n = w^{n-1} + \sum_{k=1}^{K} \mathbb{I}[z_n = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right)
+\]
+
+Then:
+
+\begin{align*}
+\mathbb{E}_{\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}^{(t)}} &[\log p(\mathbf{X}, \mathbf{Z} \mid \boldsymbol{\theta})]
+  = \mathbb{E}_{\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}^{(t)}}[w^n] \\
+  &= \sum_{\bZ} w^n p(\mathbf{Z} \mid \mathbf{X}, \boldsymbol{\theta}) \\
+  &= \sum_{z_1} \ldots \sum_{z_n} \left( w^{n-1} + \sum_{k=1}^{K} \mathbb{I}[z_n = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \right) \prod_{i=1}^n p(z_i \mid \bx_i, \boldsymbol{\theta}) \\
+  &= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) \\
+  &\quad + \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) \sum_{z_{n}} \sum_{k=1}^{K} \mathbb{I}[z_n = k] \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) p(z_n \mid \bx_n, \boldsymbol{\theta}) \\
+  &= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) \\
+  &\quad + \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{n k} \\
+  &= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) \\
+  &\quad + \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{n k} \sum_{z_1} \ldots \sum_{z_{n-1}} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) \\
+  &= \sum_{z_1} \ldots \sum_{z_{n-1}} w^{n-1} \prod_{i=1}^{n-1} p(z_i \mid \bx_i, \boldsymbol{\theta}) + \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_n \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{n k} \\
+  &= \sum_{i=1}^n \sum_{k=1}^{K} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \gamma_{i k} \\
+\end{align*}
+
+Then:
+
+\begin{align*}
+Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) 
+  &= \sum_{i=1}^{n} \sum_{k=1}^{K} \gamma_{ik} \log \left( \pi_k \, \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right) \\
+  &= \sum_{i=1}^{n} \sum_{k=1}^{K} \gamma_{ik} \left[ \log \pi_k + \log \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right]
+\end{align*}
+
+---
+
+### Maximization Step
+
+We need to maximize:
+
+\[
+\max_{\bgp, \bgm, \bgS} Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{(t)}) \\
+\text{s.t.}  \sum_{k=1}^{K} \pi_k = 1
+\]
+
+then, the Lagrange multiplier is:
+
+\[
+\mathcal{L} = \sum_{i=1}^{n} \sum_{k=1}^{K} \gamma_{ik} \left[ \log \pi_k + \log \mathcal{N}(\mathbf{x}_i \mid \boldsymbol{\mu}_k, \mathbf{\Sigma}_k) \right] + \lambda \left( \sum_{k=1}^{K} \pi_k - 1 \right)
+\]
+
+#### Update \( \pi_k \)
+
+\begin{align*}
+& \frac{\partial \mathcal{L}}{\partial \pi_k} = \sum_{i=1}^{n} \frac{\gamma_{ik}}{\pi_k} + \lambda = 0 \\
+\Rightarrow & \pi_k = - \frac{1}{\lambda} \sum_{i=1}^{n} \gamma_{ik} \\
+\Rightarrow & \sum_{k=1}^K \pi_k = - \frac{1}{\lambda} \sum_{k=1}^K \sum_{i=1}^{n} \gamma_{ik} \\
+\Rightarrow & 1 = - \frac{1}{\lambda} n \\
+\Rightarrow & \lambda = -n \\
+\end{align*}
+
+Then:
+
+\[
+\pi_k = \frac{1}{n} \sum_{i=1}^{n} \gamma_{ik}
+\]
+
+---
+
+#### Update \( \boldsymbol{\mu}_k \)
+
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \boldsymbol{\mu}_k} &= -\sum_{i=1}^{n} \gamma_{ik} \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) = 0 \\
+  &\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) = 0 \\
+  &\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \mathbf{x}_i = \sum_{i=1}^{n} \gamma_{ik} \boldsymbol{\mu}_k \\
+  &\Rightarrow \boldsymbol{\mu}_k = \frac{\sum_{i=1}^{n} \gamma_{ik} \mathbf{x}_i}{\sum_{i=1}^{n} \gamma_{ik}}
+\end{align*}
+
+---
+
+#### Update \( \mathbf{\Sigma}_k \)
+
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma}_k} 
+  &= \frac{\partial}{\partial \mathbf{\Sigma}_k} \sum_{i=1}^{n} \gamma_{ik} \left( -\frac{1}{2} \log |\mathbf{\Sigma}_k| - \frac{1}{2} (\mathbf{x}_i - \boldsymbol{\mu}_k)^\top \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) \right) \\
+  &= \sum_{i=1}^{n} \gamma_{ik} \left( -\frac{1}{2} \mathbf{\Sigma}_k^{-1} + \frac{1}{2} \mathbf{\Sigma}_k^{-1} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)'  \mathbf{\Sigma}_k^{-1} \right) \\
+\end{align*}
+
+Then
+
+\begin{align*}
+\frac{\partial \mathcal{L}}{\partial \mathbf{\Sigma}_k} 
+  &= 0 \\
+  &\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \left( \Sigma_k - (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)' \right) = 0 \\
+  &\Rightarrow \sum_{i=1}^{n} \gamma_{ik} \Sigma_k = \sum_{i=1}^{n} \gamma_{ik} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)' \\
+  &\Rightarrow \Sigma_k \sum_{i=1}^{n} \gamma_{ik} = \sum_{i=1}^{n} \gamma_{ik} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)' \\
+  &\Rightarrow \Sigma_k = \frac{\sum_{i=1}^{n} \gamma_{ik} (\mathbf{x}_i - \boldsymbol{\mu}_k) (\mathbf{x}_i - \boldsymbol{\mu}_k)'}{\sum_{i=1}^{n} \gamma_{ik}} \\
+\end{align*}
